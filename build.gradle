@@ -1,0 +1,39 @@
+
+plugins {
+    id 'java'
+    id 'war'                                  // package as a WAR
+    id 'org.gretty' version '4.1.1'           // embedded container support
+    id 'application'                          // CLI application
+}
+
+group = 'com.example'
+version = '1.0-SNAPSHOT'
+sourceCompatibility = '23'                   // or whichever Java you target
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'jakarta.platform:jakarta.jakartaee-api:10.0.0' // Jakarta EE 10 API
+
+    implementation 'org.hibernate.orm:hibernate-core:6.4.0.Final' // Hibernate Core
+
+    // Jakarta Servlet API for Tomcat 10
+    compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+    implementation 'jakarta.servlet.jsp:jakarta.servlet.jsp-api:3.1.1'
+    implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0'
+    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
+
+    implementation 'org.slf4j:slf4j-simple:1.7.36'            // simple logging
+}
+
+gretty {
+    servletContainer = 'tomcat10'
+    contextPath = '/'
+    httpPort = 8080
+}
+
+war {
+    archiveFileName = 'theKvizApp.war'
+}
