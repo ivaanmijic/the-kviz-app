@@ -25,6 +25,9 @@ dependencies {
     implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0'
     implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
 
+    // Serialization - Gson
+    implementation 'com.google.code.gson:gson:2.10.1'
+
     implementation 'org.slf4j:slf4j-simple:1.7.36'            // simple logging
 }
 

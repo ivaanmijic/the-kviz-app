@@ -1,4 +1,4 @@
-package com.example.kviz.servlets;
+package com.example.kviz.servlet;
 
 import java.io.IOException;
 
@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/")
+@WebServlet("/hello")
 public class HelloServlet extends HttpServlet {
 
     @Override
