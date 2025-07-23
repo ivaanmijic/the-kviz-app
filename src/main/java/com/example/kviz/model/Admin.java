@@ -45,7 +45,7 @@ public class Admin {
 
     @PreUpdate
     protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now()
+        this.updatedAt = LocalDateTime.now();
     }
 
     // MARK: - Initialization

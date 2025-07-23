@@ -5,14 +5,13 @@ import com.example.kviz.model.Admin;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
 
 public class AdminRepository {
 
-    public Admin save(@NotNull Admin admin) {
+    public Admin save(Admin admin) {
         EntityManager em = PersistenceManager.createEntityManager();
 
         try {
@@ -35,19 +34,19 @@ public class AdminRepository {
         }
     }
 
-    public Optional<Admin> findById(@NotNull Long id) {
+    public Optional<Admin> findById(Long id) {
         try (EntityManager em = PersistenceManager.createEntityManager()) {
             return Optional.ofNullable(em.find(Admin.class, id));
         }
     }
 
-    public Optional<Admin> findByEmail(@NotNull String email) {
+    public Optional<Admin> findByEmail(String email) {
         try (EntityManager em = PersistenceManager.createEntityManager()) {
             return Optional.ofNullable(em.find(Admin.class, email));
         }
     }
 
-    public Optional<Admin> findByUsername(@NotNull String username) {
+    public Optional<Admin> findByUsername(String username) {
         try (EntityManager em = PersistenceManager.createEntityManager()) {
             return Optional.ofNullable(em.find(Admin.class, username));
         }
@@ -60,7 +59,7 @@ public class AdminRepository {
         }
     }
 
-    public void delete(@NotNull Admin admin) {
+    public void delete(Admin admin) {
         try (EntityManager em = PersistenceManager.createEntityManager()) {
             em.getTransaction().begin();
             em.remove(admin);
