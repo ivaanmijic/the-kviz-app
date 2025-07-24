@@ -4,11 +4,14 @@ plugins {
     id 'war'                                  // package as a WAR
     id 'org.gretty' version '4.1.1'           // embedded container support
     id 'application'                          // CLI application
+    id "com.github.node-gradle.node" version "5.0.0"
 }
 
 group = 'com.example'
 version = '1.0-SNAPSHOT'
 sourceCompatibility = '23'                   // or whichever Java you target
+
+defaultTasks 'grettyRun'
 
 repositories {
     mavenCentral()
@@ -37,6 +40,40 @@ gretty {
     httpPort = 8080
 }
 
+// Node.js / npm configuration for Shoelace
+node {
+    download = true        // bundle a local Node.js install
+    version = '20.0.0'
+    npmVersion = '9.8.1'    // match your npm version if needed
+    workDir = file(".gradle/nodejs")
+    npmWorkDir = file(".gradle/npm")
+}
+
+// Task: install npm dependencies (including Shoelace)
+tasks.register('npmInstallShoelace', com.github.gradle.node.npm.task.NpmInstallTask) {
+    group = 'build'
+    description = 'Installs npm dependencies'
+    dependsOn tasks.named('nodeSetup')
+}
+
+// Task: copy Shoelace assets into webapp
+tasks.register('copyShoelace', Copy) {
+    group = 'build'
+    description = 'Copies Shoelace dist files into webapp'
+    dependsOn 'npmInstallShoelace'
+    from 'node_modules/@shoelace-style/shoelace/dist'
+    into 'src/main/webapp/vendor/shoelace'
+    include 'shoelace.js', 'shoelace.css', 'assets/**'
+}
+
+// Ensure Shoelace is copied before packaging the WAR
 war {
+    dependsOn 'copyShoelace'
     archiveFileName = 'theKvizApp.war'
 }
+
+application {
+    // configure your main class if needed
+    // mainClass = 'com.example.Main'
+}
+
