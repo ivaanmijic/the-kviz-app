@@ -17,11 +17,11 @@ public class Admin {
     private Long id;
 
     @Expose
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Expose
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false)
