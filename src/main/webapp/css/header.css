@@ -1,0 +1,93 @@
+/*MARK: - Side bar*/
+aside{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 20%;
+    height: 100vh;
+    padding: 10px;
+    box-sizing: border-box;
+    background: #2C2A68;
+}
+aside h1{
+    margin: 0;
+}
+aside ul{
+    padding: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+aside li{
+    padding: 10px 20px;
+    display: flex;
+    margin-top: 15px;
+    margin-left: 10px;
+    font-size: 25px;
+    list-style-type: none;
+    align-items: center;
+}
+aside span{
+    margin-left: 10px;
+}
+aside .selected{
+    background-color: #AD586F;
+    border-radius: 25px;
+}
+
+
+/*MARK: - Admin main body*/
+.main{
+    display: flex;
+    flex-direction: column;
+    margin-left: 20%;
+    width: 80%;
+    min-height: 100vh;
+}
+
+.quiz-card{
+    width: 80%;
+}
+
+.main li{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+/*MARK: - main header */
+.main header{
+    display: flex;
+    width: 100%;
+    align-self: end;
+    justify-content: end;
+}
+.header-container{
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    width: 100%;
+}
+.profile-buttons{
+    display: flex;
+    justify-content: end;
+    align-content: space-between;
+    align-items: center;
+    width: 42%;
+}
+sl-icon-button{
+    font-size: 1.5rem;
+}
+.profile-buttons sl-icon-button{
+    font-size: 2.5rem;
+}
+.profile-buttons sl-avatar{
+    margin-right: 10px;
+    margin-left: 15px;
+}
+.search-bar{
+    width: 42%;
+    align-self: center;
+}

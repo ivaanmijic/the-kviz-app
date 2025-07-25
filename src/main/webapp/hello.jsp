@@ -6,9 +6,7 @@
     <%@ include file="/WEB-INF/views/shoelace-imoprt.jsp"%>
   </head>
   <body>
-    <h1>${message}</h1>
-    <p>Served at: ${pageContext.request.contextPath}</p>
-
-  <sl-button>Click me - I am dangerous </sl-button>
+      <h1>${message}</h1>
+      <p>Served at: ${pageContext.request.contextPath}</p>
   </body>
 </html>
