@@ -66,9 +66,14 @@ tasks.register('copyShoelace', Copy) {
     include 'shoelace.js', 'shoelace.css', 'assets/**'
 }
 
-// Ensure Shoelace is copied before packaging the WAR
+tasks.register('compileTypeScript', com.github.gradle.node.npm.task.NpmTask) {
+    group = 'build'
+    description = 'Compile TypeScript files to JavaScript'
+    args = ['run', 'build'] // assumes you have "build": "tsc" in package.json
+}
+
 war {
-    dependsOn 'copyShoelace'
+    dependsOn 'copyShoelace', 'compileTypeScript'
     archiveFileName = 'theKvizApp.war'
 }
 
