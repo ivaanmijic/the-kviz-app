@@ -26,15 +26,16 @@ public class Quiz {
     private String thumbnail;
 
     @Expose
-    @Column(nullable = false)
+    @Lob
+    @Column(nullable = false, length = 10000)
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "admin_id", nullable = false)
+    @JoinColumn(name = "admin_id", nullable = true)
     private Admin owner;
 
     @OneToMany
-    @JoinColumn(name = "questions", nullable = false)
+    @JoinColumn(name = "questions", nullable = true)
     private List<Question> questions;
 
     @Column(name = "created_at", nullable = false)
