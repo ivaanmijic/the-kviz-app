@@ -13,6 +13,22 @@
 <body>
 
 <h3><%=session.getAttribute("admin")%></h3>
+<script>
+    // ... some JavaScript code ...
+    <%
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("username".equals(cookie.getName())) {
+    %>
+    <h2><%=cookie.getValue()%></h2><% // This will cause an error in <script> block
+                }
+            }
+        }
+    %>
+    // ... more JavaScript code ...
+</script>
+
 
 </body>
 </html>

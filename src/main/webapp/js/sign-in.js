@@ -16,7 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
             fields: [
                 { name: 'emailOrUsername', selector: 'sl-input[type="text"]', type: 'text' },
                 { name: 'password', selector: 'sl-input[type="password"]', type: 'password' }
-            ]
+            ],
+            checkbox: { name: 'rememberMe', selector: 'sl-checkbox' }
         },
         signup: {
             formSelector: '.sign-up-form',
@@ -29,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
     Object.keys(configs).forEach(formType => {
-        const { formSelector, endpoint, fields } = configs[formType]; // use `endpoint`
+        const { formSelector, endpoint, fields, checkbox } = configs[formType]; // use `endpoint`
         const form = document.querySelector(formSelector);
         if (!form)
             return;
@@ -56,6 +57,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 payload[name] = v;
             });
+            if (checkbox) {
+                const checkboxElement = form.querySelector(checkbox.selector);
+                if (checkboxElement) {
+                    payload[checkbox.name] = checkboxElement.checked;
+                }
+            }
             if (!isValid)
                 return;
             try {
