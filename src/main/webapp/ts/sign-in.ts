@@ -4,12 +4,17 @@ interface ShoelaceInputElement extends HTMLElement {
     reportValidity(): void;
 }
 
+interface ShoelaceCheckboxElement extends HTMLElement {
+    checked: boolean;
+}
+
 type FormType = "signin" | "signup";
 
 interface FormConfiguration {
     formSelector: string;
     endpoint: string;
     fields: { name: string; selector: string; type: string }[];
+    checkbox?: { name: string; selector: string; };
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -20,7 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
             fields: [
                 { name: 'emailOrUsername', selector: 'sl-input[type="text"]',    type: 'text'     },
                 { name: 'password',          selector: 'sl-input[type="password"]', type: 'password' }
-            ]
+            ],
+            checkbox: { name: 'rememberMe', selector: 'sl-checkbox' }
         },
         signup: {
             formSelector: '.sign-up-form',
@@ -34,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     (Object.keys(configs) as FormType[]).forEach(formType => {
-        const { formSelector, endpoint, fields } = configs[formType];  // use `endpoint`
+        const { formSelector, endpoint, fields, checkbox } = configs[formType];  // use `endpoint`
         const form = document.querySelector<HTMLFormElement>(formSelector);
         if (!form) return;
 
@@ -50,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }));
 
             let isValid = true;
-            const payload: Record<string, string> = {};
+            const payload: Record<string, string | boolean> = {};
             inputs.forEach(({ name, el }) => {
                 const v = el.value.trim();
                 if (!v) {
@@ -62,6 +68,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 payload[name] = v;
             });
+
+            if (checkbox) {
+                const checkboxElement = form.querySelector<ShoelaceCheckboxElement>(checkbox.selector)
+                if (checkboxElement) {
+                    payload[checkbox.name] = checkboxElement.checked;
+                }
+            }
             if (!isValid) return;
 
             try {

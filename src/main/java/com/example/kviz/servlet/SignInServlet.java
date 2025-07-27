@@ -26,6 +26,7 @@ public class SignInServlet extends HttpServlet {
     private static class SignInRequest {
         private String emailOrUsername;
         private String password;
+        private boolean rememberMe;
 
         public SignInRequest() {}
 
@@ -43,6 +44,14 @@ public class SignInServlet extends HttpServlet {
 
         public void setPassword(String password) {
             this.password = password;
+        }
+
+        public boolean isRememberMe() {
+            return rememberMe;
+        }
+
+        public void setRememberMe(boolean rememberMe) {
+            this.rememberMe = rememberMe;
         }
     }
 
@@ -65,11 +74,11 @@ public class SignInServlet extends HttpServlet {
 
         log.info("Sign-in POST request received");
         String body = req.getReader().lines().collect(Collectors.joining("\n"));
-        String rememberMe = req.getParameter("rememberMe");
 
         SignInRequest signInRequest = gson.fromJson(body, SignInRequest.class);
         String emailOrUsername = signInRequest.getEmailOrUsername();
         String password = signInRequest.getPassword();
+        boolean rememberMe = signInRequest.isRememberMe();
 
         if (emailOrUsername == null || emailOrUsername.trim().isEmpty()) {
             HttpResponseUtil.sendBadRequest(resp, "Email or username is required");
@@ -93,6 +102,7 @@ public class SignInServlet extends HttpServlet {
 
             if (optionalAdmin.isPresent()) {
                 Admin admin = optionalAdmin.get();
+                log.info("RememberMe: " + signInRequest.isRememberMe());
 
                 HttpSession session = req.getSession(true);
                 session.setAttribute("admin", admin);
@@ -101,12 +111,13 @@ public class SignInServlet extends HttpServlet {
 
                 session.setMaxInactiveInterval(3600);
 
-                if (rememberMe != null && rememberMe.equals("true")) {
+                if (rememberMe) {
                     Cookie usernameCookie = new Cookie("username", admin.getUsername());
                     usernameCookie.setMaxAge(7 *  24 * 60 * 60);
                     usernameCookie.setHttpOnly(true);
                     usernameCookie.setSecure(req.isSecure());
                     usernameCookie.setPath(req.getContextPath());
+                    log.info(usernameCookie.getValue());
                     resp.addCookie(usernameCookie);
                 }
 
