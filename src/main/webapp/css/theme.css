@@ -12,4 +12,5 @@
     /*--sl-color-primary-950: var(--sl-color-purple-950);*/
 
     --bg-color: var(--sl-color-neutral-0);
+    --bg-overlay-color: rgba(from var(--sl-color-neutral-0) r g b / 0.8);
 }

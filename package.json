@@ -20,10 +20,8 @@
     "url": "https://github.com/ivaanmijic/the-kviz-app/issues"
   },
   "homepage": "https://github.com/ivaanmijic/the-kviz-app#readme",
-  "dependencies": {
-    "@shoelace-style/shoelace": "^2.20.1"
-  },
   "devDependencies": {
+    "@shoelace-style/shoelace": "^2.20.1",
     "typescript": "^5.8.3"
   }
 }

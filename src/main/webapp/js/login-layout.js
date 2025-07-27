@@ -4,7 +4,6 @@ const container = document.querySelector('.container');
 
 signUpButton.addEventListener('click', () => {
     container.classList.add("sign-up-mode");
-    console.log("ivan")
 });
 
 signInButton.addEventListener('click', () => {

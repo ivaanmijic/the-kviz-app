@@ -11,20 +11,21 @@
     <title>Sign In</title>
     <%@include file="shoelace-imoprt.jsp"%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <script>window.ctx='${pageContext.request.contextPath}'</script>
 </head>
 <body>
 
 <div class="container">
-
     <div class="forms-container">
         <div class="signin-signup">
             <form action="" class="sign-in-form">
                 <h2 class="title">Sign In</h2>
-                <sl-input class="input-field" type="text" placeholder="Email or Username" required filled pill>
+                <sl-input id="usernamePlaceholder" class="input-field" type="text" placeholder="Email or Username" required filled pill>
                 </sl-input>
                 <sl-input class="input-field" type="password" placeholder="Password" required filled pill password-toggle></sl-input>
                 <sl-checkbox>Remember Me</sl-checkbox>
                 <sl-button class="input-field" type="submit" variant="primary" style="margin-top: 1rem;" pill>Submit</sl-button>
+                <p class="error-label">Error placeholder</p>
 
                 <p class="social-text">Or Sign in with social media account</p>
                 <div class="social-media">
@@ -37,13 +38,13 @@
 
             <form action="" class="sign-up-form">
                 <h2 class="title">Sign Up</h2>
-                <sl-input class="input-field" type="text" placeholder="Email" required filled pill></sl-input>
+                <sl-input class="input-field" type="email" placeholder="Email" required filled pill></sl-input>
                 <sl-input class="input-field" type="text" placeholder="Username" required filled pill></sl-input>
                 <sl-input class="input-field" type="password" placeholder="Password" required filled pill password-toggle></sl-input>
-                <sl-checkbox>Remember Me</sl-checkbox>
                 <sl-button class="input-field" type="submit" variant="primary" style="margin-top: 1rem;" pill>
                     Submit
                 </sl-button>
+                <p class="error-label">Error placeholder</p>
 
                 <p class="social-text">Or Sign up with social medial account</p>
                 <div class="social-media">
@@ -80,6 +81,7 @@
 
 </div>
 
-<script src="${pageContext.request.contextPath}/js/sign-in-up.js"></script>
+<script src="${pageContext.request.contextPath}/js/login-layout.js"></script>
+<script src="${pageContext.request.contextPath}/js/sign-in.js"></script>
 </body>
 </html>

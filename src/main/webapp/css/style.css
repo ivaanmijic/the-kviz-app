@@ -70,6 +70,7 @@ form.sign-in-form {
     display: grid;
     position: relative;
     width: 100%;
+    max-width: 360px;
 }
 
 .social-text {
@@ -188,6 +189,13 @@ form.sign-in-form {
 
 .container.sign-up-mode .right-panel {
     pointer-events: all;
+}
+
+.error-label {
+    color: var(--sl-color-danger-600);
+    font-size: 0.8rem;
+    font-weight: 500;
+    visibility: hidden;
 }
 
 @media (max-width: 870px) {
