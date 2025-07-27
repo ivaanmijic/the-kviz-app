@@ -15,7 +15,7 @@ public class QuizRepository {
         EntityManager em = PersistenceManager.createEntityManager();
 
         try {
-            em.getTransaction();
+            em.getTransaction().begin();
             if (quiz.getId() == null) {
                 em.persist(quiz);
             } else {
