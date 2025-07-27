@@ -4,7 +4,9 @@
   "description": "Razvoj web aplikacija 2024./25. Završni projekt",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "watch": "tsc --watch"
   },
   "repository": {
     "type": "git",
@@ -18,7 +20,8 @@
     "url": "https://github.com/ivaanmijic/the-kviz-app/issues"
   },
   "homepage": "https://github.com/ivaanmijic/the-kviz-app#readme",
-  "dependencies": {
-    "@shoelace-style/shoelace": "^2.20.1"
+  "devDependencies": {
+    "@shoelace-style/shoelace": "^2.20.1",
+    "typescript": "^5.8.3"
   }
 }

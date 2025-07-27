@@ -1,15 +1,70 @@
 package com.example.kviz.service;
 
+import com.example.kviz.database.PersistenceManager;
+import com.example.kviz.model.Admin;
 import com.example.kviz.repository.AdminRepository;
+import com.example.kviz.util.PasswordUtil;
+import jakarta.persistence.PersistenceException;
+import org.hibernate.exception.ConstraintViolationException;
 
 import java.util.Optional;
 
 public class AdminService {
 
-    private AdminRepository adminRepository;
+    private final AdminRepository adminRepository;
 
-    public AdminService(AdminRepository adminRepository) {
-        this.adminRepository = adminRepository;
+    public AdminService() {
+        this.adminRepository = new AdminRepository();
+    }
+
+    public Optional<Admin> getAdminByEmail(String email) {
+        return adminRepository.findByEmail(email);
+    }
+
+    public Optional<Admin> getAdminByUsername(String username) {
+        return adminRepository.findByUsername(username);
+    }
+
+    public Admin registerAdmin(Admin admin) throws IllegalStateException, PersistenceException {
+        if (adminRepository.findByUsername(admin.getUsername()).isPresent()) {
+            throw new IllegalStateException("Username already exists");
+        }
+        if (adminRepository.findByEmail(admin.getEmail()).isPresent()) {
+            throw new IllegalStateException("Email already exists");
+        }
+
+        admin.setPassword(PasswordUtil.hashPassword(admin.getPassword()));
+
+        try {
+            return adminRepository.save(admin);
+        } catch (PersistenceException e) {
+            throw new PersistenceException(e.getMessage());
+        }
+
+    }
+
+    public boolean authenticate(String identificator, String password) {
+        return authenticateByEmail(identificator, password) || authenticateByUsername(identificator, password);
+    }
+
+    private boolean authenticateByEmail(String email, String password) {
+        Optional<Admin> optionalAdmin = adminRepository.findByEmail(email);
+
+        if (optionalAdmin.isPresent()) {
+            Admin admin = optionalAdmin.get();
+            return PasswordUtil.checkPassword(password, admin.getPassword());
+        }
+        return false;
+    }
+
+    private boolean authenticateByUsername(String username, String password) {
+        Optional<Admin> optionalAdmin = adminRepository.findByUsername(username);
+
+        if (optionalAdmin.isPresent()) {
+            Admin admin = optionalAdmin.get();
+            return PasswordUtil.checkPassword(password, admin.getPassword());
+        }
+        return false;
     }
 
 }

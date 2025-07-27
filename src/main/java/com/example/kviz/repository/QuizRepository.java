@@ -12,7 +12,7 @@ import java.util.Optional;
 public class QuizRepository {
 
     public Quiz save(Quiz quiz) {
-        EntityManager em = PersistenceManager.createEntityManager();
+        EntityManager em = PersistenceManager.entityManager();
 
         try {
             em.getTransaction().begin();
@@ -34,13 +34,13 @@ public class QuizRepository {
     }
 
     public Optional<Quiz> findById(Long id) {
-        try (EntityManager em = PersistenceManager.createEntityManager()) {
+        try (EntityManager em = PersistenceManager.entityManager()) {
             return Optional.ofNullable(em.find(Quiz.class, id));
         }
     }
 
     public List<Quiz> findByTitle(String title) {
-        try (EntityManager em = PersistenceManager.createEntityManager()) {
+        try (EntityManager em = PersistenceManager.entityManager()) {
             TypedQuery<Quiz> q = em.createQuery("SELECT q FROM Quiz q WHERE q.title = :title", Quiz.class);
             q.setParameter("title", title);
             return q.getResultList();
@@ -48,14 +48,14 @@ public class QuizRepository {
     }
 
     public List<Quiz> findAll() {
-        try (EntityManager em = PersistenceManager.createEntityManager()) {
+        try (EntityManager em = PersistenceManager.entityManager()) {
             TypedQuery<Quiz> q = em.createQuery("SELECT q FROM Quiz q", Quiz.class);
             return q.getResultList();
         }
     }
 
     public List<Quiz> findAllByAdmin(Admin admin) {
-        try (EntityManager em = PersistenceManager.createEntityManager()) {
+        try (EntityManager em = PersistenceManager.entityManager()) {
             TypedQuery<Quiz> q = em.createQuery("SELECT q FROM Quiz q WHERE q.owner.id = :id", Quiz.class);
             q.setParameter("id", admin.getId());
             return q.getResultList();
@@ -63,7 +63,7 @@ public class QuizRepository {
     }
 
     public void delete(Quiz quiz) {
-        try (EntityManager em = PersistenceManager.createEntityManager()) {
+        try (EntityManager em = PersistenceManager.entityManager()) {
             em.getTransaction().begin();
             em.remove(quiz);
             em.getTransaction().commit();

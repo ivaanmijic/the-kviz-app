@@ -27,11 +27,13 @@ dependencies {
     implementation 'jakarta.servlet.jsp:jakarta.servlet.jsp-api:3.1.1'
     implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0'
     implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
+    implementation 'mysql:mysql-connector-java:8.0.33' // Use the latest compatible version
 
     // Serialization - Gson
     implementation 'com.google.code.gson:gson:2.10.1'
 
     implementation 'org.slf4j:slf4j-simple:1.7.36'            // simple logging
+    implementation 'org.mindrot:jbcrypt:0.4'
 }
 
 gretty {
@@ -66,9 +68,14 @@ tasks.register('copyShoelace', Copy) {
     include 'shoelace.js', 'shoelace.css', 'assets/**'
 }
 
-// Ensure Shoelace is copied before packaging the WAR
+tasks.register('compileTypeScript', com.github.gradle.node.npm.task.NpmTask) {
+    group = 'build'
+    description = 'Compile TypeScript files to JavaScript'
+    args = ['run', 'build'] // assumes you have "build": "tsc" in package.json
+}
+
 war {
-    dependsOn 'copyShoelace'
+    dependsOn 'copyShoelace', 'compileTypeScript'
     archiveFileName = 'theKvizApp.war'
 }
 

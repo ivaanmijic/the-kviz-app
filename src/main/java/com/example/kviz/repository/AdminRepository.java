@@ -4,6 +4,7 @@ import com.example.kviz.database.PersistenceManager;
 import com.example.kviz.model.Admin;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 
 import java.util.List;
@@ -12,10 +13,10 @@ import java.util.Optional;
 public class AdminRepository {
 
     public Admin save(Admin admin) {
-        EntityManager em = PersistenceManager.createEntityManager();
+        EntityManager em = PersistenceManager.entityManager();
 
         try {
-            em.getTransaction();
+            em.getTransaction().begin();
             if (admin.getId() == null) {
                 em.persist(admin);
             } else {
@@ -34,35 +35,42 @@ public class AdminRepository {
         }
     }
 
-    public Optional<Admin> findById(Long id) {
-        try (EntityManager em = PersistenceManager.createEntityManager()) {
-            return Optional.ofNullable(em.find(Admin.class, id));
-        }
-    }
-
     public Optional<Admin> findByEmail(String email) {
-        try (EntityManager em = PersistenceManager.createEntityManager()) {
-            return Optional.ofNullable(em.find(Admin.class, email));
+        try (EntityManager em = PersistenceManager.entityManager()) {
+            TypedQuery<Admin> query = em.createQuery("SELECT a FROM Admin a WHERE a.email = :email", Admin.class);
+            query.setParameter("email", email);
+            try {
+                return Optional.ofNullable(query.getSingleResult());
+            } catch (NoResultException e) {
+                return Optional.empty();
+            }
         }
     }
 
     public Optional<Admin> findByUsername(String username) {
-        try (EntityManager em = PersistenceManager.createEntityManager()) {
-            return Optional.ofNullable(em.find(Admin.class, username));
+        try (EntityManager em = PersistenceManager.entityManager()) {
+            TypedQuery<Admin> query = em.createQuery("SELECT a FROM Admin a WHERE a.username = :username", Admin.class);
+            query.setParameter("username", username);
+            try {
+                return Optional.ofNullable(query.getSingleResult());
+            } catch (NoResultException e) {
+                return Optional.empty();
+            }
         }
     }
 
     public List<Admin> findAll() {
-        try (EntityManager em = PersistenceManager.createEntityManager()) {
+        try (EntityManager em = PersistenceManager.entityManager()) {
             TypedQuery<Admin> q = em.createQuery("SELECT a FROM Admin a", Admin.class);
             return q.getResultList();
         }
     }
 
     public void delete(Admin admin) {
-        try (EntityManager em = PersistenceManager.createEntityManager()) {
+        try (EntityManager em = PersistenceManager.entityManager()) {
             em.getTransaction().begin();
-            em.remove(admin);
+            Admin managedAdmin = em.contains(admin) ? admin : em.merge(admin);
+            em.remove(managedAdmin);
             em.getTransaction().commit();
         }
     }

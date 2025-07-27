@@ -6,7 +6,7 @@ import jakarta.persistence.Persistence;
 
 public class PersistenceManager {
 
-    private static final String PERSISTENCE_UNIT = "kvizdb";
+    private static final String PERSISTENCE_UNIT = "kvizPU";
     private static EntityManagerFactory entityManagerFactory;
 
     private PersistenceManager() {
@@ -19,7 +19,7 @@ public class PersistenceManager {
         return entityManagerFactory;
     }
 
-    public static EntityManager createEntityManager() {
+    public static EntityManager entityManager() {
         return getEntityManagerFactory().createEntityManager();
     }
 
