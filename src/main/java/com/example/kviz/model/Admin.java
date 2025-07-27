@@ -8,7 +8,10 @@ import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "admins")
+@Table(name = "admins", uniqueConstraints = {
+        @UniqueConstraint(name = "UK_admin_email", columnNames = "email"),
+        @UniqueConstraint(name = "UK_admin_username", columnNames = "username")
+})
 public class Admin {
 
     @Expose
