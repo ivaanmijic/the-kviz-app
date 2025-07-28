@@ -1,7 +1,17 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap");
+
+html, body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-color);
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
 button:hover{
     transform: scale(1.05);
 }
-/*MARK: - Side bar*/
+
 aside{
     position: fixed;
     top: 0;
@@ -10,8 +20,7 @@ aside{
     height: 100vh;
     padding: 0;
     box-sizing: border-box;
-    background: var(--sl-color-primary-900);
-    color: var(--sl-color-primary-50);
+    background-color: var(--bg-color);
 }
 
 aside header{
@@ -33,120 +42,134 @@ aside li{
     display: flex;
     margin-top: 15px;
     margin-left: 1px;
-    font-size: 25px;
     list-style-type: none;
     align-items: center;
-    transition:all 0.3s ease;
+    min-width: 140px;
 }
 aside span{
     margin-left: 10px;
 }
 aside .selected{
-    background-color: var(--sl-color-primary-600);
+    background: linear-gradient(to right,  #4481eb, #04befe);
+    color: var(--sl-color-neutral-100);
     border-bottom-right-radius: 30px;
     border-top-right-radius: 30px;
-    border-left: solid 2px white;
+    border-left: solid 2px var(--bg-color);
 }
 
-aside .selected:hover{
-    background: var(--sl-color-primary-700);
-}
-
-body{
-    background-color: #ffffff;
-}
-/*MARK: - Admin main body*/
 .main{
     display: flex;
     flex-direction: column;
     margin-left: 20%;
     width: 80%;
     min-height: 100vh;
+    border-bottom-left-radius: 30px;
+    border-top-left-radius: 30px;
+    background-color: var(--bg-color-secondary);
 }
 
-/*MARK: - main header */
 .main header{
     display: flex;
     width: 100%;
     align-self: end;
     justify-content: end;
 }
+
 .header-container{
     display: flex;
     justify-content: end;
     align-items: end;
     width: 100%;
 }
+
 .profile-buttons{
     display: flex;
     justify-content: end;
     align-content: space-between;
-    align-items: center;
+    align-items: end;
     width: 42%;
 }
-sl-icon-button{
-    font-size: 1.5rem;
-}
-.profile-buttons sl-icon-button{
-    font-size: 2.5rem;
-}
+
 .profile-buttons sl-avatar{
+    margin-top: 10px;
     margin-right: 10px;
     margin-left: 15px;
 }
 
-sl-input.sl-input-color::part(base) {
-    background-color: var(--sl-color-primary-50);
-    border-radius: 1.5rem;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    border-width: 1px;
-}
-
-/* Hover state */
-sl-input.sl-input-color:hover::part(base) {
-    box-shadow: 0 0 6px rgba(68, 129, 235, 0.3);
-    border-color: var(--sl-color-primary-200);
-}
-
-/* Active/Typing state (focus) */
-sl-input.sl-input-color:focus-within::part(base) {
-    border: 2px solid var(--sl-color-primary-100);
-    box-shadow: 0 0 8px rgba(68, 129, 235, 0.4);
+.profile-buttons sl-dropdown::part(base) {
+    border: none;
 }
 
 .search-bar{
+    height: 2.5rem;
     width: 42%;
-    align-self: center;
+    align-self: end;
 }
 
-/* MARK: - cards */
+.dropdwon {
+    margin-right: 5%;
+    border: none;
+    align-self: center;
+    margin-top: 10px;
+}
+
+.dropdwon::part(base) {
+    background-color: transparent !important;
+    border: none !important;
+}
+
+sl-menu-item::part(base) {
+    background-color: transparent;
+}
+
+sl-menu-item.destructive::part(base) {
+    color: var(--sl-color-danger-600);
+}
+sl-menu-item.destructive::part(base):hover {
+    background-color: var(--sl-color-danger-100);
+}
+
+
 sl-card{
     --border-radius: 40px;
-    --border-color:  var(--sl-color-primary-200);
+    --border-color: transparent;
 }
 
 sl-card img{
+    flex-shrink: 0;
     width: 100%;
-    height: 300px;
+    height: 200px;
+    object-fit: cover;
 }
 
-.quiz-card{
-    background: var(--sl-color-primary-50);
-    color: var(--sl-card-text);
+.quiz-card.content {
+    flex-grow: 1;
+    padding: 1rem;
+    overflow: hidden;
+}
+
+.quiz-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 500px;
     width: 100%;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
     border-radius: 40px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
 }
 
 .quiz-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 
 
 .quiz-card h2{
-    color: var(--sl-color-primary-900);
+    font-size: 1.5rem;
+    color: var(--sl-color-neutral-900);
     margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .card-grid{
@@ -157,28 +180,23 @@ sl-card img{
     margin-top: 20px;
 }
 .quiz-card .footer{
+    padding: 0 1rem 1rem;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
 }
 
 .quiz-card sl-icon-button, sl-dialog sl-icon-button{
-    background-color: var(--sl-color-primary-600);
-    border-radius: 100%;
     margin: 10px;
-    font-size: 2.5rem;
-    color: var(--sl-color-primary-50);
-    padding: 5px;
 }
 
 .quiz-card sl-icon-button:hover, sl-dialog sl-icon-button:hover{
-    background-color: var(--sl-color-primary-700);
     transform: scale(1.05);
 }
 
 .quiz-card-description{
     display: -webkit-box;
     -webkit-box-orient:vertical;
-    -webkit-line-clamp: 5;
+    -webkit-line-clamp: 3;
     overflow: hidden;
     text-overflow: ellipsis;
     margin-bottom: 8px;
@@ -189,15 +207,6 @@ sl-card img{
     max-height: none;
 }
 
-.desc-button{
-    background: none;
-    border: none;
-    color: var(--sl-color-primary-400);
-    cursor: pointer;
-    font-weight: bold;
-    padding: 0;
-    margin-bottom: 10px;
-}
 /* MARK: - sl-dialog */
 sl-dialog::part(panel){
     border-radius: 40px;

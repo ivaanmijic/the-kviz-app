@@ -121,7 +121,7 @@ public class SignInServlet extends HttpServlet {
                     resp.addCookie(usernameCookie);
                 }
 
-                resp.sendRedirect(req.getContextPath() + "/admin/test");
+                resp.sendRedirect(req.getContextPath() + "dashboard");
             } else {
                 HttpResponseUtil.sendBadRequest(resp, "Invalid email/username or password");
             }
