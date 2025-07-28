@@ -10,7 +10,7 @@
 <head>
     <title>Sign In</title>
     <%@include file="shoelace-imoprt.jsp"%>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/signup-style.css">
     <script>window.ctx='${pageContext.request.contextPath}'</script>
 </head>
 <body>

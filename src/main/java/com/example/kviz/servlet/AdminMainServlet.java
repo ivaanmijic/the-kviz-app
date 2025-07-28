@@ -11,14 +11,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/adminMain")
+@WebServlet("/dashboard")
 public class AdminMainServlet extends HttpServlet {
-    private final QuizService quizService = new QuizService();
+  private final QuizService quizService = new QuizService();
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException{
-        List<Quiz> myQuizzes = quizService.findAll();
-        request.setAttribute("myQuizzes", myQuizzes);
-        request.getRequestDispatcher("/WEB-INF/views/adminMain.jsp").forward(request, response);
-    }
+  @Override
+  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    List<Quiz> myQuizzes = quizService.findAll();
+    request.setAttribute("myQuizzes", myQuizzes);
+    request.getRequestDispatcher("/WEB-INF/views/adminMain.jsp").forward(request, response);
+  }
 }

@@ -11,16 +11,16 @@
 <head>
     <title>Gretty Demo</title>
     <%@ include file="/WEB-INF/views/shoelace-imoprt.jsp"%>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/adminMain.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main-style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/theme.css">
     <script>window.ctx='${pageContext.request.contextPath}'</script>
-    <script src="${pageContext.request.contextPath}/js/adminMainPage.js"></script>
 </head>
 <body>
-<jsp:include page="/WEB-INF/views/sideBar.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/views/sidebar.jsp"></jsp:include>
 <div class="main">
     <jsp:include page="/WEB-INF/views/header.jsp"></jsp:include>
     <jsp:include page="/WEB-INF/views/myQuizzes.jsp"></jsp:include>
 </div>
+<script src="${pageContext.request.contextPath}/js/adminMainPage.js"></script>
 </body>
 </html>

@@ -12,7 +12,7 @@
       <img class="quiz-card-img" slot="image" src="${pageContext.request.contextPath}/css/resources/${quiz.thumbnail}">
       <h2>${quiz.title}</h2>
       <p class="quiz-card-description">${quiz.description}</p>
-      <button class="desc-button">More...</button>
+      <sl-button variant="text" size="medium" class="desc-button">More...</sl-button>
       <div slot="footer" class="footer">
         <sl-icon-button name="play"></sl-icon-button>
         <sl-icon-button name="pen"></sl-icon-button>
@@ -29,7 +29,6 @@
         </div>
       </div>
       <div slot="footer" class="dialog-footer">
-        <sl-icon-button name="play"></sl-icon-button>
         <sl-icon-button name="pen"></sl-icon-button>
       </div>
     </sl-dialog>

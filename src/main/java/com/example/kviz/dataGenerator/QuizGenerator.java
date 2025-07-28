@@ -1,11 +1,13 @@
 package com.example.kviz.dataGenerator;
 
+import com.example.kviz.model.Admin;
 import com.example.kviz.model.Quiz;
+import com.example.kviz.service.AdminService;
 import com.example.kviz.service.QuizService;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
+import java.util.Optional;
 
 public class QuizGenerator {
     private static final List<String> descs= Arrays.asList(
@@ -40,13 +42,18 @@ public class QuizGenerator {
     );
 
     public static void main(String[] args) {
-        QuizService qs = new QuizService();
-        for (int i = 0; i < 8; i++) {
-            Quiz quiz = new Quiz();
-            quiz.setTitle(title.get(i));
-            quiz.setThumbnail(imgs.get(i));
-            quiz.setDescription(descs.get(i));
-            qs.save(quiz);
+        AdminService adminService = new AdminService();
+        Optional<Admin> owner = adminService.getAdminByUsername("ivan");
+        if (owner.isPresent()) {
+            QuizService qs = new QuizService();
+            for (int i = 0; i < 8; i++) {
+                Quiz quiz = new Quiz();
+                quiz.setTitle(title.get(i));
+                quiz.setThumbnail(imgs.get(i));
+                quiz.setDescription(descs.get(i));
+                quiz.setOwner(owner.get());
+                qs.save(quiz);
+            }
         }
     }
 
