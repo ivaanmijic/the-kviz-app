@@ -17,8 +17,12 @@
             <sl-dropdown class="dropdwon">
                 <sl-button slot="trigger" caret>Options</sl-button>
                 <sl-menu class="custom-menu">
-                    <sl-menu-item value="edit">Edit</sl-menu-item>
-                    <sl-menu-item value="signout" class="destructive">Sign Out</sl-menu-item>
+                    <sl-menu-item>
+                        <sl-button variant="text" class="text-button">Edit</sl-button>
+                    </sl-menu-item>
+                    <sl-menu-item class="destructive">
+                        <sl-button variant="text" class="destructive-text-button" href="${pageContext.request.contextPath}/signout">Sign Out</sl-button>
+                    </sl-menu-item>
                 </sl-menu>
             </sl-dropdown>
         </div>
