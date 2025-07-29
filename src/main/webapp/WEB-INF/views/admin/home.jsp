@@ -19,6 +19,20 @@
 <jsp:include page="/WEB-INF/views/sidebar.jsp"></jsp:include>
 <div class="main">
     <jsp:include page="/WEB-INF/views/header.jsp"></jsp:include>
+
+    <% if (session.getAttribute("admin") != null) { %>
+    <div class="user-box">
+        <div class="user-left">
+            <sl-avatar label="username"></sl-avatar>
+            <div class="user-labels">
+                <span class="welcome">Welcome</span>
+                <span class="username"><%=session.getAttribute("username")%></span>
+            </div>
+        </div>
+        <sl-button class="yellow" size="large">Profile</sl-button>
+    </div>
+    <%}%>
+
     <jsp:include page="/WEB-INF/views/admin/quizzes.jsp"></jsp:include>
 </div>
 <script src="${pageContext.request.contextPath}/js/admin-home.js"></script>

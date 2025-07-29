@@ -16,7 +16,7 @@ aside{
     position: fixed;
     top: 0;
     left: 0;
-    width: 20%;
+    width: 220px;
     height: 100vh;
     padding: 0;
     box-sizing: border-box;
@@ -60,8 +60,8 @@ aside .selected{
 .main{
     display: flex;
     flex-direction: column;
-    margin-left: 20%;
-    width: 80%;
+    margin-left: 220px;
+    width: calc(100% - 220px);
     min-height: 100vh;
     border-bottom-left-radius: 30px;
     border-top-left-radius: 30px;
@@ -106,14 +106,14 @@ aside .selected{
     align-self: end;
 }
 
-.dropdwon {
+.dropdown {
     margin-right: 5%;
     border: none;
     align-self: center;
     margin-top: 10px;
 }
 
-.dropdwon::part(base) {
+.dropdown::part(base) {
     background-color: transparent !important;
     border: none !important;
 }
@@ -125,10 +125,65 @@ sl-menu-item::part(base) {
 sl-menu-item.destructive::part(base) {
     color: var(--sl-color-danger-600);
 }
+
 sl-menu-item.destructive::part(base):hover {
     background-color: var(--sl-color-danger-100);
 }
 
+.user-box {
+    width: calc(100% - 3rem);
+    height: auto;
+    background: linear-gradient(135deg, #007cf0, #00dfd8);
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2.5rem;
+    box-sizing: border-box;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 2.5rem auto;
+    flex-wrap: wrap;
+}
+
+.user-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 1;
+}
+
+.user-labels {
+    display: flex;
+    flex-direction: column;
+}
+
+.welcome {
+    font-size: 0.9rem;
+    opacity: 0.85;
+}
+
+.username {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+sl-button.yellow::part(base) {
+    color: white;
+    border-radius: 15px;
+    border-color: transparent;
+    background-color: var(--sl-color-yellow-500);
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+sl-button.yellow::part(base):hover {
+    background-color: var(--sl-color-yellow-400);
+}
+
+.section-title {
+    margin-left: 1.5rem;
+}
 
 sl-card{
     --border-radius: 40px;
@@ -139,13 +194,13 @@ sl-card{
 sl-card img{
     flex-shrink: 0;
     width: 100%;
-    height: 200px;
+    height: 225px;
     object-fit: cover;
 }
 
+
 .quiz-card.content {
     flex-grow: 1;
-    padding: 1rem;
     overflow: hidden;
 }
 
@@ -153,19 +208,19 @@ sl-card img{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 500px;
+    height: auto;
     width: 100%;
     background-color: var(--card-color);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
     border-radius: 40px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     overflow: hidden;
+    padding-bottom: 0;
 }
 
 .quiz-card:hover {
     transform: translateY(-8px);
 }
-
 
 .quiz-card h2{
     font-size: 1.5rem;
@@ -176,19 +231,16 @@ sl-card img{
 
 .card-grid{
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, 400px);
+    gap: 2.5rem;
     padding: 20px;
     margin-top: 20px;
-}
-.quiz-card .footer{
-    padding: 0 1rem 1rem;
-    display: flex;
-    justify-content: flex-end;
+    justify-content: space-evenly;
 }
 
-.quiz-card sl-icon-button, sl-dialog sl-icon-button{
-    margin: 10px;
+.quiz-card .footer{
+    display: flex;
+    justify-content: flex-end;
 }
 
 .quiz-card sl-icon-button:hover, sl-dialog sl-icon-button:hover{
@@ -201,7 +253,6 @@ sl-card img{
     -webkit-line-clamp: 3;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin-bottom: 8px;
 }
 
 .quiz-card-description.expanded{
@@ -252,6 +303,39 @@ sl-dialog h2{
     color: var(--sl-color-neutral-800);
 }
 
+.hamburger-menu {
+    display: none;
+    font-size: 1.8rem;
+    color: var(--sl-color-neutral-800);
+}
+
+.nav-drawer {
+    padding: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.nav-drawer li {
+    padding: 10px 25px;
+    display: flex;
+    margin-top: 15px;
+    list-style-type: none;
+    align-items: center;
+    width: calc(100% - 50px);
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.nav-drawer li:hover {
+    background-color: var(--sl-color-primary-100);
+}
+
+.nav-drawer span {
+    margin-left: 10px;
+}
+
 
 @media (prefers-color-scheme: dark) {
     .main {
@@ -263,3 +347,86 @@ sl-dialog h2{
     }
 }
 
+@media (max-width: 870px) {
+    aside {
+        display: none;
+        width: 0;
+    }
+
+    .hamburger-menu {
+        display: inline-flex;
+    }
+
+    .main {
+        width: 100%;
+        margin-left: 0;
+        border-radius: 0;
+    }
+
+    .header-container {
+        justify-content: space-between;
+        padding: 0 1rem;
+        align-items: center;
+    }
+
+    .profile-buttons,
+    .search-bar {
+        width: auto;
+    }
+
+    .search-bar {
+        flex-grow: 1;
+        margin: 0 1rem;
+    }
+
+
+}
+
+@media (max-width: 570px) {
+    .card-grid {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+    }
+
+    sl-dialog::part(panel) {
+        width: 95vw;
+        max-width: 95vw;
+    }
+
+    .dialog-body {
+        grid-template-columns: 1fr;
+    }
+
+    .header-container {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .search-bar {
+        width: 100%;
+        order: 2;
+        margin: 0;
+    }
+
+    .profile-buttons {
+        order: 1;
+    }
+
+    .hamburger-menu {
+        order: 0;
+    }
+
+    .user-box {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .user-left {
+        width: 100%;
+    }
+
+    sl-button {
+        align-self: flex-end;
+    }
+}
