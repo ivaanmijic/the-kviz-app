@@ -241,4 +241,12 @@ sl-dialog h2{
     align-items: start;
 }
 
+.destructive-text-button::part(base) {
+    color: var(--sl-color-danger-600);
+}
+
+.text-button::part(base) {
+    color: var(--sl-color-neutral-800);
+}
+
 
