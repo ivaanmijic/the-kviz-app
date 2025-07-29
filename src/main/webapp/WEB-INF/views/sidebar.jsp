@@ -5,7 +5,7 @@
   Time: 8:45 AM
   To change this template use File | Settings | File Templates.
 --%>
-<script src="${pageContext.request.contextPath}/js/adminMainPage.js"></script>
+<script src="${pageContext.request.contextPath}/js/admin-home.js"></script>
 <aside>
     <header>
         <h1>TheKvizApp</h1>

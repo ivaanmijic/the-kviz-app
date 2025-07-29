@@ -9,7 +9,7 @@ plugins {
 
 group = 'com.example'
 version = '1.0-SNAPSHOT'
-sourceCompatibility = '23'                   // or whichever Java you target
+sourceCompatibility = '21'                   // or whichever Java you target
 
 defaultTasks 'grettyRun'
 

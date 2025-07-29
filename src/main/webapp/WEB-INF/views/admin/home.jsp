@@ -9,7 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Gretty Demo</title>
+    <title>The Kviz App</title>
     <%@ include file="/WEB-INF/views/shoelace-imoprt.jsp"%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main-style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/theme.css">
@@ -19,8 +19,8 @@
 <jsp:include page="/WEB-INF/views/sidebar.jsp"></jsp:include>
 <div class="main">
     <jsp:include page="/WEB-INF/views/header.jsp"></jsp:include>
-    <jsp:include page="/WEB-INF/views/myQuizzes.jsp"></jsp:include>
+    <jsp:include page="/WEB-INF/views/admin/quizzes.jsp"></jsp:include>
 </div>
-<script src="${pageContext.request.contextPath}/js/adminMainPage.js"></script>
+<script src="${pageContext.request.contextPath}/js/admin-home.js"></script>
 </body>
 </html>
