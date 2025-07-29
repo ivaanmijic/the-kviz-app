@@ -37,7 +37,7 @@ function addEventListenersOnCards() {
 }
 addEventListenersOnCards();
 function loadMyQuizzes(){
-    fetch(window.ctx + "myQuizzes", {
+    fetch(window.ctx + "quizzes", {
         method: "GET",
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     })
