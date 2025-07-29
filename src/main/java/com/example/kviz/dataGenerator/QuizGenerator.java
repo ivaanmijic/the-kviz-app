@@ -43,7 +43,7 @@ public class QuizGenerator {
 
     public static void main(String[] args) {
         AdminService adminService = new AdminService();
-        Optional<Admin> owner = adminService.getAdminByUsername("ivan");
+        Optional<Admin> owner = adminService.getAdminByUsername("superadmin");
         if (owner.isPresent()) {
             QuizService qs = new QuizService();
             for (int i = 0; i < 8; i++) {

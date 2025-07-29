@@ -1,48 +1,4 @@
 :root {
-    /*--sl-color-primary-50: rgb(247 250 254);*/
-    /*--sl-color-primary-100: rgb(228 237 252);*/
-    /*--sl-color-primary-200: rgb(207 223 250);*/
-    /*--sl-color-primary-300: rgb(185 208 247);*/
-    /*--sl-color-primary-400: rgb(154 187 244);*/
-    /*--sl-color-primary-500: rgb(114 160 240);*/
-    /*--sl-color-primary-600: rgb(68 129 235);*/
-    /*--sl-color-primary-700: rgb(56 106 193);*/
-    /*--sl-color-primary-800: rgb(46 88 159);*/
-    /*--sl-color-primary-900: rgb(33 62 113);*/
-    /*--sl-color-primary-950: rgb(20 38 70);*/
-    /*--sl-input-background-color: var(--sl-color-primary-800);*/
-    /*--sl-panel-background-color: #ffffff;*/
-    /*--sl-input-border-color: var(--sl-color-primary-100);*/
-    /*--sl-color-neutral-200: var(--sl-color-primary-400);*/
-    /*--sl-sidebar: var(--sl-color-primary-900);*/
-    /*--sl-sidebar-text: var(--sl-color-primary-50);*/
-    /*--sl-sidebar-hower: var(--sl-color-primary-700);*/
-    /*--sl-mainbg: #ffffff;*/
-    /*--sl-cardbg: var(--sl-color-primary-50);*/
-    /*--sl-card-title: var(--sl-color-primary-900);*/
-    /*--sl-card-text: rgb(85 85 85);*/
-    /*--sl-input-border-width: 4px;*/
-    /*--sl-color-neutral-50: #ffffff;*/
-    /*--sl-color-gray-100: #ffffff;*/
-/*
-primary-dark primary-800
-sidebar 900
-sidebartext 50
-sidebarhower 700
-mainbg white
-cardbg 50
-card title 900
-card text 85 85 85
-button primary
-button howwer 700
-*/
-/* DARK THEME
-sidebar bg 950
-main bg 18 18 18
-card bg 31 31 31
-card text 100
-
-*/
     --sl-color-primary-50: var(--sl-color-blue-50);
     --sl-color-primary-100: var(--sl-color-blue-100);
     --sl-color-primary-200: var(--sl-color-blue-200);
@@ -83,4 +39,6 @@ card text 100
     --bg-color-secondary: var(--sl-color-neutral-50);
     --label-color: var(--sl-color-neutral-200);
     --label-color-secondary: var(--sl-color-neutral-700);
+
+    --card-color: var(--sl-color-neutral-0)
 }

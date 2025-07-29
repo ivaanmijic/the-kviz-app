@@ -133,6 +133,7 @@ sl-menu-item.destructive::part(base):hover {
 sl-card{
     --border-radius: 40px;
     --border-color: transparent;
+    background-color: var(--card-color);
 }
 
 sl-card img{
@@ -154,6 +155,7 @@ sl-card img{
     justify-content: space-between;
     height: 500px;
     width: 100%;
+    background-color: var(--card-color);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
     border-radius: 40px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -241,6 +243,7 @@ sl-dialog h2{
     align-items: start;
 }
 
+
 .destructive-text-button::part(base) {
     color: var(--sl-color-danger-600);
 }
@@ -249,4 +252,14 @@ sl-dialog h2{
     color: var(--sl-color-neutral-800);
 }
 
+
+@media (prefers-color-scheme: dark) {
+    .main {
+        background-color: var(--bg-color);
+    }
+
+    aside, body {
+        background-color: var(--bg-color-secondary);
+    }
+}
 

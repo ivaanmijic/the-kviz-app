@@ -1,4 +1,4 @@
-package com.example.kviz.servlet;
+package com.example.kviz.servlet.admin;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,14 +11,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/dashboard")
-public class AdminMainServlet extends HttpServlet {
+@WebServlet("/admin/home")
+public class AdminHomeServlet extends HttpServlet {
   private final QuizService quizService = new QuizService();
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     List<Quiz> myQuizzes = quizService.findAll();
     request.setAttribute("myQuizzes", myQuizzes);
-    request.getRequestDispatcher("/WEB-INF/views/adminMain.jsp").forward(request, response);
+    request.getRequestDispatcher("/WEB-INF/views/admin/home.jsp").forward(request, response);
   }
 }
