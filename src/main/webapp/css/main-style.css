@@ -253,31 +253,31 @@ sl-card img{
 }
 
 /* MARK: - sl-dialog */
-sl-dialog::part(panel){
-    border-radius: 40px;
-    color: var(--sl-card-text);
-    max-width: 1200px;
-    width: 90vw;
-}
+/*sl-dialog::part(panel){*/
+/*    border-radius: 40px;*/
+/*    color: var(--sl-card-text);*/
+/*    max-width: 1200px;*/
+/*    width: 90vw;*/
+/*}*/
 
-sl-dialog::part(header){
-    color: var(--sl-color-primary-900);
-    font-weight: bold;
-}
+/*sl-dialog::part(header){*/
+/*    color: var(--sl-color-primary-900);*/
+/*    font-weight: bold;*/
+/*}*/
 
-sl-dialog header{
-    color: var(--sl-color-primary-900);
-}
+/*sl-dialog header{*/
+/*    color: var(--sl-color-primary-900);*/
+/*}*/
 
-sl-dialog img{
-    height: 400px;
-    width: 100%;
-    border-radius: 12px;
-    object-fit: cover;
-}
-sl-dialog h2{
-    color: var(--sl-color-primary-900);
-}
+/*sl-dialog img{*/
+/*    height: 400px;*/
+/*    width: 100%;*/
+/*    border-radius: 12px;*/
+/*    object-fit: cover;*/
+/*}*/
+/*sl-dialog h2{*/
+/*    color: var(--sl-color-primary-900);*/
+/*}*/
 
 .dialog-body{
     display: grid;
@@ -379,6 +379,35 @@ sl-dialog h2{
 
 .icn-btn-danger sl-icon-button::part(base) {
     color: var(--sl-color-danger-600);
+}
+
+.drawer-body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    /*justify-content: space-between; !* Push Delete button to bottom *!*/
+    padding: 1rem;
+    gap: 0.75rem;
+}
+
+.admin-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.quiz-list {
+    padding-left: 1rem;
+    text-align: left;
+    max-height: 120px;
+    overflow-y: auto;
+    margin: 0.5rem 0;
+}
+
+.drawer-button {
+    width: 100%;
+    margin-top: 1.5rem;
 }
 
 @media (prefers-color-scheme: dark) {
