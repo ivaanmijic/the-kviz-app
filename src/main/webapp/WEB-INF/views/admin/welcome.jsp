@@ -61,9 +61,14 @@
     </sl-details>
     </div>
 
-    <sl-button variant="danger" class="drawer-button" pill onclick="document.getElementById('<%=id%>Dialog').show">Delete</sl-button>
+    <sl-button variant="danger" class="drawer-button" pill onclick="document.getElementById('<%=id%>Dialog').show()">Delete</sl-button>
   </div>
 </sl-drawer>
 
+<sl-dialog label="Confirm Deletion" id="<%=id%>Dialog">
+  <p>Are you sure you want to delete <strong><%=admin.getUsername()%></strong>?</p>
+  <sl-button slot="footer" variant="primary" outline pill onclick="document.getElementById('<%=id%>Dialog').hide()">Cancel</sl-button>
+  <sl-button slot="footer" variant="danger" pill onclick="deleteAdmin(<%=id%>, true)">Delete</sl-button>
+</sl-dialog>
 
-
+<script src="/js/admin-crud.js"></script>

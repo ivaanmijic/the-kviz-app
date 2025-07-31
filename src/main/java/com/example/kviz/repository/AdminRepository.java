@@ -4,14 +4,16 @@ import com.example.kviz.database.PersistenceManager;
 import com.example.kviz.model.Admin;
 
 import com.example.kviz.model.supporting.AdminRole;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
-import jakarta.persistence.TypedQuery;
+import jakarta.persistence.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
 
 public class AdminRepository {
+
+    private static final Logger log = LoggerFactory.getLogger(AdminRepository.class);
 
     public Admin save(Admin admin) {
         EntityManager em = PersistenceManager.entityManager();
@@ -81,6 +83,28 @@ public class AdminRepository {
             Admin managedAdmin = em.contains(admin) ? admin : em.merge(admin);
             em.remove(managedAdmin);
             em.getTransaction().commit();
+        }
+    }
+
+    public void deleteById(Long id) {
+        EntityManager em = PersistenceManager.entityManager();
+        EntityTransaction tx = null;
+
+        try {
+            tx = em.getTransaction();
+            tx.begin();
+            em.createQuery("DELETE FROM Admin a WHERE a.id = :id")
+                    .setParameter("id", id)
+                    .executeUpdate();
+            tx.commit();
+        } catch (RuntimeException e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            log.error("Failed to delete admin with id " + id, e);
+            throw e;
+        } finally {
+            em.close();
         }
     }
 

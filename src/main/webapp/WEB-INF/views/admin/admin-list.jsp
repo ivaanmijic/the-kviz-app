@@ -8,6 +8,7 @@
   Time: 9:41 AM
   To change this template use File | Settings | File Templates.
 --%>
+<script src="/js/admin-crud.js"></script>
 <section>
     <h2 class="section-title">Users</h2>
 
@@ -26,7 +27,7 @@
                 String id = editor.getId().toString();
 
         %>
-        <sl-card class="user-card">
+        <sl-card class="user-card" id="<%=id%>Card">
             <div slot="header" class="admin-avatar">
                 <sl-avatar
                     label="<%= editor.getUsername() %>"
@@ -43,7 +44,7 @@
                 <sl-icon-button
                         name="info-circle"
                         label="Info"
-                        onclick="document.getElementById('<%=id%>').show()";
+                        onclick="document.getElementById('<%=id%>Drawer').show()";
                 >
                 </sl-icon-button>
                 <div class="icn-btn-danger">
@@ -59,7 +60,7 @@
 
         </sl-card>
 
-        <sl-drawer label="Admin Details" id="<%=id%>" placement="end">
+        <sl-drawer label="Admin Details" id="<%=id%>Drawer" placement="end">
             <div class="drawer-body" style="justify-content: space-between">
                 <div class="admin-info">
                     <sl-avatar
@@ -97,13 +98,12 @@
         <sl-dialog label="Confirm Deletion" id="<%=id%>Dialog">
             <p>Are you sure you want to delete <strong><%=editor.getUsername()%></strong>?</p>
             <sl-button slot="footer" variant="primary" outline pill onclick="document.getElementById('<%=id%>Dialog').hide()">Cancel</sl-button>
-            <sl-button slot="footer" variant="danger" pill>Delete</sl-button>
+            <sl-button slot="footer" variant="danger" pill onclick="deleteAdmin(<%=id%>)">Delete</sl-button>
         </sl-dialog>
         <% } %>
     </div>
     <% } %>
 </section>
-<script src="/js/delete-admin.js"></script>
 
 
 

@@ -49,6 +49,10 @@ public class AdminService {
 
     }
 
+    public void deleteAdminById(Long id) {
+        adminRepository.deleteById(id);
+    }
+
     public boolean authenticate(String identificator, String password) {
         return authenticateByEmail(identificator, password) || authenticateByUsername(identificator, password);
     }
