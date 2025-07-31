@@ -2,11 +2,13 @@ package com.example.kviz.service;
 
 import com.example.kviz.database.PersistenceManager;
 import com.example.kviz.model.Admin;
+import com.example.kviz.model.supporting.AdminRole;
 import com.example.kviz.repository.AdminRepository;
 import com.example.kviz.util.PasswordUtil;
 import jakarta.persistence.PersistenceException;
 import org.hibernate.exception.ConstraintViolationException;
 
+import java.util.List;
 import java.util.Optional;
 
 public class AdminService {
@@ -23,6 +25,10 @@ public class AdminService {
 
     public Optional<Admin> getAdminByUsername(String username) {
         return adminRepository.findByUsername(username);
+    }
+
+    public List<Admin> getAllEditors() {
+        return adminRepository.findByRole(AdminRole.EDITOR);
     }
 
     public Admin registerAdmin(Admin admin) throws IllegalStateException, PersistenceException {

@@ -13,8 +13,8 @@
      <c:forEach items="${myQuizzes}" var="quiz" varStatus="loop">
       <sl-card class="quiz-card">
         <img class="quiz-card-img" slot="image" src="${pageContext.request.contextPath}/css/resources/${quiz.thumbnail}">
-        <h2>${quiz.title}</h2>
-        <p class="quiz-card-description">${quiz.description}</p>
+        <div class="title">${quiz.title}</div>
+        <div class="subtitle">${quiz.description}</div>
         <sl-button variant="text" size="medium" class="desc-button">More...</sl-button>
         <div slot="footer" class="footer">
           <sl-icon-button name="pen"></sl-icon-button>

@@ -3,6 +3,7 @@ package com.example.kviz.repository;
 import com.example.kviz.database.PersistenceManager;
 import com.example.kviz.model.Admin;
 
+import com.example.kviz.model.supporting.AdminRole;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
@@ -56,6 +57,14 @@ public class AdminRepository {
             } catch (NoResultException e) {
                 return Optional.empty();
             }
+        }
+    }
+
+    public List<Admin> findByRole(AdminRole role) {
+        try (EntityManager em = PersistenceManager.entityManager()) {
+            TypedQuery<Admin> query = em.createQuery("SELECT a FROM Admin a WHERE a.role = :role", Admin.class);
+            query.setParameter("role", role);
+            return query.getResultList();
         }
     }
 
