@@ -1,3 +1,11 @@
+document.addEventListener("DOMContentLoaded", function() {
+    const drawer = document.querySelector('.nav-drawer');
+    const openButton = document.querySelector('.hamburger-menu');
+
+    if (openButton && drawer) {
+        openButton.addEventListener('click', () => {drawer.show()})
+    }
+})
 document.addEventListener("DOMContentLoaded", () => {
     const navItems = document.querySelectorAll("aside li");
 

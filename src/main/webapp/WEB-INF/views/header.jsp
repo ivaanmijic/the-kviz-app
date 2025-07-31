@@ -7,6 +7,7 @@
 --%>
 <header>
     <div class="header-container">
+        <sl-icon-button name="list" label="Menu" class="hamburger-menu"></sl-icon-button>
         <div class="search-bar">
             <sl-input class="sl-input-color"  placeholder="Search" size="medium" pill filled>
                 <sl-icon-button name="search" slot="suffix" ></sl-icon-button>
@@ -14,7 +15,7 @@
         </div>
         <div class="profile-buttons">
             <sl-avatar label="UserProfile"></sl-avatar>
-            <sl-dropdown class="dropdwon">
+            <sl-dropdown class="dropdown">
                 <sl-button slot="trigger" caret>Options</sl-button>
                 <sl-menu class="custom-menu">
                     <sl-menu-item>

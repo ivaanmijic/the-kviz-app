@@ -1,4 +1,4 @@
-<%--
+<%@ page import="com.example.kviz.model.supporting.AdminRole" %><%--
   Created by IntelliJ IDEA.
   User: haris
   Date: 7/25/25
@@ -19,7 +19,14 @@
 <jsp:include page="/WEB-INF/views/sidebar.jsp"></jsp:include>
 <div class="main">
     <jsp:include page="/WEB-INF/views/header.jsp"></jsp:include>
+
+    <jsp:include page="/WEB-INF/views/admin/welcome.jsp"></jsp:include>
+
     <jsp:include page="/WEB-INF/views/admin/quizzes.jsp"></jsp:include>
+
+    <% if (session.getAttribute("role") == AdminRole.SUPERADMIN) { %>
+        <jsp:include page="/WEB-INF/views/admin/admin-list.jsp"/>
+    <% } %>
 </div>
 <script src="${pageContext.request.contextPath}/js/admin-home.js"></script>
 </body>
