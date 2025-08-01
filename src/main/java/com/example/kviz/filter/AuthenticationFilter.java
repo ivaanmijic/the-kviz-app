@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebFilter(urlPatterns = "/admin/*")
 public class AuthenticationFilter implements Filter {
 
     @Override
@@ -22,7 +21,7 @@ public class AuthenticationFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) response;
 
         HttpSession session = req.getSession(false);
-        Boolean isAdmin = (session != null && session.getAttribute("admin") != null);
+        boolean isAdmin = (session != null && session.getAttribute("admin") != null);
 
         if (isAdmin) {
             chain.doFilter(request, response);
@@ -31,7 +30,4 @@ public class AuthenticationFilter implements Filter {
         }
     }
 
-    @Override
-    public void destroy() {
-    }
 }

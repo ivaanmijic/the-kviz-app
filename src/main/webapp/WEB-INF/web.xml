@@ -6,14 +6,34 @@
 
     <display-name>The Kviz App</display-name>
 
-    <!-- Welcome File List -->
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 
-    <!-- Session Configuration -->
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>
+
+    <filter>
+        <filter-name>RememberMeCookieFilter</filter-name>
+        <filter-class>com.example.kviz.filter.RememberMeCookieFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>RememberMeCookieFilter</filter-name>
+        <url-pattern>/signin</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>RememberMeCookieFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>com.example.kviz.filter.AuthenticationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/admin/*</url-pattern>
+    </filter-mapping>
 
 </web-app>
