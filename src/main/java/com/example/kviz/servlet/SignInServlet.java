@@ -1,11 +1,14 @@
 package com.example.kviz.servlet;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.example.kviz.model.Admin;
 import com.example.kviz.service.AdminService;
+import com.example.kviz.service.SessionAuthTokenService;
 import com.example.kviz.util.HttpResponseUtil;
 import com.example.kviz.util.IdentifierChecker;
 import com.google.gson.Gson;
@@ -21,6 +24,7 @@ public class SignInServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(SignInServlet.class);
 
     private AdminService adminService;
+    private SessionAuthTokenService sessionAuthTokenService;
     private Gson gson;
 
     private static class SignInRequest {
@@ -59,6 +63,7 @@ public class SignInServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         this.adminService = new AdminService();
+        this.sessionAuthTokenService = new SessionAuthTokenService();
         this.gson = new Gson();
     }
 
@@ -102,7 +107,6 @@ public class SignInServlet extends HttpServlet {
 
             if (optionalAdmin.isPresent()) {
                 Admin admin = optionalAdmin.get();
-                log.info("RememberMe: " + signInRequest.isRememberMe());
 
                 HttpSession session = req.getSession(true);
                 session.setAttribute("admin", admin);
@@ -112,13 +116,18 @@ public class SignInServlet extends HttpServlet {
                 session.setMaxInactiveInterval(3600);
 
                 if (rememberMe) {
-                    Cookie usernameCookie = new Cookie("username", admin.getUsername());
-                    usernameCookie.setMaxAge(7 *  24 * 60 * 60);
-                    usernameCookie.setHttpOnly(true);
-                    usernameCookie.setSecure(req.isSecure());
-                    usernameCookie.setPath(req.getContextPath());
-                    log.info(usernameCookie.getValue());
-                    resp.addCookie(usernameCookie);
+                    String token = UUID.randomUUID().toString();
+                    LocalDateTime expiration = LocalDateTime.now().plusDays(7);
+
+                    sessionAuthTokenService.createToken(token, admin, expiration);
+
+                    Cookie tokenCookie = new Cookie("rememberMe", token);
+                    tokenCookie.setMaxAge(7 * 24 * 60 * 60);
+                    tokenCookie.setHttpOnly(true);
+                    tokenCookie.setSecure(req.isSecure());
+                    tokenCookie.setPath(req.getContextPath());
+
+                    resp.addCookie(tokenCookie);
                 }
 
                 resp.sendRedirect(req.getContextPath() + "admin/home");
