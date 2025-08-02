@@ -20,7 +20,7 @@
 <div class="main">
     <jsp:include page="/WEB-INF/views/header.jsp"></jsp:include>
 
-    <jsp:include page="/WEB-INF/views/admin/welcome.jsp"></jsp:include>
+    <jsp:include page="/WEB-INF/views/admin/profile.jsp"></jsp:include>
 
     <jsp:include page="/WEB-INF/views/admin/quizzes.jsp"></jsp:include>
 
@@ -29,5 +29,6 @@
     <% } %>
 </div>
 <script src="${pageContext.request.contextPath}/js/admin-home.js"></script>
+<script src="${pageContext.request.contextPath}/js/admin-crud.js"></script>
 </body>
 </html>

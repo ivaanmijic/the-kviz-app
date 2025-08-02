@@ -13,7 +13,6 @@ import jakarta.persistence.*;
         @UniqueConstraint(name = "UK_admin_username", columnNames = "username")
 })
 public class Admin {
-
     @Expose
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,9 +34,11 @@ public class Admin {
     @Column(nullable = false)
     private AdminRole role;
 
+    @Expose
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    @Expose
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 

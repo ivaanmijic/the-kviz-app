@@ -29,6 +29,11 @@ public class AdminDeleteServlet extends HttpServlet {
     }
 
     @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doPost(req, resp);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info("AdminDeleteServlet: doPost:");
 

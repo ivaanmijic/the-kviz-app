@@ -38,6 +38,14 @@ public class AdminRepository {
         }
     }
 
+    public Optional<Admin> findById(Long id) {
+        try (EntityManager em = PersistenceManager.entityManager()) {
+            return Optional.ofNullable(em.find(Admin.class, id));
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+    }
+
     public Optional<Admin> findByEmail(String email) {
         try (EntityManager em = PersistenceManager.entityManager()) {
             TypedQuery<Admin> query = em.createQuery("SELECT a FROM Admin a WHERE a.email = :email", Admin.class);

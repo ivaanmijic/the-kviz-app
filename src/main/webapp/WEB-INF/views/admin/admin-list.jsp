@@ -8,7 +8,7 @@
   Time: 9:41 AM
   To change this template use File | Settings | File Templates.
 --%>
-<script src="/js/admin-crud.js"></script>
+<script src="${pageContext.request.contextPath}/webjars/jquery/3.7.1/jquery.min.js"></script>
 <section>
     <h2 class="section-title">Users</h2>
 

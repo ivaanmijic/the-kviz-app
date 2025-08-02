@@ -1,13 +1,15 @@
 package com.example.kviz.service;
 
-import com.example.kviz.database.PersistenceManager;
 import com.example.kviz.model.Admin;
 import com.example.kviz.model.supporting.AdminRole;
 import com.example.kviz.repository.AdminRepository;
 import com.example.kviz.util.PasswordUtil;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
-import org.hibernate.exception.ConstraintViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +31,21 @@ public class AdminService {
 
     public List<Admin> getAllEditors() {
         return adminRepository.findByRole(AdminRole.EDITOR);
+    }
+
+    public Admin updateAdmin(Long id, Admin admin, String newPassword) {
+        Admin existingAdmin = adminRepository.findById(id)
+                .orElseThrow(() ->  new EntityNotFoundException("Admin with ID: " + id + " not found"));
+
+        existingAdmin.setEmail(admin.getEmail());
+        existingAdmin.setUsername(admin.getUsername());
+        existingAdmin.setRole(admin.getRole());
+
+        if (newPassword != null && !newPassword.trim().isEmpty()) {
+            existingAdmin.setPassword(PasswordUtil.hashPassword(newPassword));
+        }
+
+        return adminRepository.save(existingAdmin);
     }
 
     public Admin registerAdmin(Admin admin) throws IllegalStateException, PersistenceException {
@@ -55,6 +72,17 @@ public class AdminService {
 
     public boolean authenticate(String identificator, String password) {
         return authenticateByEmail(identificator, password) || authenticateByUsername(identificator, password);
+    }
+
+    public boolean authenticateById(Long id, String password) {
+        Optional<Admin> adminOptional = adminRepository.findById(id);
+        if (adminOptional.isPresent()) {
+            LoggerFactory.getLogger(AdminService.class).info("Admin with ID: " + id + " authenticated");
+            LoggerFactory.getLogger(AdminService.class).info("Password: " + password);
+        }
+        return adminOptional.map(admin ->
+                PasswordUtil.checkPassword(password, admin.getPassword())
+        ).orElse(false);
     }
 
     private boolean authenticateByEmail(String email, String password) {
