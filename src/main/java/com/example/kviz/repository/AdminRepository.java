@@ -16,26 +16,24 @@ public class AdminRepository {
     private static final Logger log = LoggerFactory.getLogger(AdminRepository.class);
 
     public Admin save(Admin admin) {
-        EntityManager em = PersistenceManager.entityManager();
-
-        try {
-            em.getTransaction().begin();
-            if (admin.getId() == null) {
-                em.persist(admin);
-            } else {
-                admin = em.merge(admin);
-            }
-            em.getTransaction().commit();
-            return admin;
-
-        } catch (Exception e) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-            throw e;
-        } finally {
-            em.close();
-        }
+       EntityManager em = PersistenceManager.entityManager();
+       try {
+           em.getTransaction().begin();
+           if (admin.getId() == null) {
+               em.persist(admin);
+           } else {
+               em.merge(admin);
+           }
+           em.getTransaction().commit();
+           return admin;
+       } catch (Exception e) {
+           if (em.getTransaction().isActive()) {
+               em.getTransaction().rollback();
+           }
+           throw e;
+       } finally {
+           em.close();
+       }
     }
 
     public Optional<Admin> findById(Long id) {
@@ -87,22 +85,10 @@ public class AdminRepository {
 
     public void delete(Admin admin) {
         EntityManager em = PersistenceManager.entityManager();
-
         try {
             em.getTransaction().begin();
-
-            em.createQuery("Delete from SessionAuthToken t WHERE t.admin.id = :id")
-                    .setParameter("id", admin.getId())
-                    .executeUpdate();
-
-            em.createQuery("Delete from Quiz q WHERE q.owner.id = :id")
-                    .setParameter("id", admin.getId())
-                    .executeUpdate();
-
-            em.createQuery("Delete from Admin a WHERE a.id = :id")
-                    .setParameter("id", admin.getId())
-                    .executeUpdate();
-
+            Admin managedAdmin = em.contains(admin) ? admin : em.merge(admin);
+            em.remove(managedAdmin);
             em.getTransaction().commit();
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {
@@ -115,32 +101,8 @@ public class AdminRepository {
     }
 
     public void deleteById(Long id) {
-                EntityManager em = PersistenceManager.entityManager();
-
-        try {
-            em.getTransaction().begin();
-
-            em.createQuery("Delete from SessionAuthToken t WHERE t.admin.id = :id")
-                    .setParameter("id", id)
-                    .executeUpdate();
-
-            em.createQuery("Delete from Quiz q WHERE q.owner.id = :id")
-                    .setParameter("id", id)
-                    .executeUpdate();
-
-            em.createQuery("Delete from Admin a WHERE a.id = :id")
-                    .setParameter("id", id)
-                    .executeUpdate();
-
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-            throw e;
-        } finally {
-            em.close();
-        }
+        findById(id).ifPresent(this::delete);
     }
+
 
 }

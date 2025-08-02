@@ -3,6 +3,7 @@ package com.example.kviz.repository;
 import com.example.kviz.database.PersistenceManager;
 import com.example.kviz.model.SessionAuthToken;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -33,11 +34,16 @@ public class SessionAuthTokenRepository {
 
     public Optional<SessionAuthToken> findByToken(String token) {
         try (EntityManager em = PersistenceManager.entityManager()) {
-            SessionAuthToken authToken = em.find(SessionAuthToken.class, token);
-            if (authToken == null || authToken.getExpiry().isBefore(LocalDateTime.now())) {
-                return Optional.empty();
-            }
-            return Optional.of(authToken);
+            SessionAuthToken tokenEntity = em.createQuery("""
+                SELECT t FROM SessionAuthToken t
+                JOIN FETCH t.admin a
+                WHERE t.token = :token
+                """, SessionAuthToken.class)
+                    .setParameter("token", token)
+                    .getSingleResult();
+            return Optional.of(tokenEntity);
+        } catch (NoResultException e) {
+            return Optional.empty();
         }
     }
 
