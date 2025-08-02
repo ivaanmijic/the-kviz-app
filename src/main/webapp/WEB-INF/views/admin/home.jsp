@@ -20,7 +20,7 @@
 <div class="main">
     <jsp:include page="/WEB-INF/views/header.jsp"></jsp:include>
 
-    <jsp:include page="/WEB-INF/views/admin/welcome.jsp"></jsp:include>
+    <jsp:include page="/WEB-INF/views/admin/profile.jsp"></jsp:include>
 
     <jsp:include page="/WEB-INF/views/admin/quizzes.jsp"></jsp:include>
 
@@ -28,6 +28,12 @@
         <jsp:include page="/WEB-INF/views/admin/admin-list.jsp"/>
     <% } %>
 </div>
+
+<sl-alert class="alert" id="succesAlert" variant="success" closable></sl-alert>
+
+<sl-alert class="alert" id="errorAlert" variant="danger" closable></sl-alert>
+
 <script src="${pageContext.request.contextPath}/js/admin-home.js"></script>
+<script type="module" src="${pageContext.request.contextPath}/js/adminController.js"></script>
 </body>
 </html>

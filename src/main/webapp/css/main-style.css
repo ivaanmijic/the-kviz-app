@@ -252,6 +252,19 @@ sl-card img{
     max-height: none;
 }
 
+sl-alert::part(base) {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    max-width: 90vw;
+    width: fit-content;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    font-size: 1.1rem;
+    padding: 0.75rem 1rem;
+}
+
 /* MARK: - sl-dialog */
 /*sl-dialog::part(panel){*/
 /*    border-radius: 40px;*/

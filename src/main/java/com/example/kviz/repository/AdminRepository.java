@@ -4,14 +4,16 @@ import com.example.kviz.database.PersistenceManager;
 import com.example.kviz.model.Admin;
 
 import com.example.kviz.model.supporting.AdminRole;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
-import jakarta.persistence.TypedQuery;
+import jakarta.persistence.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
 
 public class AdminRepository {
+
+    private static final Logger log = LoggerFactory.getLogger(AdminRepository.class);
 
     public Admin save(Admin admin) {
         EntityManager em = PersistenceManager.entityManager();
@@ -33,6 +35,14 @@ public class AdminRepository {
             throw e;
         } finally {
             em.close();
+        }
+    }
+
+    public Optional<Admin> findById(Long id) {
+        try (EntityManager em = PersistenceManager.entityManager()) {
+            return Optional.ofNullable(em.find(Admin.class, id));
+        } catch (NoResultException e) {
+            return Optional.empty();
         }
     }
 
@@ -76,11 +86,60 @@ public class AdminRepository {
     }
 
     public void delete(Admin admin) {
-        try (EntityManager em = PersistenceManager.entityManager()) {
+        EntityManager em = PersistenceManager.entityManager();
+
+        try {
             em.getTransaction().begin();
-            Admin managedAdmin = em.contains(admin) ? admin : em.merge(admin);
-            em.remove(managedAdmin);
+
+            em.createQuery("Delete from SessionAuthToken t WHERE t.admin.id = :id")
+                    .setParameter("id", admin.getId())
+                    .executeUpdate();
+
+            em.createQuery("Delete from Quiz q WHERE q.owner.id = :id")
+                    .setParameter("id", admin.getId())
+                    .executeUpdate();
+
+            em.createQuery("Delete from Admin a WHERE a.id = :id")
+                    .setParameter("id", admin.getId())
+                    .executeUpdate();
+
             em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
+
+    public void deleteById(Long id) {
+                EntityManager em = PersistenceManager.entityManager();
+
+        try {
+            em.getTransaction().begin();
+
+            em.createQuery("Delete from SessionAuthToken t WHERE t.admin.id = :id")
+                    .setParameter("id", id)
+                    .executeUpdate();
+
+            em.createQuery("Delete from Quiz q WHERE q.owner.id = :id")
+                    .setParameter("id", id)
+                    .executeUpdate();
+
+            em.createQuery("Delete from Admin a WHERE a.id = :id")
+                    .setParameter("id", id)
+                    .executeUpdate();
+
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw e;
+        } finally {
+            em.close();
         }
     }
 

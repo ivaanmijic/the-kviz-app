@@ -25,6 +25,15 @@ public class SessionAuthTokenService {
         return tokenOptional.map(SessionAuthToken::getAdmin);
     }
 
+    public void updateToken(String token, Admin admin) {
+        Optional<SessionAuthToken> tokenOptional = sessionAuthTokenRepository.findByToken(token);
+        if (tokenOptional.isPresent()) {
+            SessionAuthToken sessionAuthToken = tokenOptional.get();
+            sessionAuthToken.setAdmin(admin);
+            sessionAuthTokenRepository.save(sessionAuthToken);
+        }
+    }
+
     public void deleteToken(String token) {
         Optional<SessionAuthToken> tokenOptional = sessionAuthTokenRepository.findByToken(token);
         tokenOptional.ifPresent(sessionAuthTokenRepository::delete);
