@@ -1,6 +1,7 @@
 package com.example.kviz.servlet;
 
 import com.example.kviz.model.Admin;
+import com.example.kviz.model.request.SignUpRequest;
 import com.example.kviz.model.supporting.AdminRole;
 import com.example.kviz.service.AdminService;
 import com.example.kviz.util.HttpResponseUtil;
@@ -28,38 +29,6 @@ public class SignUpServlet extends HttpServlet {
     private AdminService adminService;
     private Gson gson;
 
-    private static class SignUpRequset {
-        private String email;
-        private String username;
-        private String password;
-
-        public SignUpRequset() {}
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-    }
-
     @Override
     public void init() throws ServletException {
         super.init();
@@ -73,17 +42,17 @@ public class SignUpServlet extends HttpServlet {
 
         String body = req.getReader().lines().collect(Collectors.joining("\n"));
 
-        SignUpRequset signup = gson.fromJson(body, SignUpRequset.class);
+        SignUpRequest signUp = gson.fromJson(body, SignUpRequest.class);
 
         List<String> errors = new ArrayList<>();
-        if (isEmpty(signup.getEmail())) errors.add("Email is required");
-        else if (!IdentifierChecker.isEmail(signup.getEmail())) errors.add("Invalid email");
+        if (isEmpty(signUp.getEmail())) errors.add("Email is required");
+        else if (!IdentifierChecker.isEmail(signUp.getEmail())) errors.add("Invalid email");
 
-        if (isEmpty(signup.getUsername())) errors.add("Username is required");
-        else if (!IdentifierChecker.isUsername(signup.getUsername())) errors.add("Invalid username");
+        if (isEmpty(signUp.getUsername())) errors.add("Username is required");
+        else if (!IdentifierChecker.isUsername(signUp.getUsername())) errors.add("Invalid username");
 
-        if (isEmpty(signup.getPassword())) errors.add("Password is required");
-        else if (signup.getPassword().length() < 8) errors.add("Password length must be at least 8 characters");
+        if (isEmpty(signUp.getPassword())) errors.add("Password is required");
+        else if (signUp.getPassword().length() < 8) errors.add("Password length must be at least 8 characters");
 
         if (!errors.isEmpty()) {
             HttpResponseUtil.sendBadRequest(resp, String.join("; ", errors));
@@ -91,9 +60,9 @@ public class SignUpServlet extends HttpServlet {
         }
 
         Admin admin = new Admin(
-                signup.getEmail(),
-                signup.getUsername(),
-                signup.getPassword(),
+                signUp.getEmail(),
+                signUp.getUsername(),
+                signUp.getPassword(),
                 AdminRole.EDITOR
         );
 

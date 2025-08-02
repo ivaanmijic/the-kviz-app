@@ -19,7 +19,13 @@ function deleteAdmin(id, self = false) {
             }
         })
         .fail(function (jqXHR) {
-            alert("Failed to delete admin: " + jqXHR.responseText);
+            const alert = document.getElementById('errorAlert')
+            alert.innerHTML = `
+            <sl-icon slot="icon" name="exclamation-octagon"></sl-icon>
+            <strong>${jqXHR.responseText}</strong><br/>
+            Please try again.
+            `;
+            alert.show();
         });
 }
 
@@ -38,9 +44,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const pwMatchIndicator = dialog.querySelector('#pwMatchIndicator');
 
     const initialValues = {
-        email: emailInput.value,
-        username: usernameInput.value,
+        email: "",
+        username: "",
     };
+
+    dialog.addEventListener('sl-show', () => {
+        initialValues.email = emailInput.value;
+        initialValues.email = usernameInput.value;
+        toggleUpdateButton()
+    });
 
     const checkPasswordMatch = () => {
         const newPw = newPasswordInput.value;
@@ -61,27 +73,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const toggleUpdateButton = () => {
         const oldPasswordFilled = oldPasswordInput.value.length > 0;
-        const emailChanged = emailInput.value !== initialValues.email;
-        const usernameChanged = usernameInput.value !== initialValues.username;
+        const emailChanged      = emailInput.value !== initialValues.email;
+        const usernameChanged   = usernameInput.value !== initialValues.username;
         const newPasswordEntered = newPasswordInput.value.length > 0;
-        const passwordsMatch = checkPasswordMatch();
-
-        const hasValidChanges = emailChanged || usernameChanged || (newPasswordEntered && passwordsMatch);
+        const passwordsMatch    = checkPasswordMatch();
+        const hasValidChanges   = emailChanged || usernameChanged || (newPasswordEntered && passwordsMatch);
 
         updateBtn.disabled = !(oldPasswordFilled && hasValidChanges);
     };
 
-    [emailInput, usernameInput, oldPasswordInput, newPasswordInput, repPasswordInput].forEach(input => {
-        input.addEventListener('sl-input', toggleUpdateButton);
-    });
+    [emailInput, usernameInput, oldPasswordInput, newPasswordInput, repPasswordInput]
+        .forEach(input => input.addEventListener('sl-input', toggleUpdateButton));
 
     updateBtn.addEventListener('click', async () => {
 
-        const data = {
+        const admin = {
             username: usernameInput.value,
             email: emailInput.value,
             role: role,
-            currentPassword: oldPasswordInput.value,
+            password: oldPasswordInput.value,
+        }
+
+        const data = {
+            admin: admin,
             newPassword: newPasswordInput.value,
         };
 
@@ -93,14 +107,29 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.ok) {
-                alert('Profile updated successfully! The page will now reload.');
-                location.reload();
+                const alert = document.getElementById('succesAlert');
+                console.log(alert);
+                alert.innerHTML = `
+                    <sl-icon slot="icon" name="info-circle"></sl-icon>
+                    <strong>Profile updated successfully!</strong>
+                    The page will now reload.
+                    `;
+                alert.show();
+                alert.addEventListener('sl-after-hide', () => {
+                    location.reload();
+                })
             } else {
                 const errorResult = await response.json();
-                throw new Error(errorResult.message || 'Update failed. Please check your credentials.');
+                throw new Error(errorResult.error || 'Update failed. Please check your credentials.');
             }
         } catch (error) {
-            alert(`Error: ${error.message}`);
+            const alert = document.getElementById('errorAlert')
+            alert.innerHTML = `
+            <sl-icon slot="icon" name="exclamation-octagon"></sl-icon>
+            <strong>${error.message}</strong><br/>
+            Please try again.
+            `;
+            alert.show();
         }
     });
 });

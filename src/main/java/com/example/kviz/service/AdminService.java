@@ -6,10 +6,8 @@ import com.example.kviz.repository.AdminRepository;
 import com.example.kviz.util.PasswordUtil;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +34,16 @@ public class AdminService {
     public Admin updateAdmin(Long id, Admin admin, String newPassword) {
         Admin existingAdmin = adminRepository.findById(id)
                 .orElseThrow(() ->  new EntityNotFoundException("Admin with ID: " + id + " not found"));
+
+        if (adminRepository.findByEmail(admin.getEmail()).isPresent() &&
+                !adminRepository.findByEmail(admin.getEmail()).get().getEmail().equals(admin.getEmail())) {
+            throw new IllegalStateException("An account with this email already exists. Choose another one.");
+        }
+
+        if (adminRepository.findByUsername(admin.getUsername()).isPresent() &&
+                !adminRepository.findByUsername(admin.getUsername()).get().getUsername().equals(admin.getUsername())) {
+            throw new IllegalStateException("An account with username already exists. Choose another one.");
+        }
 
         existingAdmin.setEmail(admin.getEmail());
         existingAdmin.setUsername(admin.getUsername());

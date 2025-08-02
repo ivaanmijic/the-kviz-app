@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.example.kviz.model.Admin;
+import com.example.kviz.model.request.SignInRequest;
 import com.example.kviz.service.AdminService;
 import com.example.kviz.service.SessionAuthTokenService;
 import com.example.kviz.util.HttpResponseUtil;
@@ -26,38 +27,6 @@ public class SignInServlet extends HttpServlet {
     private AdminService adminService;
     private SessionAuthTokenService sessionAuthTokenService;
     private Gson gson;
-
-    private static class SignInRequest {
-        private String emailOrUsername;
-        private String password;
-        private boolean rememberMe;
-
-        public SignInRequest() {}
-
-        public String getEmailOrUsername() {
-            return emailOrUsername;
-        }
-
-        public void setEmailOrUsername(String emailOrUsername) {
-            this.emailOrUsername = emailOrUsername;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
-        }
-
-        public boolean isRememberMe() {
-            return rememberMe;
-        }
-
-        public void setRememberMe(boolean rememberMe) {
-            this.rememberMe = rememberMe;
-        }
-    }
 
     @Override
     public void init() throws ServletException {
@@ -80,10 +49,10 @@ public class SignInServlet extends HttpServlet {
         log.info("Sign-in POST request received");
         String body = req.getReader().lines().collect(Collectors.joining("\n"));
 
-        SignInRequest signInRequest = gson.fromJson(body, SignInRequest.class);
-        String emailOrUsername = signInRequest.getEmailOrUsername();
-        String password = signInRequest.getPassword();
-        boolean rememberMe = signInRequest.isRememberMe();
+        SignInRequest signIn = gson.fromJson(body, SignInRequest.class);
+        String emailOrUsername = signIn.getEmailOrUsername();
+        String password = signIn.getPassword();
+        boolean rememberMe = signIn.isRememberMe();
 
         if (emailOrUsername == null || emailOrUsername.trim().isEmpty()) {
             HttpResponseUtil.sendBadRequest(resp, "Email or username is required");

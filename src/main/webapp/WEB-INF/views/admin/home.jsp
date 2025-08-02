@@ -28,6 +28,11 @@
         <jsp:include page="/WEB-INF/views/admin/admin-list.jsp"/>
     <% } %>
 </div>
+
+<sl-alert class="alert" id="succesAlert" variant="success" closable></sl-alert>
+
+<sl-alert class="alert" id="errorAlert" variant="danger" closable></sl-alert>
+
 <script src="${pageContext.request.contextPath}/js/admin-home.js"></script>
 <script src="${pageContext.request.contextPath}/js/admin-crud.js"></script>
 </body>

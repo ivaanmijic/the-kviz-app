@@ -1,23 +1,25 @@
 package com.example.kviz.servlet.admin;
 
 import com.example.kviz.model.Admin;
-import com.example.kviz.model.supporting.AdminRole;
+import com.example.kviz.model.adapter.AdminTypeAdapter;
+import com.example.kviz.model.request.AdminUpdateRequest;
 import com.example.kviz.service.AdminService;
+import com.example.kviz.service.SessionAuthTokenService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.annotations.Expose;
-import jakarta.jms.Session;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @WebServlet("/admin/update")
@@ -26,26 +28,30 @@ public class AdminUpdateServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(AdminUpdateServlet.class);
 
     private AdminService adminService;
+    private SessionAuthTokenService sessionAuthTokenService;
     private Gson gson;
 
-    private static class AdminUpdateRequest {
-        @Expose
-        String username;
-        @Expose
-        String email;
-        @Expose
-        AdminRole role;
-        @Expose
-        String currentPassword;
-        @Expose
-        String newPassword;
-    }
 
     @Override
     public void init() throws ServletException {
         super.init();
         adminService = new AdminService();
-        gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        sessionAuthTokenService = new SessionAuthTokenService();
+
+        gson = new GsonBuilder()
+                .registerTypeAdapter(Admin.class, new AdminTypeAdapter())
+                .registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
+                    @Override
+                    public void write(JsonWriter out, LocalDateTime value) throws IOException {
+                        out.value(value != null ? value.toString() : null);
+                    }
+
+                    @Override
+                    public LocalDateTime read(JsonReader in) throws IOException {
+                        return LocalDateTime.parse(in.nextString());
+                    }
+                })
+                .create();
     }
 
     @Override
@@ -71,7 +77,7 @@ public class AdminUpdateServlet extends HttpServlet {
         } catch (Exception e) {
             log.error("Error while processing request", e);
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            gson.toJson(Map.of("error", "Error while processing request"), resp.getWriter());
+            gson.toJson(Map.of("error", "Error while processing request body"), resp.getWriter());
             return;
         }
 
@@ -86,30 +92,59 @@ public class AdminUpdateServlet extends HttpServlet {
             return;
         }
 
+        if (payload == null || payload.getNewPassword() == null || payload.getAdmin().getPassword() == null) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            gson.toJson(Map.of("error", "Invalid requset payload. Old password is required"), resp.getWriter());
+            return;
+        }
+
         try {
-            Admin admin = new Admin(payload.email, payload.username, payload.currentPassword, payload.role);
-            if (adminService.authenticateById(id, payload.currentPassword)) {
-                Admin updated = adminService.updateAdmin(id, admin, payload.newPassword);
+            if (adminService.authenticateById(id, payload.getAdmin().getPassword())) {
+                Admin updated = adminService.updateAdmin(id, payload.getAdmin(), payload.getNewPassword());
                 resp.setStatus(HttpServletResponse.SC_OK);
                 gson.toJson(Map.of("admin", updated), resp.getWriter());
+                udpateSession(req.getSession(false), updated);
+                updateCookie(req, updated);
             } else {
                 resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 gson.toJson(Map.of("error", "Wrong password"), resp.getWriter());
-                log.error("Wrong password.");
+                log.warn("Failed authentication attempt for admin id: {}", id);
             }
+        } catch (IllegalStateException e) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            gson.toJson(Map.of("error", e.getMessage()), resp.getWriter());
+            log.error("Error while processing request", e);
+
         } catch (IllegalArgumentException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            log.error("Invalid arguments. {}", e.getMessage());
+            log.error("Invalid arguments for admin update. {}", e.getMessage());
             gson.toJson(Map.of("error", e.getMessage()), resp.getWriter());
 
         } catch (Exception e) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            gson.toJson(Map.of("error", "Server error"), resp.getWriter());
+            gson.toJson(Map.of("error", "A server error occurred while updating the admin profile."), resp.getWriter());
             log.error("Error updating admin", e);
         }
 
     }
 
-    private void udpateSession(HttpServletRequest req, Admin udpatedAdmin) {
+    private void udpateSession(HttpSession session, Admin udpatedAdmin) {
+        session.setAttribute("admin", udpatedAdmin);
+        session.setAttribute("id", udpatedAdmin.getId());
+        session.setAttribute("role", udpatedAdmin.getRole());
+    }
+
+    private void updateCookie(HttpServletRequest req, Admin updatedAdmin) {
+        Cookie[] cookies = req.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("admin")) {
+                    if (cookie.getValue() != null) {
+                        String token =  cookie.getValue();
+                        sessionAuthTokenService.updateToken(token, updatedAdmin);
+                    }
+                }
+            }
+        }
     }
 }

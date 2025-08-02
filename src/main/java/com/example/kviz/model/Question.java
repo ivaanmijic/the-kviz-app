@@ -3,6 +3,7 @@ package com.example.kviz.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.example.kviz.model.supporting.AdminRole;
 import com.example.kviz.model.supporting.QuestionType;
 import com.google.gson.annotations.Expose;
 
