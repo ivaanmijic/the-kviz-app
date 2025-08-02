@@ -30,8 +30,8 @@ public class Question {
     private List<String> answers = new ArrayList<>();
 
     @Expose
-    @Column
-    private String correct_answer;
+    @Column(name = "correct_answer")
+    private String correctAnswer;
 
     @Expose
     @Enumerated(EnumType.STRING)
@@ -63,10 +63,10 @@ public class Question {
     public Question() {
     }
 
-    public Question(String question, List<String> answers, String correct_answer, Quiz quiz, QuestionType type) {
+    public Question(String question, List<String> answers, String correctAnswer, Quiz quiz, QuestionType type) {
         this.question = question;
         this.answers = answers;
-        this.correct_answer = correct_answer;
+        this.correctAnswer = correctAnswer;
         this.quiz = quiz;
         this.type = type;
     }
@@ -95,10 +95,10 @@ public class Question {
     }
 
     public String getCorrect_answer() {
-        return correct_answer;
+        return correctAnswer;
     }
-    public void setCorrect_answer(String correct_answer) {
-        this.correct_answer = correct_answer;
+    public void setCorrect_answer(String correctAnswer) {
+        this.correctAnswer = correctAnswer;
     }
 
     public QuestionType getType() {
@@ -116,7 +116,7 @@ public class Question {
     }
 
     public boolean checkIfCorrectAnswer(String answer){
-        return answer.equals(this.correct_answer);
+        return answer.equals(this.correctAnswer);
     }
 
 }

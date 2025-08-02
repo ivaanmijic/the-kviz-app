@@ -11,7 +11,7 @@ public class SessionAuthToken {
     @Id
     private String token;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "admin_id", nullable = false)
     private Admin admin;
 

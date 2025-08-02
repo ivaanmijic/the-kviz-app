@@ -46,14 +46,17 @@ public class Admin {
 
     @OneToMany(
             mappedBy = "owner",
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
     )
     private List<Quiz> quizzes =  new ArrayList<>();
 
     @OneToMany(
             mappedBy = "admin",
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
     )
     private List<SessionAuthToken> sessionAuthTokens = new ArrayList<>();
 
