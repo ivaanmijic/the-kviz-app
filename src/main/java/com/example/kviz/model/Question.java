@@ -1,6 +1,7 @@
 package com.example.kviz.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.example.kviz.model.supporting.AdminRole;
@@ -23,8 +24,10 @@ public class Question {
     private String question;
 
     @Expose
-    @Column
-    private List<String> answers;
+    @ElementCollection
+    @CollectionTable(name = "answers", joinColumns = @JoinColumn(name = "question_id"))
+    @Column(name = "answer")
+    private List<String> answers = new ArrayList<>();
 
     @Expose
     @Column
@@ -35,7 +38,7 @@ public class Question {
     @Column(nullable = false)
     private QuestionType type;
 
-    @ManyToOne
+    @ManyToOne(fetch =  FetchType.LAZY)
     @JoinColumn(name = "quiz_id", nullable = false)
     private Quiz quiz;
 

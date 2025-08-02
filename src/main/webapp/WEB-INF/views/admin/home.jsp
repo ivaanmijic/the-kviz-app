@@ -34,6 +34,6 @@
 <sl-alert class="alert" id="errorAlert" variant="danger" closable></sl-alert>
 
 <script src="${pageContext.request.contextPath}/js/admin-home.js"></script>
-<script src="${pageContext.request.contextPath}/js/admin-crud.js"></script>
+<script type="module" src="${pageContext.request.contextPath}/js/adminController.js"></script>
 </body>
 </html>

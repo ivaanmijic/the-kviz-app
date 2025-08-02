@@ -86,30 +86,57 @@ public class AdminRepository {
     }
 
     public void delete(Admin admin) {
-        try (EntityManager em = PersistenceManager.entityManager()) {
+        EntityManager em = PersistenceManager.entityManager();
+
+        try {
             em.getTransaction().begin();
-            Admin managedAdmin = em.contains(admin) ? admin : em.merge(admin);
-            em.remove(managedAdmin);
+
+            em.createQuery("Delete from SessionAuthToken t WHERE t.admin.id = :id")
+                    .setParameter("id", admin.getId())
+                    .executeUpdate();
+
+            em.createQuery("Delete from Quiz q WHERE q.owner.id = :id")
+                    .setParameter("id", admin.getId())
+                    .executeUpdate();
+
+            em.createQuery("Delete from Admin a WHERE a.id = :id")
+                    .setParameter("id", admin.getId())
+                    .executeUpdate();
+
             em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw e;
+        } finally {
+            em.close();
         }
     }
 
     public void deleteById(Long id) {
-        EntityManager em = PersistenceManager.entityManager();
-        EntityTransaction tx = null;
+                EntityManager em = PersistenceManager.entityManager();
 
         try {
-            tx = em.getTransaction();
-            tx.begin();
-            em.createQuery("DELETE FROM Admin a WHERE a.id = :id")
+            em.getTransaction().begin();
+
+            em.createQuery("Delete from SessionAuthToken t WHERE t.admin.id = :id")
                     .setParameter("id", id)
                     .executeUpdate();
-            tx.commit();
-        } catch (RuntimeException e) {
-            if (tx != null && tx.isActive()) {
-                tx.rollback();
+
+            em.createQuery("Delete from Quiz q WHERE q.owner.id = :id")
+                    .setParameter("id", id)
+                    .executeUpdate();
+
+            em.createQuery("Delete from Admin a WHERE a.id = :id")
+                    .setParameter("id", id)
+                    .executeUpdate();
+
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
             }
-            log.error("Failed to delete admin with id " + id, e);
             throw e;
         } finally {
             em.close();

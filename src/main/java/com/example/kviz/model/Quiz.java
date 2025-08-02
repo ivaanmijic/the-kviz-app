@@ -4,6 +4,8 @@ import com.google.gson.annotations.Expose;
 import com.example.kviz.model.Admin;
 import com.example.kviz.model.Question;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import java.time.LocalDateTime;
@@ -30,15 +32,18 @@ public class Quiz {
     @Column(nullable = false, length = 10000)
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "admin_id", nullable = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "admin_id")
     private Admin owner;
 
-    @OneToMany
-    @JoinColumn(name = "questions", nullable = true)
-    private List<Question> questions;
+    @OneToMany(
+            mappedBy = "quiz",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Question> questions = new ArrayList<>();
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createAt;
 
     @Column(name = "updated_at")
@@ -48,6 +53,7 @@ public class Quiz {
     protected void onCreate() {
         this.createAt = LocalDateTime.now();
     }
+
     //MARK: - Initialization
 
     public Quiz(){

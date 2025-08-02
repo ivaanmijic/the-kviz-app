@@ -1,6 +1,8 @@
 package com.example.kviz.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.example.kviz.model.supporting.AdminRole;
 import com.google.gson.annotations.Expose;
@@ -35,12 +37,25 @@ public class Admin {
     private AdminRole role;
 
     @Expose
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Expose
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @OneToMany(
+            mappedBy = "owner",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}
+    )
+    private List<Quiz> quizzes =  new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "admin",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<SessionAuthToken> sessionAuthTokens = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
@@ -94,6 +109,14 @@ public class Admin {
         return updatedAt;
     }
 
+    public List<Quiz> getQuizzes() {
+        return quizzes;
+    }
+
+    public List<SessionAuthToken> getSessionAuthTokens() {
+        return sessionAuthTokens;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -122,4 +145,11 @@ public class Admin {
         this.updatedAt = updatedAt;
     }
 
+    public void setQuizzes(List<Quiz> quizzes) {
+        this.quizzes = quizzes;
+    }
+
+    public void setSessionAuthTokens(List<SessionAuthToken> sessionAuthTokens) {
+        this.sessionAuthTokens = sessionAuthTokens;
+    }
 }

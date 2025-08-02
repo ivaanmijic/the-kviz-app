@@ -78,7 +78,14 @@
 <sl-dialog label="Confirm Deletion" id="<%=id%>Dialog">
     <p>Are you sure you want to delete <strong><%=admin.getUsername()%></strong>?</p>
     <sl-button slot="footer" variant="primary" outline pill onclick="document.getElementById('<%=id%>Dialog').hide()">Cancel</sl-button>
-    <sl-button slot="footer" variant="danger" pill onclick="deleteAdmin(<%=id%>, true)">Delete</sl-button>
+    <sl-button slot="footer"
+               variant="danger"
+               class="delete-admin-btn"
+               data-admin-id="<%= id %>"
+               data-self="<%= true %>"
+               pill>
+               Delete
+    </sl-button>
 </sl-dialog>
 
 <script>

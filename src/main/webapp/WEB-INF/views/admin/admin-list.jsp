@@ -89,7 +89,8 @@
                         variant="danger"
                         class="drawer-button"
                         pill
-                        onclick="document.getElementById('<%=id%>Dialog').show()">
+                        onclick="document.getElementById('<%=id%>Dialog').show()"
+                >
                     Delete
                 </sl-button>
             </div>
@@ -98,7 +99,13 @@
         <sl-dialog label="Confirm Deletion" id="<%=id%>Dialog">
             <p>Are you sure you want to delete <strong><%=editor.getUsername()%></strong>?</p>
             <sl-button slot="footer" variant="primary" outline pill onclick="document.getElementById('<%=id%>Dialog').hide()">Cancel</sl-button>
-            <sl-button slot="footer" variant="danger" pill onclick="deleteAdmin(<%=id%>)">Delete</sl-button>
+            <sl-button slot="footer"
+                       variant="danger"
+                       pill
+                       class="delete-admin-btn"
+                       data-admin-id="<%= editor.getId() %>"
+                       data-self="<%= false %>"
+                       onclick="deleteAdmin(<%=id%>)">Delete</sl-button>
         </sl-dialog>
         <% } %>
     </div>
