@@ -276,17 +276,18 @@ sl-dialog h2{
     font-size: var(--font-size-small);
     margin-bottom: 10px;
 }
+
 .submit-quiz:hover{}
+
 /* MARK: - quiz info */
 .main-quiz-info{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: auto auto;
-    grid-template-rows: 50px auto;
     gap: 20px;
     min-height: 300px;
 }
-
+/* MARK: - upload box */
 .upload-box{
     display: grid;
     align-items: center;
@@ -295,7 +296,9 @@ sl-dialog h2{
     border: 1px dashed var(--sl-color-neutral-500);
     border-radius: 20px;
     height:300px;
+    overflow: hidden;
 }
+
 .upload-box:hover{
     border-color: var(--sl-color-neutral-600);
 }
@@ -309,26 +312,23 @@ sl-dialog h2{
     color: var(--sl-color-primary-700);
 }
 
+/* MARK: - quiz image preview */
 #quizPreview{
     width: 100%;
     height: 100%;
     border-radius: 15px;
+    object-fit: cover;
 }
 
 #imageInput{
     display: none;
 }
 
+/* MARK: - description textarea */
 .main-quiz-info sl-textarea{
     grid-column: span 2;
 }
 
-sl-textarea::part(form-control) {
-    height: 100%;
-}
-sl-textarea::part(form-control-input) {
-     height: 100%;
-}
 sl-textarea::part(textarea) {
      height: 100%;
 }
@@ -362,14 +362,14 @@ sl-textarea::part(base) {
     margin-bottom: 10px;
 }
 
+/* MARK: - all of the details/questions */
 #questions-container{
     display: flex;
     flex-direction: column;
     justify-content: start;
     align-items: center;
     width: 100%;
-    padding: 5px;
-    padding-top: 30px;
+    padding: 30px 5px 5px;
 }
 
 sl-details{
@@ -377,6 +377,7 @@ sl-details{
     margin: 15px;
 }
 
+/* MARK: - one question container */
 .question-cont{
      display: grid;
      grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -385,26 +386,24 @@ sl-details{
      justify-content: center;
  }
 
+/* MARK: - upload box for question image */
 .question-cont .upload-box{
     grid-row: span 3;
     height: 200px;
 }
 
-
-#add-question-button sl-icon{
-    color: var(--bg-color);
-    font-size: 2rem;
-}
 .question-img-preview{
     height: 100%;
     width: 100%;
     border-radius: 15px;
 }
 
+/* MARK: - input field for question */
 .question {
     grid-column: span 3;
 }
 
+/* MARK: - four of the given answers */
 .radio-group{
     grid-column: span 3;
     width: 100%;
@@ -441,10 +440,17 @@ sl-details{
     width: 100%;
 }
 
+/* MARK: - when moving questions around */
 .dragging{
     opacity:0.5;
     border:1px dashed ;
 }
+
+/* MARK: - button for adding new questions */
+#add-question-button sl-icon{
+     color: var(--bg-color);
+     font-size: 2rem;
+ }
 
 @media (prefers-color-scheme: dark) {
     .main {
@@ -479,32 +485,6 @@ sl-details{
         grid-column: span 2;
         grid-row: 3;
     }
-}
-
-@media (max-width: 480px) {
-    .main-quiz-info {
-        grid-template-columns: 1fr;
-    }
-
-    .upload-box{
-        grid-column: 1;
-        grid-row: 1;
-    }
-    .main-quiz-info sl-input{
-        grid-column: 1;
-        grid-row: 2;
-    }
-    .main-quiz-info sl-select{
-        grid-column: 1;
-        grid-row: 3;
-    }
-    .main-quiz-info sl-textarea{
-        grid-column: span 1;
-        grid-row: 4;
-    }
-}
-
-@media (max-width: 768px) {
     .question-cont {
         grid-template-columns: 1fr;
     }
@@ -532,6 +512,29 @@ sl-details{
     .question-cont .answers{
         grid-column: span 1;
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-quiz-info {
+        grid-template-columns: 1fr;
+    }
+
+    .upload-box{
+        grid-column: 1;
+        grid-row: 1;
+    }
+    .main-quiz-info sl-input{
+        grid-column: 1;
+        grid-row: 2;
+    }
+    .main-quiz-info sl-select{
+        grid-column: 1;
+        grid-row: 3;
+    }
+    .main-quiz-info sl-textarea{
+        grid-column: span 1;
+        grid-row: 4;
     }
 }
 
