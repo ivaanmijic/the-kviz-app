@@ -127,10 +127,10 @@ public class Question {
         this.answers = answers;
     }
 
-    public String getCorrect_answer() {
+    public String getCorrectAnswer() {
         return correctAnswer;
     }
-    public void setCorrect_answer(String correctAnswer) {
+    public void setCorrectAnswer(String correctAnswer) {
         this.correctAnswer = correctAnswer;
     }
 

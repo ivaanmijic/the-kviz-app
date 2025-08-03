@@ -70,7 +70,7 @@ public class SubmitQuizCreationServlet extends HttpServlet {
                 break;
             }
             question.setQuestion(title);
-            question.setQuestionType(QuestionTypeFactory.getType(request.getParameter("questions[" + questionIndex + "][category]").toLowerCase()));
+            question.setType(QuestionTypeFactory.getType(request.getParameter("questions[" + questionIndex + "][category]").toLowerCase()));
             question.setPoints(Integer.parseInt(request.getParameter("questions[" + questionIndex + "][points]")));
             question.setTime(Integer.parseInt(request.getParameter("questions[" + questionIndex + "][time]")));
             question.setQuiz(quiz);
@@ -83,7 +83,7 @@ public class SubmitQuizCreationServlet extends HttpServlet {
 
             question.setAnswers(answers);
 
-            question.setCorrect_answer(answers.get(Integer.parseInt(request.getParameter("questions[" + questionIndex + "][correctAnswer]"))));
+            question.setCorrectAnswer(answers.get(Integer.parseInt(request.getParameter("questions[" + questionIndex + "][correctAnswer]"))));
 
             question = questionServices.save(question);
 
