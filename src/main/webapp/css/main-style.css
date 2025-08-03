@@ -60,6 +60,30 @@ aside .selected{
     border-left: solid 2px var(--bg-color);
 }
 
+.sidebar-section {
+    margin-bottom: 2rem;
+}
+
+.sidebar-heading {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    color: var(--sl-color-neutral-600);
+    padding-left: 0.5rem;
+}
+
+.sidebar-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-icon {
+    margin-right: 0.6rem;
+    font-size: 1.1rem;
+}
+
 .main{
     display: flex;
     flex-direction: column;
