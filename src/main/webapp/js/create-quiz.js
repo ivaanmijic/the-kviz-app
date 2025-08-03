@@ -294,9 +294,10 @@ function validateQuiz() {
     const quizTitle = document.querySelector('#quizTitle').value.trim();
     const quizCategory = document.querySelector('#quizCategory').value.trim();
     const quizDescription = document.querySelector('#quizDescription').value.trim();
+    const quizVisibility = document.querySelector('#quizVisibility').value.trim();
     const quizImagePresent = !!window.quizImageFile;
 
-    if (!quizTitle || !quizCategory || !quizDescription || !quizImagePresent) {
+    if (!quizTitle || !quizCategory || !quizDescription || !quizImagePresent || !quizVisibility) {
         const alert = document.createElement('sl-alert');
         alert.setAttribute('variant', "danger");
         alert.setAttribute('duration', "3000");
@@ -354,7 +355,6 @@ function validateQuiz() {
 }
 
 function submitQuizButton(e){
-    console.log("Allahu ti si kadar")
     if (validateQuiz() === false) {
         e.preventDefault();
     } else {
@@ -364,6 +364,7 @@ function submitQuizButton(e){
         console.log(document.getElementById("quizCategory").value.trim());
         formData.append("quizCategory", document.getElementById("quizCategory").value.trim());
         formData.append("quizDescription", document.getElementById("quizDescription").value.trim());
+        formData.append("quizVisibility", document.getElementById("quizVisibility").value.trim());
         formData.append("quizImage", window.quizImageFile);
 
         const questionWrappers = document.querySelectorAll('.question-wrapper');

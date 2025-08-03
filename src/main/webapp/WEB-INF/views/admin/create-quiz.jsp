@@ -27,7 +27,16 @@
         <sl-input id="quizTitle" placeholder="Quiz Title"></sl-input>
         <sl-select id="quizCategory" placeholder="Category">
             <sl-option value="sport">Sport</sl-option>
+            <sl-option value="history">History</sl-option>
+            <sl-option value="geography">Geography</sl-option>
+            <sl-option value="science">Science</sl-option>
+            <sl-option value="pop-culture">Pop-culture</sl-option>
             <sl-option value="technology">Technology</sl-option>
+            <sl-option value="other">Other</sl-option>
+        </sl-select>
+        <sl-select id="quizVisibility" placeholder="Visibility">
+            <sl-option value="private">Private</sl-option>
+            <sl-option value="public">Public</sl-option>
         </sl-select>
     <sl-textarea id="quizDescription" size="large" placeholder="Quiz Description"></sl-textarea>
     </div>

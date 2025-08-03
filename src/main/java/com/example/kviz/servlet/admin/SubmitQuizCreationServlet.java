@@ -40,15 +40,10 @@ public class SubmitQuizCreationServlet extends HttpServlet {
 
         quiz.setTitle(request.getParameter("quizTitle"));
         String cat = request.getParameter("quizCategory");
+        String visible =  request.getParameter("quizVisibility");
 
-        System.out.println(cat);
-        System.out.println(request.getParameter("quizTitle"));
-        System.out.println(request.getParameter("quizCategory"));
-        System.out.println(request.getParameter("quizDescription"));
-        if (cat == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing quiz category");
-            return;
-        }
+        quiz.setVisible(visible.equals("public"));
+
         quiz.setCategory(QuizCategoryFactory.getCategory(cat.toLowerCase()));
 
         quiz.setDescription(request.getParameter("quizDescription"));

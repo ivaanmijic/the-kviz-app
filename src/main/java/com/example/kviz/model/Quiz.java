@@ -32,6 +32,10 @@ public class Quiz {
     private QuizCategory category;
 
     @Expose
+    @Column(nullable=false)
+    private boolean visible;
+
+    @Expose
     @Lob
     @Column(nullable = false, length = 10000)
     private String description;
@@ -101,6 +105,13 @@ public class Quiz {
     }
     public void setCategory(QuizCategory category) {
         this.category = category;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 
     public Admin getOwner() {
