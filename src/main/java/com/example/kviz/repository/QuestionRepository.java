@@ -14,7 +14,7 @@ public class QuestionRepository {
         EntityManager em = PersistenceManager.entityManager();
 
         try {
-            em.getTransaction();
+            em.getTransaction().begin();
             if (question.getId() == null) {
                 em.persist(question);
             } else {

@@ -22,17 +22,29 @@ public class Question {
     private String question;
 
     @Expose
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private QuestionType questionType;
+
+    @Expose
+    @Column(nullable = false)
+    private Integer points;
+
+    @Expose
+    @Column(nullable = false)
+    private Integer time;
+
+    @Expose
     @Column
+    private String image;
+
+    @Expose
+    @Column(nullable = false)
     private List<String> answers;
 
     @Expose
     @Column
     private String correct_answer;
-
-    @Expose
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private QuestionType type;
 
     @ManyToOne
     @JoinColumn(name = "quiz_id", nullable = false)
@@ -41,7 +53,7 @@ public class Question {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @PrePersist
@@ -64,7 +76,7 @@ public class Question {
         this.answers = answers;
         this.correct_answer = correct_answer;
         this.quiz = quiz;
-        this.type = type;
+        this.questionType = type;
     }
 
     // MARK: - Getters and Setters
@@ -83,6 +95,34 @@ public class Question {
         this.question = question;
     }
 
+    public QuestionType getQuestionType() {
+        return questionType;
+    }
+    public void setQuestionType(QuestionType questionType) {
+        this.questionType = questionType;
+    }
+
+    public Integer getPoints() {
+        return points;
+    }
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
+
+    public Integer getTime() {
+        return time;
+    }
+    public void setTime(Integer time) {
+        this.time = time;
+    }
+
+    public String getImage() {
+        return image;
+    }
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public List<String> getAnswers() {
         return answers;
     }
@@ -95,13 +135,6 @@ public class Question {
     }
     public void setCorrect_answer(String correct_answer) {
         this.correct_answer = correct_answer;
-    }
-
-    public QuestionType getType() {
-        return type;
-    }
-    public void setType(QuestionType type) {
-        this.type = type;
     }
 
     public Quiz getQuiz() {

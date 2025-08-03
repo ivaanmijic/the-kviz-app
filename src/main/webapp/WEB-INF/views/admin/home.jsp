@@ -19,8 +19,11 @@
 <jsp:include page="/WEB-INF/views/sidebar.jsp"></jsp:include>
 <div class="main">
     <jsp:include page="/WEB-INF/views/header.jsp"></jsp:include>
+    <div id="changeablePart">
     <jsp:include page="/WEB-INF/views/admin/quizzes.jsp"></jsp:include>
+    </div>
 </div>
+<script src="${pageContext.request.contextPath}/js/create-quiz.js"></script>
 <script src="${pageContext.request.contextPath}/js/admin-home.js"></script>
 </body>
 </html>
