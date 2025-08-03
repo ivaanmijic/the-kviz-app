@@ -1,5 +1,6 @@
 package com.example.kviz.model;
 
+import com.example.kviz.model.supporting.QuizCategory;
 import com.google.gson.annotations.Expose;
 import com.example.kviz.model.Admin;
 import com.example.kviz.model.Question;
@@ -24,8 +25,17 @@ public class Quiz {
     private String title;
 
     @Expose
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String thumbnail;
+
+    @Expose
+    @Enumerated(EnumType.STRING)
+    @Column(nullable=false)
+    private QuizCategory category;
+
+    @Expose
+    @Column(nullable = false)
+    private boolean visible;
 
     @Expose
     @Lob
@@ -96,6 +106,19 @@ public class Quiz {
         this.description = description;
     }
 
+    public QuizCategory getCategory() {
+        return category;
+    }
+    public void setCategory(QuizCategory category) {
+        this.category = category;
+    }
+    public boolean isVisible() {
+        return visible;
+    }
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
     public Admin getOwner() {
         return owner;
     }
@@ -123,4 +146,5 @@ public class Quiz {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
 }
