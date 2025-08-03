@@ -33,25 +33,21 @@ function addEventListenersOnCards() {
                 paragraph.innerText = desc.innerText;
 
                 const cardTitle = card.querySelector("h2");
-                const dialogTitle = dialog.querySelector("h2");
-                dialogTitle.innerText = cardTitle.innerText;
+                dialog.setAttribute("label", cardTitle.innerText);
 
-                const dialogImg = dialog.querySelector("img");
-                const cardImg = card.querySelector("img");
-                dialogImg.src = cardImg.src;
                 dialog.show();
             });
         });
 }
 addEventListenersOnCards();
-function loadMyQuizzes(){
+function loadMyQuizzesWindow(){
     fetch(window.ctx + "quizzes", {
         method: "GET",
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     })
         .then(response => response.text())
         .then(html => {
-            document.getElementById('card-grid').outerHTML = html;
+            document.getElementById('changeablePart').innerHTML = html;
             addEventListenersOnCards();
         })
         .catch(error => console.log(error));

@@ -24,6 +24,18 @@ public class Question {
     private String question;
 
     @Expose
+    @Column(nullable = false)
+    private Integer points;
+
+    @Expose
+    @Column(nullable = false)
+    private Integer time;
+
+    @Expose
+    @Column
+    private String image;
+
+    @Expose
     @ElementCollection
     @CollectionTable(name = "answers", joinColumns = @JoinColumn(name = "question_id"))
     @Column(name = "answer")
@@ -45,7 +57,7 @@ public class Question {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @PrePersist
@@ -85,6 +97,27 @@ public class Question {
     }
     public void setQuestion(String question) {
         this.question = question;
+    }
+
+    public Integer getPoints() {
+        return points;
+    }
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
+
+    public Integer getTime() {
+        return time;
+    }
+    public void setTime(Integer time) {
+        this.time = time;
+    }
+
+    public String getImage() {
+        return image;
+    }
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public List<String> getAnswers() {
