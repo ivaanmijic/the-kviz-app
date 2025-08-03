@@ -12,7 +12,7 @@
   <div class="card-grid" id="card-grid">
      <c:forEach items="${myQuizzes}" var="quiz" varStatus="loop">
       <sl-card class="quiz-card">
-        <img class="quiz-card-img" slot="image" src="${pageContext.request.contextPath}/css/resources/${quiz.thumbnail}">
+        <img class="quiz-card-img" slot="image" src="${pageContext.request.contextPath}/uploads/quizImages/${quiz.thumbnail}.jpg">
         <div class="title">${quiz.title}</div>
         <div class="subtitle">${quiz.description}</div>
         <sl-button variant="text" size="medium" class="desc-button">More...</sl-button>

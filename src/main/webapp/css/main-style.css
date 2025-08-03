@@ -215,6 +215,7 @@ sl-button.yellow::part(base):hover {
 sl-card{
     --border-radius: 40px;
     --border-color: transparent;
+    background-color: var(--card-color);
 }
 
 sl-card img{
@@ -321,7 +322,7 @@ sl-alert::part(base) {
 
 .dialog-body{
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 20px;
     align-items: start;
 }
@@ -458,6 +459,202 @@ footer > p {
     color: var(--sl-color-neutral-800);
 }
 
+/* MARK - create quiz page */
+
+.create-quiz{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+}
+
+.submit-quiz {
+    align-self: end;
+    width: 150px;
+    border-radius: 15px;
+    background: linear-gradient(to right, #4481eb, #04befe);
+    border: none;
+    height: 50px;
+    color: var(--bg-color);
+    font-size: var(--font-size-small);
+    margin-bottom: 10px;
+}
+
+.submit-quiz:hover{}
+
+/* MARK: - quiz info */
+.main-quiz-info{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto auto;
+    gap: 20px;
+    min-height: 300px;
+}
+/* MARK: - upload box */
+.upload-box{
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    grid-row: span 2;
+    border: 1px dashed var(--sl-color-neutral-500);
+    border-radius: 20px;
+    height:300px;
+    overflow: hidden;
+}
+
+.upload-box:hover{
+    border-color: var(--sl-color-neutral-600);
+}
+
+.upload-box sl-icon{
+    font-size: 3rem;
+    color: var(--sl-color-neutral-500);
+}
+
+.upload-box sl-icon:hover{
+    color: var(--sl-color-primary-700);
+}
+
+/* MARK: - quiz image preview */
+#quizPreview{
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    object-fit: cover;
+}
+
+#imageInput{
+    display: none;
+}
+
+/* MARK: - description textarea */
+.main-quiz-info sl-textarea{
+    grid-column: span 3;
+}
+
+sl-textarea::part(textarea) {
+     height: 100%;
+}
+sl-textarea::part(base) {
+    height: 100%;
+}
+
+/* MARK: - questions */
+.remove-btn{
+    position: absolute;
+    z-index: 999;
+    align-self: flex-start;
+    justify-self: end;
+    margin:7px;
+    border: none;
+    background: transparent;
+    font-size: 1.5rem;
+}
+.remove-btn:hover{}
+
+#add-question-button{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 10%;
+    font-size: 1.2rem;
+    background: linear-gradient(to right, #4481eb, #04befe);
+    border-radius: 10px;
+    align-items: center;
+    align-self: center;
+    margin-bottom: 10px;
+}
+
+/* MARK: - all of the details/questions */
+#questions-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    width: 100%;
+    padding: 30px 5px 5px;
+}
+
+sl-details{
+    width: 70%;
+    margin: 15px;
+}
+
+/* MARK: - one question container */
+.question-cont{
+     display: grid;
+     grid-template-columns: 1fr 1fr 1fr 1fr;
+     gap: 1rem;
+     align-items: center;
+     justify-content: center;
+ }
+
+/* MARK: - upload box for question image */
+.question-cont .upload-box{
+    grid-row: span 3;
+    height: 200px;
+}
+
+.question-img-preview{
+    height: 100%;
+    width: 100%;
+    border-radius: 15px;
+}
+
+/* MARK: - input field for question */
+.question {
+    grid-column: span 3;
+}
+
+/* MARK: - four of the given answers */
+.radio-group{
+    grid-column: span 3;
+    width: 100%;
+}
+
+.question-cont .answers{
+    grid-column: span 3;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.question-cont .radio-answer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.question-cont .answers sl-radio::part(base){
+    flex: 1;
+    width: 100%;
+    font-size: 1rem;
+    align-items: center;
+}
+.question-cont .answers sl-radio::part(label){
+    width: 100%;
+}
+
+.question-cont .answers sl-input::part(form-control){
+    width: 100%;
+}
+
+/* MARK: - when moving questions around */
+.dragging{
+    opacity:0.5;
+    border:1px dashed ;
+}
+
+/* MARK: - button for adding new questions */
+#add-question-button sl-icon{
+     color: var(--bg-color);
+     font-size: 2rem;
+ }
+
 @media (prefers-color-scheme: dark) {
     .main, .user-grid {
         background-color: var(--bg-color);
@@ -468,34 +665,127 @@ footer > p {
     }
 }
 
+@media (max-width: 768px) {
+    .main-quiz-info {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto auto;
+    }
+
+    .upload-box {
+        grid-row: span 3;
+    }
+
+    #quizTitle{
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    #quizCategory{
+        grid-column: 2;
+        grid-row: 2;
+    }
+
+    #quizVisibility{
+        grid-column: 2;
+        grid-row: 3;
+    }
+
+    sl-textarea {
+        grid-column: span 2;
+        grid-row: 4;
+    }
+    .question-cont {
+        grid-template-columns: 1fr;
+    }
+    .question-cont .upload-box{
+        grid-row: 1;
+    }
+    .question-points{
+        grid-row: 2;
+    }
+    .question-time{
+        grid-row: 3;
+    }
+    .question-category{
+        grid-row: 4;
+    }
+    .question{
+        grid-column: span 1;
+        grid-row: 5;
+    }
+
+    .radio-group{
+        grid-column: span 1;
+    }
+
+    .question-cont .answers{
+        grid-column: span 1;
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-quiz-info {
+        grid-template-columns: 1fr;
+    }
+
+    .upload-box{
+        grid-column: 1;
+        grid-row: 1;
+    }
+    #quizTitle{
+        grid-column: 1;
+        grid-row: 2;
+    }
+    #quizCategory{
+        grid-column: 1;
+        grid-row: 3;
+    }
+    #quizVisibility{
+        grid-column: 1;
+        grid-row: 4;
+    }
+    .main-quiz-info sl-textarea {
+        grid-column: span 1;
+        grid-row: 5;
+    }
+    .radio-group{
+        grid-column: span 1;
+    }
+    .question-cont .answers{
+        grid-column: span 1;
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 870px) {
-    aside {
-        display: none;
-        width: 0;
-    }
+        aside {
+            display: none;
+            width: 0;
+        }
 
-    .hamburger-menu {
-        display: inline-flex;
-    }
+        .hamburger-menu {
+            display: inline-flex;
+        }
 
-    .main {
-        width: 100%;
-        margin-left: 0;
-        border-radius: 0;
-    }
+        .main {
+            width: 100%;
+            margin-left: 0;
+            border-radius: 0;
+        }
 
-    .header-container {
-        justify-content: space-between;
-        padding: 0 1rem;
-        align-items: center;
-    }
+        .header-container {
+            justify-content: space-between;
+            padding: 0 1rem;
+            align-items: center;
+        }
 
-    .profile-buttons,
-    .search-bar {
-        width: auto;
-    }
+        .profile-buttons,
+        .search-bar {
+            width: auto;
+        }
 
-    .search-bar {
+        .search-bar {
         flex-grow: 1;
         margin: 0 1rem;
     }
@@ -552,3 +842,12 @@ footer > p {
     }
 }
 
+
+
+
+@media (max-width: 1500px){
+    sl-details{
+         width: 100%;
+        margin: 5px;
+    }
+}

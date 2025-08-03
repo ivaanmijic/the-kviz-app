@@ -22,7 +22,9 @@
 
     <jsp:include page="/WEB-INF/views/admin/profile.jsp"></jsp:include>
 
+    <div id="changeablePart">
     <jsp:include page="/WEB-INF/views/admin/quizzes.jsp"></jsp:include>
+    </div>
 
     <% if (session.getAttribute("role") == AdminRole.SUPERADMIN) { %>
         <jsp:include page="/WEB-INF/views/admin/admin-list.jsp"/>
@@ -35,6 +37,7 @@
 
 <script src="${pageContext.request.contextPath}/js/admin-home.js"></script>
 <script type="module" src="${pageContext.request.contextPath}/js/adminController.js"></script>
+<script src="${pageContext.request.contextPath}/js/create-quiz.js"></script>
 </body>
 <jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/fragments/footer.jsp"></jsp:include>
 </html>

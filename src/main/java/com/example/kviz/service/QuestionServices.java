@@ -11,12 +11,12 @@ import java.util.Optional;
 public class QuestionServices {
     private final QuestionRepository questionRepository;
 
-    public QuestionServices(QuestionRepository questionRepository) {
-        this.questionRepository = questionRepository;
+    public QuestionServices() {
+        this.questionRepository = new QuestionRepository();
     }
 
-    public void save(Question question){
-        questionRepository.save(question);
+    public Question save(Question question){
+        return questionRepository.save(question);
     }
 
     public Optional<Question> findById(Long id){
