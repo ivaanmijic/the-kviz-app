@@ -58,6 +58,7 @@ public class SubmitQuizCreationServlet extends HttpServlet {
         List<Question> questions = new ArrayList<>();
         int questionIndex = 0;
         while(true){
+            System.out.println("jodlejodlejodlejodelIOOOOOOO");
             QuestionServices questionServices = new QuestionServices();
             Question question = new Question();
             String title = request.getParameter("questions[" + questionIndex + "][title]");
@@ -65,7 +66,7 @@ public class SubmitQuizCreationServlet extends HttpServlet {
                 break;
             }
             question.setQuestion(title);
-            question.setQuestionType(QuestionTypeFactory.getType(request.getParameter("questions[" + questionIndex + "][category]").toLowerCase()));
+            question.setType(QuestionTypeFactory.getType(request.getParameter("questions[" + questionIndex + "][category]").toLowerCase()));
             question.setPoints(Integer.parseInt(request.getParameter("questions[" + questionIndex + "][points]")));
             question.setTime(Integer.parseInt(request.getParameter("questions[" + questionIndex + "][time]")));
             question.setQuiz(quiz);
@@ -74,11 +75,12 @@ public class SubmitQuizCreationServlet extends HttpServlet {
             for (int i = 0; i < 4; i++) {
                 String answer = request.getParameter("questions[" + questionIndex + "][answers][" + i + "]");
                 if (answer != null) answers.add(answer);
+                System.out.println(answer);
             }
 
             question.setAnswers(answers);
 
-            question.setCorrect_answer(answers.get(Integer.parseInt(request.getParameter("questions[" + questionIndex + "][correctAnswer]"))));
+            question.setCorrectAnswer(answers.get(Integer.parseInt(request.getParameter("questions[" + questionIndex + "][correctAnswer]"))));
 
             question = questionServices.save(question);
 

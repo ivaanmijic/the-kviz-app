@@ -1,4 +1,4 @@
-<%--
+<%@ page import="com.example.kviz.model.supporting.AdminRole" %><%--
   Created by IntelliJ IDEA.
   User: haris
   Date: 7/25/25
@@ -16,14 +16,28 @@
     <script>window.ctx='${pageContext.request.contextPath}'</script>
 </head>
 <body>
-<jsp:include page="/WEB-INF/views/sidebar.jsp"></jsp:include>
+<jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/fragments/sidebar.jsp"></jsp:include>
 <div class="main">
-    <jsp:include page="/WEB-INF/views/header.jsp"></jsp:include>
+    <jsp:include page="/WEB-INF/views/fragments/header.jsp"></jsp:include>
+
+    <jsp:include page="/WEB-INF/views/admin/profile.jsp"></jsp:include>
+
     <div id="changeablePart">
     <jsp:include page="/WEB-INF/views/admin/quizzes.jsp"></jsp:include>
     </div>
+
+    <% if (session.getAttribute("role") == AdminRole.SUPERADMIN) { %>
+        <jsp:include page="/WEB-INF/views/admin/admin-list.jsp"/>
+    <% } %>
 </div>
-<script src="${pageContext.request.contextPath}/js/create-quiz.js"></script>
+
+<sl-alert class="alert" id="succesAlert" variant="success" closable></sl-alert>
+
+<sl-alert class="alert" id="errorAlert" variant="danger" closable></sl-alert>
+
 <script src="${pageContext.request.contextPath}/js/admin-home.js"></script>
+<script type="module" src="${pageContext.request.contextPath}/js/adminController.js"></script>
+<script src="${pageContext.request.contextPath}/js/create-quiz.js"></script>
 </body>
+<jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/fragments/footer.jsp"></jsp:include>
 </html>

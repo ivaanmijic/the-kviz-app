@@ -22,6 +22,8 @@ dependencies {
 
     implementation 'org.hibernate.orm:hibernate-core:6.4.0.Final' // Hibernate Core
 
+    implementation 'org.webjars:jquery:3.7.1'
+
     // Jakarta Servlet API for Tomcat 10
     compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
     implementation 'jakarta.servlet.jsp:jakarta.servlet.jsp-api:3.1.1'
@@ -74,8 +76,29 @@ tasks.register('compileTypeScript', com.github.gradle.node.npm.task.NpmTask) {
     args = ['run', 'build'] // assumes you have "build": "tsc" in package.json
 }
 
+tasks.register('copyWebJars', Copy) {
+    group = 'build'
+    description = 'Copies WebJar static files to webapp dir'
+
+    from({
+        configurations.runtimeClasspath.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }) {
+        include 'META-INF/resources/webjars/**'
+        eachFile { f ->
+            // Remove META-INF/resources/ prefix
+            f.path = f.path.replaceFirst("^META-INF/resources/", "")
+        }
+        includeEmptyDirs = false
+    }
+
+    into 'src/main/webapp'
+}
+
+
 war {
-    dependsOn 'copyShoelace', 'compileTypeScript'
+    dependsOn 'copyShoelace', 'compileTypeScript', 'copyWebJars'
     archiveFileName = 'theKvizApp.war'
 }
 

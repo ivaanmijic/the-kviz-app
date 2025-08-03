@@ -1,6 +1,8 @@
 package com.example.kviz.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.example.kviz.model.supporting.AdminRole;
 import com.google.gson.annotations.Expose;
@@ -13,7 +15,6 @@ import jakarta.persistence.*;
         @UniqueConstraint(name = "UK_admin_username", columnNames = "username")
 })
 public class Admin {
-
     @Expose
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,11 +36,29 @@ public class Admin {
     @Column(nullable = false)
     private AdminRole role;
 
-    @Column(name = "created_at", nullable = false)
+    @Expose
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @Expose
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @OneToMany(
+            mappedBy = "owner",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private List<Quiz> quizzes =  new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "admin",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private List<SessionAuthToken> sessionAuthTokens = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
@@ -93,6 +112,18 @@ public class Admin {
         return updatedAt;
     }
 
+    public List<Quiz> getQuizzes() {
+        return quizzes;
+    }
+
+    public List<SessionAuthToken> getSessionAuthTokens() {
+        return sessionAuthTokens;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -117,4 +148,11 @@ public class Admin {
         this.updatedAt = updatedAt;
     }
 
+    public void setQuizzes(List<Quiz> quizzes) {
+        this.quizzes = quizzes;
+    }
+
+    public void setSessionAuthTokens(List<SessionAuthToken> sessionAuthTokens) {
+        this.sessionAuthTokens = sessionAuthTokens;
+    }
 }

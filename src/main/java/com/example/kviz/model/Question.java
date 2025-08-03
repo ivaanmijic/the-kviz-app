@@ -1,8 +1,10 @@
 package com.example.kviz.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.example.kviz.model.supporting.AdminRole;
 import com.example.kviz.model.supporting.QuestionType;
 import com.google.gson.annotations.Expose;
 
@@ -22,11 +24,6 @@ public class Question {
     private String question;
 
     @Expose
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private QuestionType questionType;
-
-    @Expose
     @Column(nullable = false)
     private Integer points;
 
@@ -40,13 +37,18 @@ public class Question {
 
     @Expose
     @Column(nullable = false)
-    private List<String> answers;
+    private List<String> answers = new ArrayList<>();
 
     @Expose
-    @Column
-    private String correct_answer;
+    @Column(name = "correct_answer")
+    private String correctAnswer;
 
-    @ManyToOne
+    @Expose
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private QuestionType type;
+
+    @ManyToOne(fetch =  FetchType.LAZY)
     @JoinColumn(name = "quiz_id", nullable = false)
     private Quiz quiz;
 
@@ -71,12 +73,12 @@ public class Question {
     public Question() {
     }
 
-    public Question(String question, List<String> answers, String correct_answer, Quiz quiz, QuestionType type) {
+    public Question(String question, List<String> answers, String correctAnswer, Quiz quiz, QuestionType type) {
         this.question = question;
         this.answers = answers;
-        this.correct_answer = correct_answer;
+        this.correctAnswer = correctAnswer;
         this.quiz = quiz;
-        this.questionType = type;
+        this.type = type;
     }
 
     // MARK: - Getters and Setters
@@ -93,13 +95,6 @@ public class Question {
     }
     public void setQuestion(String question) {
         this.question = question;
-    }
-
-    public QuestionType getQuestionType() {
-        return questionType;
-    }
-    public void setQuestionType(QuestionType questionType) {
-        this.questionType = questionType;
     }
 
     public Integer getPoints() {
@@ -130,11 +125,18 @@ public class Question {
         this.answers = answers;
     }
 
-    public String getCorrect_answer() {
-        return correct_answer;
+    public String getCorrectAnswer() {
+        return correctAnswer;
     }
-    public void setCorrect_answer(String correct_answer) {
-        this.correct_answer = correct_answer;
+    public void setCorrectAnswer(String correctAnswer) {
+        this.correctAnswer = correctAnswer;
+    }
+
+    public QuestionType getType() {
+        return type;
+    }
+    public void setType(QuestionType type) {
+        this.type = type;
     }
 
     public Quiz getQuiz() {
@@ -145,7 +147,7 @@ public class Question {
     }
 
     public boolean checkIfCorrectAnswer(String answer){
-        return answer.equals(this.correct_answer);
+        return answer.equals(this.correctAnswer);
     }
 
 }

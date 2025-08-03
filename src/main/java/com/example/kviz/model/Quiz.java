@@ -5,6 +5,8 @@ import com.google.gson.annotations.Expose;
 import com.example.kviz.model.Admin;
 import com.example.kviz.model.Question;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import java.time.LocalDateTime;
@@ -32,7 +34,7 @@ public class Quiz {
     private QuizCategory category;
 
     @Expose
-    @Column(nullable=false)
+    @Column(nullable = false)
     private boolean visible;
 
     @Expose
@@ -40,24 +42,28 @@ public class Quiz {
     @Column(nullable = false, length = 10000)
     private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "admin_id", nullable = false)
     private Admin owner;
 
-    @OneToMany
-    @JoinColumn(name = "questions", nullable = true)
-    private List<Question> questions;
+    @OneToMany(
+            mappedBy = "quiz",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Question> questions = new ArrayList<>();
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @PrePersist
     protected void onCreate() {
-        this.createAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
+
     //MARK: - Initialization
 
     public Quiz(){
@@ -106,7 +112,6 @@ public class Quiz {
     public void setCategory(QuizCategory category) {
         this.category = category;
     }
-
     public boolean isVisible() {
         return visible;
     }
@@ -129,10 +134,10 @@ public class Quiz {
     }
 
     public LocalDateTime getCreateAt() {
-        return createAt;
+        return createdAt;
     }
-    public void setCreateAt(LocalDateTime createAt) {
-        this.createAt = createAt;
+    public void setCreateAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public LocalDateTime getUpdatedAt() {
@@ -141,4 +146,5 @@ public class Quiz {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
 }
