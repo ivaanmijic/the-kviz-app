@@ -8,7 +8,7 @@ interface ShoelaceCheckboxElement extends HTMLElement {
     checked: boolean;
 }
 
-type FormType = "signin" | "signup";
+type FormType = "login" | "register";
 
 interface FormConfiguration {
     formSelector: string;
@@ -19,18 +19,18 @@ interface FormConfiguration {
 
 document.addEventListener("DOMContentLoaded", () => {
     const configs: Record<FormType, FormConfiguration> = {
-        signin: {
+        login: {
             formSelector: '.sign-in-form',
-            endpoint: '/signin',
+            endpoint: '/auth/login',
             fields: [
                 { name: 'emailOrUsername', selector: 'sl-input[type="text"]',    type: 'text'     },
                 { name: 'password',          selector: 'sl-input[type="password"]', type: 'password' }
             ],
             checkbox: { name: 'rememberMe', selector: 'sl-checkbox' }
         },
-        signup: {
+        register: {
             formSelector: '.sign-up-form',
-            endpoint: '/signup',
+            endpoint: '/auth/register',
             fields: [
                 { name: 'email',    selector: 'sl-input[type="email"]',    type: 'email'    },
                 { name: 'username', selector: 'sl-input[type="text"]',     type: 'text'     },
