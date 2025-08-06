@@ -37,9 +37,10 @@ public class SessionAuthTokenRepository {
             SessionAuthToken tokenEntity = em.createQuery("""
                 SELECT t FROM SessionAuthToken t
                 JOIN FETCH t.admin a
-                WHERE t.token = :token
+                WHERE t.token = :token AND t.expiry > :now
                 """, SessionAuthToken.class)
                     .setParameter("token", token)
+                    .setParameter("now", LocalDateTime.now())
                     .getSingleResult();
             return Optional.of(tokenEntity);
         } catch (NoResultException e) {

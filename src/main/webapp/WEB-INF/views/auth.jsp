@@ -82,6 +82,6 @@
 </div>
 
 <script src="${pageContext.request.contextPath}/js/login-layout.js"></script>
-<script src="${pageContext.request.contextPath}/js/sign-in.js"></script>
+<script src="${pageContext.request.contextPath}/js/auth.js"></script>
 </body>
 </html>

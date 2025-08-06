@@ -22,7 +22,7 @@
                         <sl-button variant="text" class="text-button">Edit</sl-button>
                     </sl-menu-item>
                     <sl-menu-item class="destructive">
-                        <sl-button variant="text" class="destructive-text-button" href="${pageContext.request.contextPath}/signout">Sign Out</sl-button>
+                        <sl-button variant="text" class="destructive-text-button" href="/auth/logout">Sign Out</sl-button>
                     </sl-menu-item>
                 </sl-menu>
             </sl-dropdown>

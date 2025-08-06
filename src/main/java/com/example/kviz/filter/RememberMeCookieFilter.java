@@ -49,17 +49,22 @@ public class RememberMeCookieFilter implements Filter {
                             session.setAttribute("role", admin.getRole());
                             session.setMaxInactiveInterval(3600);
                             logger.info("Session initialized for: {}", admin.getUsername());
+                        } else {
+                            cookie.setMaxAge(0);
+                            cookie.setPath("/");
+                            resp.addCookie(cookie);
+                            logger.warn("Invalid rememberMe token; cookie cleared.");
                         }
                     }
                 }
             }
         }
 
-        if ((req.getRequestURI().equals(req.getContextPath() + "/") ||
-                req.getRequestURI().equals(req.getContextPath() + "/signin")) &&
+        if ((req.getRequestURI().equals("/") ||
+                req.getRequestURI().equals("/auth/")) &&
                 req.getSession(false) != null &&
                 req.getSession(false).getAttribute("admin") != null) {
-            resp.sendRedirect(req.getContextPath() + "/admin/home");
+            resp.sendRedirect("/admin/view");
             return;
         }
 

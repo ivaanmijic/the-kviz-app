@@ -26,7 +26,7 @@ public class AuthenticationFilter implements Filter {
         if (isAdmin) {
             chain.doFilter(request, response);
         } else {
-            resp.sendRedirect(req.getContextPath() + "/signin");
+            resp.sendRedirect("/auth/login");
         }
     }
 

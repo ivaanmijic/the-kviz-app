@@ -17,8 +17,15 @@ public class AdminViewController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String view = req.getPathInfo().substring(1);
+        String path = req.getPathInfo();
 
+        if (path == null || path.equals("/") || path.isBlank()) {
+            log.info("Main view requested");
+            req.getRequestDispatcher("/WEB-INF/views/admin/home.jsp").forward(req, resp);
+            return;
+        }
+
+        String view = path.substring(1);
         switch (view) {
             case "dashboard":
                 log.info("Dashboard view");
