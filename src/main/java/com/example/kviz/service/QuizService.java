@@ -1,9 +1,14 @@
 package com.example.kviz.service;
 
+import com.example.kviz.database.PersistenceManager;
 import com.example.kviz.model.Admin;
 import com.example.kviz.model.Quiz;
+import com.example.kviz.model.dto.QuizDTO;
 import com.example.kviz.repository.QuizRepository;
+import jakarta.persistence.EntityTransaction;
 
+import javax.swing.text.html.parser.Entity;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +38,10 @@ public class QuizService {
 
     public List<Quiz> findByOwner(Admin owner) {
         return quizRepository.findAllByAdmin(owner);
+    }
+
+    public List<Quiz> findByOwnerId(Long id) {
+        return quizRepository.findAllByAdminId(id);
     }
 
     public void delete(Quiz quiz) {

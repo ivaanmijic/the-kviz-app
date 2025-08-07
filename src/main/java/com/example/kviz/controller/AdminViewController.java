@@ -17,6 +17,8 @@ public class AdminViewController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        log.info("Admin view controller");
+
         String path = req.getPathInfo();
 
         if (path == null || path.equals("/") || path.isBlank()) {

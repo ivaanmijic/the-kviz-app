@@ -5,7 +5,7 @@
   Time: 8:45 AM
   To change this template use File | Settings | File Templates.
 --%>
-<script src="${pageContext.request.contextPath}/js/admin-home.js"></script>
+<script src="${pageContext.request.contextPath}/js/create-quiz.js"></script>
 <aside>
     <header>
         <h1>TheKvizApp</h1>
@@ -21,7 +21,7 @@
                 <sl-icon name="list-check" class="sidebar-icon"></sl-icon>
                 My Quizzes
             </li>
-            <li data-view="create-quiz" class="sidebar-item">
+            <li onclick=createQuizWindow()>
                 <sl-icon name="plus-square" class="sidebar-icon"></sl-icon>
                 Create Quiz
             </li>
@@ -66,12 +66,12 @@
                 <sl-icon name="list-check" class="sidebar-icon"></sl-icon>
                 My Quizzes
             </li>
-            <li data-view="create-quiz" class="sidebar-item">
+            <li onclick=createQuizWindow()>
                 <sl-icon name="plus-square" class="sidebar-icon"></sl-icon>
                 Create Quiz
             </li>
             <li data-view="profile" class="sidebar-item">
-                <sl-icon name="user" class="sidebar-icon"></sl-icon>
+                <sl-icon name="person" class="sidebar-icon"></sl-icon>
                 My Profile
             </li>
         </ul>

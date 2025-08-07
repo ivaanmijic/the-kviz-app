@@ -1,54 +1,67 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const drawer = document.querySelector('.nav-drawer');
-    const openButton = document.querySelector('.hamburger-menu');
+import { QuizController } from './controller/quizController.js';
 
-    if (openButton && drawer) {
-        openButton.addEventListener('click', () => {drawer.show()})
-    }
-})
-document.addEventListener("DOMContentLoaded", () => {
-    const navItems = document.querySelectorAll("aside li");
+document.addEventListener("DOMContentLoaded", function () {
+  const drawer = document.querySelector(".nav-drawer");
+  const openButton = document.querySelector(".hamburger-menu");
 
-    navItems.forEach(item => {
-        item.addEventListener("click", () => {
-            // Remove 'selected' from all
-            navItems.forEach(el => el.classList.remove("selected"));
-            // Add 'selected' to clicked
-            item.classList.add("selected");
-            const animation = item.querySelector("sl-animation");
-            animation.play=true;
-        });
-
+  if (openButton && drawer) {
+    openButton.addEventListener("click", () => {
+      drawer.show();
     });
+  }
 });
-document.addEventListener("DOMContentLoaded", () => addEventListenersOnCards())
-function addEventListenersOnCards() {
-        const cards = document.querySelectorAll(".quiz-card");
-        const dialog = document.querySelector('.quiz-card-more-info');
-        cards.forEach(card => {
-            const desc = card.querySelector(".quiz-card-description");
-            const openBtn = card.querySelector(".desc-button");
-            openBtn.addEventListener('click', () => {
-                const paragraph = dialog.querySelector("p");
-                paragraph.innerText = desc.innerText;
 
-                const cardTitle = card.querySelector("h2");
-                dialog.setAttribute("label", cardTitle.innerText);
+document.addEventListener("DOMContentLoaded", () => {
+  const navItems = document.querySelectorAll("aside li");
 
-                dialog.show();
-            });
-        });
-}
-addEventListenersOnCards();
-function loadMyQuizzesWindow(){
-    fetch(window.ctx + "quizzes", {
-        method: "GET",
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    })
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('changeablePart').innerHTML = html;
-            addEventListenersOnCards();
-        })
-        .catch(error => console.log(error));
-}
+  navItems.forEach((item) => {
+    item.addEventListener("click", () => {
+      navItems.forEach((el) => el.classList.remove("selected"));
+      item.classList.add("selected");
+    });
+  });
+});
+
+$(document).ready (() => {
+  const quizController = new QuizController(window.ctx, window.admin.id);
+
+  const $content = $("#changeablePart");
+  const $sidebar = $(".sidebar-list");
+  const $items = $sidebar.find(".sidebar-item");
+
+  function loadView(view) {
+    $items.removeClass("active");
+    $sidebar.find(`[data-view="${view}"]`).addClass("active");
+
+    $content.empty();
+
+    if (view === 'quizzes') {
+      quizController.getQuizzes()
+          .then(quizzes => {
+            $content.html(quizzes);
+          })
+          .catch(err => {
+            $content.html('<p class="warning">Failed to load quizzes content</p>');
+          });
+    } else {
+      $.ajax({
+        url: `${window.ctx}/admin/view/${view}`,
+        dataType: "html",
+      })
+          .done((data) => {
+            $content.html(data);
+          })
+          .fail(() => {
+            $content.html('<p class="warning">Failed to load content</p>');
+          });
+    }
+  }
+
+  $items.on("click", function () {
+    const view = $(this).data("view");
+    loadView(view);
+  });
+
+  const $init = $items.filter(".selected").first();
+  loadView($init.length ? $init.data("view") : $items.first().data("view"));
+});

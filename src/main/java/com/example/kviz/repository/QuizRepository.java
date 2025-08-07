@@ -3,11 +3,14 @@ package com.example.kviz.repository;
 import com.example.kviz.database.PersistenceManager;
 import com.example.kviz.model.Admin;
 import com.example.kviz.model.Quiz;
+import com.example.kviz.model.dto.QuizDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class QuizRepository {
 
@@ -59,6 +62,14 @@ public class QuizRepository {
             TypedQuery<Quiz> q = em.createQuery("SELECT q FROM Quiz q WHERE q.owner.id = :id", Quiz.class);
             q.setParameter("id", admin.getId());
             return q.getResultList();
+        }
+    }
+
+    public List<Quiz> findAllByAdminId(Long id) {
+        try (EntityManager em = PersistenceManager.entityManager()) {
+            return em.createQuery("SELECT q FROM Quiz q WHERE q.owner.id = :id", Quiz.class)
+                    .setParameter("id", id)
+                    .getResultList();
         }
     }
 
