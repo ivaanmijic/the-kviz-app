@@ -10,6 +10,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap"
+      rel="stylesheet"
+    /> 
+
     <title>The Kviz App</title>
     <%@ include file="/WEB-INF/views/shoelace-imoprt.jsp"%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main-style.css">
@@ -21,7 +30,7 @@
         <%
         Admin admin = (Admin) session.getAttribute("admin");
         if (admin != null) { %>
-        window.admin = { id: <%= admin.getId() %> };
+        window.admin = { id: <%= admin.getId() %>, username: "<%=admin.getUsername()%>" };
         <% } %>
 
     </script>

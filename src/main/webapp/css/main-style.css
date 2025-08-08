@@ -160,15 +160,15 @@ sl-menu-item.destructive::part(base):hover {
 .user-box {
     width: calc(100% - 3rem);
     height: auto;
-    background: linear-gradient(135deg, #007cf0, #00dfd8);
-    border-radius: 15px;
+    background: linear-gradient(to right, #4f46e5, #7c3aed);
+    border-radius: var(--sl-border-radius-medium);
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 2.5rem;
     box-sizing: border-box;
     color: white;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.35);
     margin: 2.5rem auto;
     flex-wrap: wrap;
 }
@@ -209,11 +209,13 @@ sl-button.yellow::part(base):hover {
 }
 
 .section-title {
+    font-size: 1.2rem;
+    font-weight: 600;
     margin-left: 1.5rem;
 }
 
 sl-card{
-    --border-radius: 40px;
+    --border-radius: var(--sl-border-radius-medium);
     --border-color: transparent;
     background-color: var(--card-color);
 }
@@ -240,7 +242,7 @@ sl-card img{
     width: 100%;
     background-color: var(--card-color);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    border-radius: 40px;
+    border-radius: var(--sl-border-radius-large);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     overflow: hidden;
     padding-bottom: 0;
@@ -293,33 +295,6 @@ sl-alert::part(base) {
     font-size: 1.1rem;
     padding: 0.75rem 1rem;
 }
-
-/* MARK: - sl-dialog */
-/*sl-dialog::part(panel){*/
-/*    border-radius: 40px;*/
-/*    color: var(--sl-card-text);*/
-/*    max-width: 1200px;*/
-/*    width: 90vw;*/
-/*}*/
-
-/*sl-dialog::part(header){*/
-/*    color: var(--sl-color-primary-900);*/
-/*    font-weight: bold;*/
-/*}*/
-
-/*sl-dialog header{*/
-/*    color: var(--sl-color-primary-900);*/
-/*}*/
-
-/*sl-dialog img{*/
-/*    height: 400px;*/
-/*    width: 100%;*/
-/*    border-radius: 12px;*/
-/*    object-fit: cover;*/
-/*}*/
-/*sl-dialog h2{*/
-/*    color: var(--sl-color-primary-900);*/
-/*}*/
 
 .dialog-body{
     display: grid;
@@ -477,7 +452,7 @@ footer > p {
     border: none;
     height: 50px;
     color: var(--bg-color);
-    font-size: var(--font-size-small);
+    font-size: var(--sl-font-size-small);
     margin-bottom: 10px;
 }
 
@@ -862,6 +837,80 @@ sl-details{
 .edit-btn:hover {
     opacity: 1;
     backdrop-filter: blur(4px);
-    background-color: rgba(255, 255, 255, 0.6); /* subtle white overlay */
+    background-color: rgba(255, 255, 255, 0.6);
     border-radius: 50%;
+}
+
+.admin-table-container {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 16px;
+    display: flex;
+    justify-content: center;
+}
+
+.admin-table {
+    width: 100%;
+    max-width: 1200px;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-family: inherit;
+    margin: 0;
+}
+
+.admin-table thead th {
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    font-weight: 600;
+}
+
+.admin-table tbody td {
+    padding: 12px 16px;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.admin-role {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+    color: inherit;
+    min-width: 64px;
+    text-align: center;
+}
+
+.admin-role.super {
+    border-color: var(--sl-color-danger-600);
+    color: var(--sl-color-danger-600);
+    background-color: color-mix(in srgb, var(--sl-color-danger-600) 9%, transparent);
+    background-color: rgba(220,20,60,0.08);
+}
+
+.admin-role.other {
+    border-color: var(--sl-color-primary-600);
+    color: var(--sl-color-danger-600);
+    background-color: color-mix(in srgb, var(--sl-color-primary-600) 9%, transparent);
+    background-color: rgba(30,120,255,0.08);
+}
+
+.admin-actions {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.admin-actions sl-button,
+.admin-actions button {
+    margin-left: 8px;
+    padding: 6px 10px;
+}
+
+@media (max-width: 640px) {
+    .admin-table tbody td { white-space: normal; }
 }

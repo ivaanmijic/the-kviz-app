@@ -15,9 +15,13 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,9 +55,8 @@ public class SubmitQuizCreationServlet extends HttpServlet {
         quiz = quizService.save(quiz);
 
         Part quizImagePart = request.getPart("quizImage");
-        saveImageToDisk(quizImagePart, "quizImages", "quizImage" + quiz.getId());
-
-        quiz.setThumbnail("quizImage" + quiz.getId());
+        String thumbnailPath = saveImageToDisk(quizImagePart, "quizImages", "quizImage" + quiz.getId(), request);
+        quiz.setThumbnail(thumbnailPath);
 
         List<Question> questions = new ArrayList<>();
         int questionIndex = 0;
@@ -85,9 +88,8 @@ public class SubmitQuizCreationServlet extends HttpServlet {
             question = questionServices.save(question);
 
             Part questionImagePart = request.getPart("questions[" + questionIndex + "][image]");
-            saveImageToDisk(questionImagePart, "questions", "quiz" + quiz.getId() + "_" + "question" + question.getId());
-
-            question.setImage("quiz" + quiz.getId() + "_" + "question" + question.getId());
+            String questionImage = saveImageToDisk(questionImagePart, "questions", "quiz" + quiz.getId() + "_" + "question" + question.getId(), request);
+            question.setImage(questionImage);
             questionServices.save(question);
 
             questions.add(question);
@@ -102,16 +104,32 @@ public class SubmitQuizCreationServlet extends HttpServlet {
         response.getWriter().write("{\"message\":\"ok\"}");
     }
 
-    private String saveImageToDisk(Part part, String folder, String filename) throws IOException {
+    private String saveImageToDisk(Part part, String folder, String filenameBase, HttpServletRequest request) throws IOException {
         if (part == null || part.getSize() == 0) return null;
-        String uploads = getServletContext().getRealPath("uploads/" + folder);
-        System.out.println("Resolved uploads path: " + uploads);
 
-        Files.createDirectories(Paths.get(uploads));
-        String filePath = uploads + "/" + filename + ".jpg";
-        System.out.println("Final file path: " + filePath);
+        String uploadsReal = getServletContext().getRealPath("/uploads/" + folder);
+        if (uploadsReal == null) {
+            File tmp = (File) getServletContext().getAttribute("javax.servlet.context.tempdir");
+            uploadsReal = new File(tmp, "uploads/" + folder).getAbsolutePath();
+        }
+        Path uploadsPath = Paths.get(uploadsReal);
+        Files.createDirectories(uploadsPath);
 
-        part.write(filePath);
-        return "uploads/" + folder + "/" + filename + ".jpg";
+        String submitted = part.getSubmittedFileName();
+        String ext = ".jpg";
+        if (submitted != null && submitted.contains(".")) {
+            ext = submitted.substring(submitted.lastIndexOf('.'));
+        }
+
+        String filename = filenameBase + ext;
+        Path filePath = uploadsPath.resolve(filename);
+
+        try (InputStream in = part.getInputStream()) {
+            Files.copy(in, filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return "uploads/" + folder + "/" + filename;
     }
 }

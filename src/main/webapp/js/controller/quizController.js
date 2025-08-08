@@ -4,14 +4,13 @@ import { QuizApiClient } from "../client/quizApiClient.js";
 export class QuizController {
     constructor(baseUrl = '', adminId = null) {
         this.apiClient = new QuizApiClient(baseUrl);
-        this.adminId = adminId;
         this.init();
     }
 
     init() {}
 
-    getQuizzes() {
-        return this.apiClient.getList(this.adminId)
+    getQuizzes(adminId = null) {
+        return this.apiClient.getList(adminId)
             .then(data => {
                 const quizzes = data.map(Quiz.fromJson);
                 return this.renderQuizzes(quizzes);
@@ -29,6 +28,8 @@ export class QuizController {
     }
 
     renderQuizzes(quizzes) {
+        this.clearAlerts()
+
         const grid = document.createElement('div');
         grid.classList.add('card-grid');
         grid.id = 'card-grid';
@@ -40,35 +41,38 @@ export class QuizController {
             const img = document.createElement('img');
             img.slot = 'image';
             img.classList.add('quiz-card-img');
-            img.src = `${window.ctx}/uploads/quizImages/${q.thumbnail}.jpg`;
+            img.src = `${window.ctx}/${q.thumbnail}`;
             card.appendChild(img);
 
-            const title = document.createElement('div');
-            title.classList.add('title');
-            title.textContent = q.title;
-            card.appendChild(title);
+            const h3 = document.createElement('h3');
+            h3.className = 'text-lg font-bold';
+            h3.textContent = q.title;
+            card.appendChild(h3);
 
-            const subtitle = document.createElement('div');
-            subtitle.classList.add('subtitle');
-            subtitle.textContent = q.description;
-            card.appendChild(subtitle);
+            const p = document.createElement('p');
+            p.className = 'text-sm mt-1';
+            p.textContent = 'Broj pitanja';
+            card.appendChild(p);
 
-            const editBtn = document.createElement('sl-icon-button');
-            editBtn.name = 'pen';
-            editBtn.classList.add('edit-btn');
-            editBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.editQuiz(q);
-            });
-            card.appendChild(editBtn);
+            const buttonGroup = document.createElement('div');
+            buttonGroup.className = 'mt-4 flex space-x-2';
 
-            const btn = document.createElement('sl-button');
-            btn.setAttribute('variant', 'text');
-            btn.setAttribute('size', 'medium');
-            btn.classList.add('desc-button');
-            btn.textContent = 'More...';
-            btn.addEventListener('click', () => this.showDetails(q));
-            card.appendChild(btn);
+            const btnStart = document.createElement("sl-button");
+            btnStart.variant = "primary";
+            btnStart.className = "flex-1";
+            btnStart.textContent = "Start";
+
+            const btnEdit = document.createElement("sl-button");
+            btnEdit.variant = "neutral";
+            btnEdit.textContent = "Edit";
+
+            const btnDelete = document.createElement("sl-button");
+            btnDelete.variant = "danger";
+            btnDelete.setAttribute("outline", "");
+            btnDelete.textContent = "Delete";
+
+            buttonGroup.append(btnStart, btnEdit, btnDelete);
+            card.appendChild(buttonGroup);
 
             grid.appendChild(card);
         });

@@ -16,6 +16,16 @@ class Admin {
             password: this.password
         };
     }
+
+    static fromJson(obj) {
+        return new Admin({
+            id: obj.id,
+            username: obj.username,
+            email: obj.email,
+            role: obj.role,
+            password: ""
+        })
+    }
 }
 
 
@@ -39,6 +49,11 @@ class AdminApi {
             body: JSON.stringify({admin: admin.toJSON(), newPassword})
         });
     }
+
+    getList() {
+        return $.get(`${this.base}/admins`, {});
+    }
+
 }
 
 class AdminDeleteController {
@@ -89,7 +104,6 @@ class AdminDeleteController {
         alert.show();
     }
 }
-
 
 class AdminUpdateController {
     constructor({adminId, api, role, contextPath}) {
@@ -201,9 +215,161 @@ class AdminUpdateController {
     }
 }
 
+export class AdminController {
+    constructor(baseUrl = '') {
+        this.api = new AdminApi(baseUrl);
+    }
+
+    getAdmins() {
+        return this.api.getList()
+            .then(data => {
+                console.log(data)
+                const admins = data.editors.map(Admin.fromJson)
+                return this.renderAdmins(admins);
+            })
+            .catch(error => {
+                let msg = "Failed to fetch admins.";
+                try {
+                    const json = JSON.parse(error.responseText || '{}');
+                    if (json.error) {
+                        msg = json.error;
+                    }
+                } catch (e) {
+                }
+                this.showError(msg);
+                console.error('Admin API error', error);
+                return null
+            });
+    }
+
+    renderAdmins(admins) {
+        const container = document.createElement('div');
+        container.className = 'w-full';
+
+        const card = document.createElement('div');
+        card.className = 'sl-card';
+
+        const table = document.createElement('table');
+        table.className = 'w-full text-left';
+
+        const thead = document.createElement('thead');
+        thead.className = 'bg-gray-50';
+        const headRow = document.createElement('tr');
+
+        ['Username', 'Email', 'Role', 'Actions'].forEach(text => {
+            const th = document.createElement('th');
+            th.className = 'p-4 font-semibold';
+            th.textContent = text;
+            headRow.appendChild(th);
+        });
+        thead.appendChild(headRow);
+        table.appendChild(thead);
+
+        const tbody = document.createElement('tbody');
+        tbody.className = 'divide-y';
+
+        const roleLabel = (role = '') => {
+            if (!role) return '';
+            const r = String(role).trim().toLowerCase();
+            return role[0].toUpperCase() + role.slice(1).toLowerCase();
+        };
+
+        admins.forEach(admin => {
+            const {id = '', username = '', email = '', role = '' } = admin;
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-gray-50';
+            tr.dataset.email = email;
+            tr.dataset.role = role;
+            const isYou = id === String(window.admin.id);
+
+            const nameTd = document.createElement('td');
+            nameTd.className = 'p-4';
+            nameTd.dataset.label = 'Username';
+            nameTd.textContent = username + (isYou ? ' (You)' : '');
+
+            const emailTd = document.createElement('td');
+            emailTd.className = 'p-4';
+            emailTd.dataset.label = 'Email';
+            emailTd.textContent = email;
+
+            const roleTd = document.createElement('td');
+            roleTd.className = 'p-4';
+            roleTd.dataset.label = 'Role';
+            const badge = document.createElement('span');
+            badge.className = 'text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full';
+            if (String(role).toUpperCase() === 'SUPERADMIN') {
+                badge.classList.add('bg-red-100', 'text-red-800');
+            } else {
+                badge.classList.add('bg-blue-100', 'text-blue-800');
+            }
+            badge.textContent = roleLabel(role);
+            roleTd.appendChild(badge);
+
+            const actionsTd = document.createElement('td');
+            actionsTd.className = 'p-4';
+            actionsTd.dataset.label = 'Actions';
+
+            const actionWrapper = document.createElement('div');
+            actionWrapper.className = 'action-buttons flex space-x-2';
+
+            if (!isYou) {
+                const editBtn = document.createElement('sl-button');
+                editBtn.setAttribute('outline', '');
+                editBtn.variant = 'neutral';
+                editBtn.className = 'sl-button sl-button-secondary text-sm !p-2';
+                editBtn.textContent = 'Edit';
+                editBtn.dataset.action = 'edit';
+                editBtn.dataset.email = email;
+
+                const deleteBtn = document.createElement('sl-button');
+                deleteBtn.setAttribute('outline', '');
+                deleteBtn.variant = 'danger'
+                deleteBtn.className = 'sl-button sl-button-danger text-sm !p-2';
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.dataset.action = 'delete';
+                deleteBtn.dataset.email = email;
+
+                actionWrapper.appendChild(editBtn);
+                actionWrapper.appendChild(deleteBtn);
+            }
+
+            actionsTd.appendChild(actionWrapper);
+
+            tr.appendChild(nameTd);
+            tr.appendChild(emailTd);
+            tr.appendChild(roleTd);
+            tr.appendChild(actionsTd);
+
+            tbody.appendChild(tr);
+        });
+
+        table.appendChild(tbody);
+        card.appendChild(table);
+
+        container.appendChild(card);
+
+        return container;
+    }
+
+    showError(message) {
+        let alert = document.getElementById('errorAlert');
+        if (alert) {
+            alert.innerHTML = `<sl-icon slot=\"icon\" name=\"exclamation-octagon\"></sl-icon> ${message}'`;
+        }
+        alert.show();
+    }
+
+    clearAlerts() {
+        const alert = document.getElementById('errorAlert');
+        if (alert) {
+            alert.hide();
+        }
+    }
+
+}
 
 document.addEventListener('DOMContentLoaded', () => {
-    const api    = new AdminApi(contextPath);
+    const api    = new AdminApi(`${window.ctx}`);
     new AdminUpdateController({ adminId, api, role, contextPath });
     new AdminDeleteController( {api, selector: '.delete-admin-btn'});
 });

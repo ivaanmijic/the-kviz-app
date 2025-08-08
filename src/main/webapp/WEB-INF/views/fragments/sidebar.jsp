@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <script src="${pageContext.request.contextPath}/js/create-quiz.js"></script>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <aside>
     <header>
         <h1>TheKvizApp</h1>
@@ -16,10 +17,6 @@
             <li data-view="dashboard" class="sidebar-item selected">
                 <sl-icon name="house" class="sidebar-icon"></sl-icon>
                 Dashboard
-            </li>
-            <li data-view="quizzes" class="sidebar-item">
-                <sl-icon name="list-check" class="sidebar-icon"></sl-icon>
-                My Quizzes
             </li>
             <li onclick=createQuizWindow()>
                 <sl-icon name="plus-square" class="sidebar-icon"></sl-icon>
@@ -41,12 +38,8 @@
                     Admin List
                 </li>
                 <li data-view="all-quizzes" class="sidebar-item">
-                    <sl-icon name="globe-europe-africa" class="sidebar-icon"></sl-icon>
+                    <sl-icon name="list-check" class="sidebar-icon"></sl-icon>
                     All Quizzes
-                </li>
-                <li data-view="logs" class="sidebar-item">
-                    <sl-icon name="terminal" class="sidebar-icon"></sl-icon>
-                    Activity Log
                 </li>
             </ul>
         </div>
@@ -62,10 +55,6 @@
                 <sl-icon name="house" class="sidebar-icon"></sl-icon>
                 Dashboard
             </li>
-            <li data-view="quizzes" class="sidebar-item">
-                <sl-icon name="list-check" class="sidebar-icon"></sl-icon>
-                My Quizzes
-            </li>
             <li onclick=createQuizWindow()>
                 <sl-icon name="plus-square" class="sidebar-icon"></sl-icon>
                 Create Quiz
@@ -86,12 +75,8 @@
                     Admin List
                 </li>
                 <li data-view="all-quizzes" class="sidebar-item">
-                    <sl-icon name="globe-europe-africa" class="sidebar-icon"></sl-icon>
+                    <sl-icon name="list-check" class="sidebar-icon"></sl-icon>
                     All Quizzes
-                </li>
-                <li data-view="logs" class="sidebar-item">
-                    <sl-icon name="terminal" class="sidebar-icon"></sl-icon>
-                    Activity Log
                 </li>
             </ul>
         </div>

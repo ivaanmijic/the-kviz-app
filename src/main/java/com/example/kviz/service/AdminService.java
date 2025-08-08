@@ -27,8 +27,8 @@ public class AdminService {
         return adminRepository.findByUsername(username);
     }
 
-    public List<Admin> getAllEditors() {
-        return adminRepository.findByRole(AdminRole.EDITOR);
+    public List<Admin> getAllAdmins() {
+        return adminRepository.findAll();
     }
 
     public Admin updateAdmin(Long id, Admin admin, String newPassword) {

@@ -2,6 +2,7 @@ package com.example.kviz.servlet.admin;
 
 import com.example.kviz.model.Admin;
 import com.example.kviz.model.adapter.AdminTypeAdapter;
+import com.example.kviz.model.dto.AdminDTO;
 import com.example.kviz.model.request.AdminUpdateRequest;
 import com.example.kviz.service.AdminService;
 import com.example.kviz.service.SessionAuthTokenService;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @WebServlet("/admins/*")
 public class AdminsServlet extends HttpServlet {
@@ -34,28 +36,6 @@ public class AdminsServlet extends HttpServlet {
     private Gson gson;
     private Gson bodyGson;
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        log.info("AdminsServlet: doGet");
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding("UTF-8");
-
-        if (req.getPathInfo() == null || !req.getPathInfo().equals("/")) {
-            log.info("AdminsServlet: doGet: Invalid request");
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            gson.toJson(Map.of("error", "Invalid request"),  resp.getWriter());
-            return;
-        }
-
-        try {
-            List<Admin> editors = adminService.getAllEditors();
-            gson.toJson(editors, resp.getWriter());
-        } catch (Exception e) {
-            log.error("AdminsServlet: doGet: Error", e);
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            gson.toJson(Map.of("error", "Error"),  resp.getWriter());
-        }
-    }
 
     @Override
     public void init() throws ServletException {
@@ -78,6 +58,33 @@ public class AdminsServlet extends HttpServlet {
                 })
                 .create();
     }
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        log.info("AdminsServlet: doGet");
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+
+        if (req.getPathInfo() != null) {
+            log.info("AdminsServlet: doGet: Invalid request");
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            gson.toJson(Map.of("error", "Invalid request"),  resp.getWriter());
+            return;
+        }
+
+        try {
+            List<Admin> amdins = adminService.getAllAdmins();
+            List<AdminDTO> dtos = amdins.stream()
+                    .map(AdminDTO::fromEntity)
+                    .toList();
+            gson.toJson(Map.of("editors", dtos), resp.getWriter());
+
+        } catch (Exception e) {
+            log.error("AdminsServlet: doGet: Error", e);
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            bodyGson.toJson(Map.of("error", "Error"),  resp.getWriter());
+        }
+    }
+
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

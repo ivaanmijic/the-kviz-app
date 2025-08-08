@@ -1,4 +1,5 @@
 import { QuizController } from './controller/quizController.js';
+import { AdminController } from './adminController.js';
 
 document.addEventListener("DOMContentLoaded", function () {
   const drawer = document.querySelector(".nav-drawer");
@@ -23,7 +24,8 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 $(document).ready (() => {
-  const quizController = new QuizController(window.ctx, window.admin.id);
+  const quizController = new QuizController(window.ctx);
+  const adminController = new AdminController(window.ctx);
 
   const $content = $("#changeablePart");
   const $sidebar = $(".sidebar-list");
@@ -35,13 +37,59 @@ $(document).ready (() => {
 
     $content.empty();
 
-    if (view === 'quizzes') {
-      quizController.getQuizzes()
+    if (view === 'dashboard') {
+
+      $content.html(`
+      <div class="user-box">
+    <div class="user-left">
+        <sl-avatar label="username"></sl-avatar>
+        <div class="user-labels">
+            <span class="welcome">Welcome</span>
+            <span class="title">${window.admin.username}</span>
+        </div>
+    </div>
+    <sl-button class="yellow" size="large" onclick="document.getElementById('<%=editDialogId%>').show()">Profile</sl-button>
+</div>
+      `)
+
+      quizController.getQuizzes(window.admin.id)
           .then(quizzes => {
-            $content.html(quizzes);
+            $content.append(`
+            <section>
+            <h2 class="section-title">My Quizzes</h2>
+            `);
+            $content.append(quizzes);
+            $content.append('</section>');
           })
           .catch(err => {
-            $content.html('<p class="warning">Failed to load quizzes content</p>');
+            $content.append('<p class="warning">Failed to load quizzes content</p>');
+          });
+    } else if (view === 'admin-list') {
+        adminController.getAdmins()
+            .then(admins => {
+                $content.append(`
+                    <section>
+                    <h2 class="section-title">Users</h2>
+                `);
+                $content.append(admins);
+                $content.append('</section>');
+            })
+            .catch(err => {
+                $content.append('<p class="warning">Failed to load users content</p>');
+            });
+
+    } else if (view === 'all-quizzes') {
+      quizController.getQuizzes()
+          .then(quizzes => {
+            $content.append(`
+                <section>
+                <h2 class="section-title">All Quizzes</h2>
+            `);
+            $content.append(quizzes);
+            $content.append('</section>');
+          })
+          .catch(err => {
+            $content.append('<p class="warning">Failed to load quizzes content</p>');
           });
     } else {
       $.ajax({
