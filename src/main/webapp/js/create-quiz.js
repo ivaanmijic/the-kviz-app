@@ -90,14 +90,14 @@ function inputImageLook(quizInput, quizPreview, quizRemove, slIcon, quizBox){
     window.quizImageFile = null;
 }
 
-function addQuestion() {
+function addQuestion(question = null) {
     let answerType = 1;
     const questionsContainer = document.getElementById('questions-container');
     const qcnt = ++qCount;
     const wrapper = document.createElement("sl-details");
     wrapper.className = "question-wrapper";
     wrapper.draggable = true;
-    const initialTitle = "Question " + qcnt;
+    const initialTitle = question!=null ? question.question : "Question " + qcnt;
     wrapper.innerHTML =
         '<span slot="summary"><span class="summary-title">' + initialTitle + '</span><sl-icon-button class="remove-question-btn" style="margin-left:10px;" name="trash"></sl-icon-button></span>' +
         '<div class="question-cont">' +
@@ -171,6 +171,41 @@ function addQuestion() {
         }
     }
 
+    if(question != null){
+        fillTheFields(question);
+        wrapper.dataset.questionId = question.id;
+    }
+
+    function fillTheFields(question){
+        const img = wrapper.querySelector('.question-img-preview')
+        img.src = "/uploads/questions/" + question.img + ".jpg";
+        img.style.display = 'block';
+        wrapper.querySelector('.remove-btn').style.display = 'block';
+        wrapper.querySelector('sl-icon').style.display = 'none';
+        wrapper.querySelector('.upload-box').style.border = 'none';
+        wrapper.querySelector('.question-points').value = question.points.toString();
+        wrapper.querySelector('.question-time').value = question.time.toString();
+        console.log(question.category.toLowerCase());
+        wrapper.querySelector('.question-category').value = question.category.toLowerCase();
+        wrapper.querySelector('.question').value = question.question;
+        const answers = question.answers;
+        const answersSpan = wrapper.querySelectorAll('.answer-text');
+        let correctIdx;
+        answers.forEach((ans, idx) =>{
+            if(ans === question.correctAnswer){
+                correctIdx = idx;
+            }
+            if(answersSpan[idx]){
+                answersSpan[idx].value = ans;
+            }
+        })
+
+        if(correctIdx != null){
+            wrapper.querySelector('.radio-group').value = correctIdx.toString();
+        }
+
+    }
+
 
 }
 
@@ -218,8 +253,8 @@ function questionHtml(){
     '<sl-option value="30">30s</sl-option>' +
     '</sl-select>' +
     '<sl-select class="question-category" placeholder="Type">' +
-    '<sl-option value="one_correct">One correct answer</sl-option>' +
-    '<sl-option value="more_correct">Multiple correct answers</sl-option>' +
+    '<sl-option value="classic">One correct answer</sl-option>' +
+    '<sl-option value="multiple_correct">Multiple correct answers</sl-option>' +
     '<sl-option value="slider">Slider</sl-option>' +
     '</sl-select>' +
     '<sl-input class="question" type="text" placeholder="Question"></sl-input>';

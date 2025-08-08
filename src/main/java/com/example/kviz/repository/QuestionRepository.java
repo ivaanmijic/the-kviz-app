@@ -53,7 +53,13 @@ public class QuestionRepository {
             return q.getResultList();
         }
     }
-
+    public List<Question> findByQuizId(long quizId){
+        try (EntityManager em = PersistenceManager.entityManager()) {
+            TypedQuery<Question> q = em.createQuery("SELECT q FROM Question q WHERE q.quiz.id = :id", Question.class);
+            q.setParameter("id", quizId);
+            return q.getResultList();
+        }
+    }
     public void delete(Question question) {
         try (EntityManager em = PersistenceManager.entityManager()) {
             em.getTransaction().begin();

@@ -17,7 +17,7 @@
         <div class="subtitle">${quiz.description}</div>
         <sl-button variant="text" size="medium" class="desc-button">More...</sl-button>
         <div slot="footer" class="footer">
-          <sl-icon-button name="pen"></sl-icon-button>
+          <sl-icon-button class="edit-quiz-btn" data-quiz-id="${quiz.id}" name="pen"></sl-icon-button>
         </div>
         </sl-card>
       </c:forEach>
@@ -34,6 +34,10 @@
           <sl-icon-button name="pen"></sl-icon-button>
         </div>
       </sl-dialog>
+    <sl-dialog class="editQuizDialog" id="editQuizDialog"></sl-dialog>
     </div>
   </section>
+  <script src="${pageContext.request.contextPath}/js/quizController.js"></script>
+  <script>
+  </script>
 </c:if>

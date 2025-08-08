@@ -21,7 +21,7 @@
         <label class="upload-box" id="uploadBox">
             <img id="quizPreview" style="display:none;">
             <sl-icon-button type="button" class="remove-btn" size="medium" name="x" id="removeBtn" style="display:none"></sl-icon-button>
-            <sl-icon name="plus-circle"></sl-icon>
+            <sl-icon id="plusIcon" name="plus-circle"></sl-icon>
         </label>
         <input type="file" name="image" id="imageInput" accept="image/*"/>
         <sl-input id="quizTitle" placeholder="Quiz Title"></sl-input>
@@ -48,4 +48,7 @@
         </div>
     </sl-tooltip>
 </form>
+<script>
+    const quiz = JSON.parse('<%= request.getAttribute("quizJson") %>');
+</script>
 <script src="${pageContext.request.contextPath}/js/create-quiz.js"></script>

@@ -26,13 +26,13 @@ function addEventListenersOnCards() {
         const cards = document.querySelectorAll(".quiz-card");
         const dialog = document.querySelector('.quiz-card-more-info');
         cards.forEach(card => {
-            const desc = card.querySelector(".quiz-card-description");
+            const desc = card.querySelector(".subtitle");
             const openBtn = card.querySelector(".desc-button");
             openBtn.addEventListener('click', () => {
                 const paragraph = dialog.querySelector("p");
                 paragraph.innerText = desc.innerText;
 
-                const cardTitle = card.querySelector("h2");
+                const cardTitle = card.querySelector(".title");
                 dialog.setAttribute("label", cardTitle.innerText);
 
                 dialog.show();
