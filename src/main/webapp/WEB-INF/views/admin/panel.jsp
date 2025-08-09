@@ -44,11 +44,8 @@
     </div>
 </div>
 
-<sl-alert class="alert" id="succesAlert" variant="success" closable></sl-alert>
-<sl-alert class="alert" id="errorAlert" variant="danger" closable></sl-alert>
-
 <script src="${pageContext.request.contextPath}/webjars/jquery/3.7.1/jquery.min.js"></script>
-<script type="module" src="${pageContext.request.contextPath}/js/admin-home.js"></script>
+<script type="module" src="${pageContext.request.contextPath}/js/adminPanelRouter.js"></script>
 <script src="${pageContext.request.contextPath}/js/create-quiz.js"></script>
 </body>
 <jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/fragments/footer.jsp"></jsp:include>

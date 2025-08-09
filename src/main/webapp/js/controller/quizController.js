@@ -1,5 +1,6 @@
 import { Quiz } from "../model/quiz.js";
 import { QuizApiClient } from "../client/quizApiClient.js";
+import { AlertManager } from "../manager/alertManager.js";
 
 export class QuizController {
     constructor(baseUrl = '', adminId = null) {
@@ -13,7 +14,7 @@ export class QuizController {
         return this.apiClient.getList(adminId)
             .then(data => {
                 const quizzes = data.map(Quiz.fromJson);
-                return this.renderQuizzes(quizzes);
+                return this.renderQuizzes(quizzes, adminId ? "My Quizzes" : "All Quizzes");
             })
             .catch(err => {
                 let msg = 'Failed to load quizzes';
@@ -21,77 +22,43 @@ export class QuizController {
                     const json = JSON.parse(err.responseText);
                     if (json.error) msg = json.error;
                 } catch (e) {}
-                this.showError(msg);
+                AlertManager.showError(msg);
                 console.error('Quiz API error', err);
                 return null;
             });
     }
 
-    renderQuizzes(quizzes) {
-        this.clearAlerts()
+    async renderQuizzes(quizzes, sectionTitleText) {
+        const section = document.createElement('section');
+        const sectionTitle = document.createElement('h2');
+        sectionTitle.classList.add('section-title');
+        sectionTitle.textContent = sectionTitleText;
+        section.appendChild(sectionTitle);
 
         const grid = document.createElement('div');
         grid.classList.add('card-grid');
         grid.id = 'card-grid';
 
-        quizzes.forEach(q => {
-            const card = document.createElement('sl-card');
-            card.classList.add('quiz-card');
+        try {
+            const response = await fetch(`${window.ctx}/templates/quiz-card.html`);
+            if (!response.ok) throw new Error('Failed to load quiz card template');
+            const cardTemplate = await response.text();
 
-            const img = document.createElement('img');
-            img.slot = 'image';
-            img.classList.add('quiz-card-img');
-            img.src = `${window.ctx}/${q.thumbnail}`;
-            card.appendChild(img);
+            quizzes.forEach((quiz) => {
+               const cardHTML = cardTemplate
+                   .replace('{{Thumbnail}}', `${window.ctx}/${quiz.thumbnail}`)
+                   .replace('{{Title}}', quiz.title);
 
-            const h3 = document.createElement('h3');
-            h3.className = 'text-lg font-bold';
-            h3.textContent = q.title;
-            card.appendChild(h3);
-
-            const p = document.createElement('p');
-            p.className = 'text-sm mt-1';
-            p.textContent = 'Broj pitanja';
-            card.appendChild(p);
-
-            const buttonGroup = document.createElement('div');
-            buttonGroup.className = 'mt-4 flex space-x-2';
-
-            const btnStart = document.createElement("sl-button");
-            btnStart.variant = "primary";
-            btnStart.className = "flex-1";
-            btnStart.textContent = "Start";
-
-            const btnEdit = document.createElement("sl-button");
-            btnEdit.variant = "neutral";
-            btnEdit.textContent = "Edit";
-
-            const btnDelete = document.createElement("sl-button");
-            btnDelete.variant = "danger";
-            btnDelete.setAttribute("outline", "");
-            btnDelete.textContent = "Delete";
-
-            buttonGroup.append(btnStart, btnEdit, btnDelete);
-            card.appendChild(buttonGroup);
-
-            grid.appendChild(card);
-        });
-
-        return grid;
-    }
-
-    showError(message) {
-        let alert = document.getElementById('errorAlert');
-        if (alert) {
-            alert.innerHTML = `<sl-icon slot=\"icon\" name=\"exclamation-octagon\"></sl-icon> ${message}'`;
+               const tempDiv = document.createElement('div');
+               tempDiv.innerHTML = cardHTML;
+               grid.appendChild(tempDiv.firstElementChild);
+            });
+        } catch (error) {
+            console.error('Failed to render quizzes', error);
+            AlertManager.showError('Could not display the quizzes');
         }
-        alert.show();
-    }
 
-    clearAlerts() {
-        const alert = document.getElementById('errorAlert');
-        if (alert) {
-            alert.hide();
-        }
+        section.appendChild(grid);
+        return section;
     }
 }

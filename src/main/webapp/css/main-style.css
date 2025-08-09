@@ -11,6 +11,10 @@ html, body {
     height: 100%;
 }
 
+section {
+    margin: auto;
+}
+
 button:hover{
     transform: scale(1.05);
 }
@@ -817,9 +821,6 @@ sl-details{
         align-self: flex-end;
     }
 }
-
-
-
 
 @media (max-width: 1500px){
     sl-details{

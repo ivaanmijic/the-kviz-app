@@ -23,7 +23,7 @@ public class AdminViewController extends HttpServlet {
 
         if (path == null || path.equals("/") || path.isBlank()) {
             log.info("Main view requested");
-            req.getRequestDispatcher("/WEB-INF/views/admin/home.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/views/admin/panel.jsp").forward(req, resp);
             return;
         }
 
