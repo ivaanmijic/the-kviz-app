@@ -12,6 +12,7 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -64,24 +65,20 @@ public class AdminsServlet extends HttpServlet {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
 
-        if (req.getPathInfo() != null) {
-            log.info("AdminsServlet: doGet: Invalid request");
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            gson.toJson(Map.of("error", "Invalid request"),  resp.getWriter());
+        String pathInfo = req.getPathInfo();
+
+        if (pathInfo == null || pathInfo.equals("/")) {
+            handleAdminListRequest(req, resp);
             return;
         }
 
-        try {
-            List<Admin> amdins = adminService.getAllAdmins();
-            List<AdminDTO> dtos = amdins.stream()
-                    .map(AdminDTO::fromEntity)
-                    .toList();
-            gson.toJson(Map.of("editors", dtos), resp.getWriter());
-
-        } catch (Exception e) {
-            log.error("AdminsServlet: doGet: Error", e);
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            bodyGson.toJson(Map.of("error", "Error"),  resp.getWriter());
+        String[] parts = pathInfo.split("/");
+        if (parts.length == 3 && "profile".equals(parts[2])) {
+            handleAdminProfileRequest(req, resp);
+        } else {
+            log.error("AdminsServlet: doGet: invalid request: {}", pathInfo);
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            gson.toJson(Map.of("error", "invalid request"), resp.getWriter());
         }
     }
 
@@ -227,6 +224,41 @@ public class AdminsServlet extends HttpServlet {
                     }
                 }
             }
+        }
+    }
+
+    private void handleAdminProfileRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String idPart = req.getPathInfo().split("/")[1];
+        try {
+            long adminId = Long.parseLong(idPart);
+            Admin admin = adminService.getAdminById(adminId);
+            req.setAttribute("admin", admin);
+            req.getRequestDispatcher("/WEB-INF/views/admin/profile.jsp").forward(req, resp);
+
+        } catch (NumberFormatException e) {
+            log.error("AdminsProfileServlet doGet: invalid admin id {}", idPart);
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            gson.toJson(Map.of("error", "Invalid admin id " + idPart), resp.getWriter());
+
+        } catch (EntityNotFoundException e) {
+            log.error("AdminsProfileServlet doGet: Admin with id {} not found", idPart);
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            gson.toJson(Map.of("error", "Admin with id " + idPart + " not found"), resp.getWriter());
+        }
+    }
+
+    private void handleAdminListRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            List<Admin> admins = adminService.getAllAdmins();
+            List<AdminDTO> dtos = admins.stream()
+                    .map(AdminDTO::fromEntity)
+                    .toList();
+            gson.toJson(Map.of("editors", dtos), resp.getWriter());
+
+        } catch (Exception e) {
+            log.error("AdminsServlet: doGet: Error", e);
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            bodyGson.toJson(Map.of("error", "Error"),  resp.getWriter());
         }
     }
 }

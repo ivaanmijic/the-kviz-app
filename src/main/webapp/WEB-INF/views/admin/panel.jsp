@@ -1,11 +1,12 @@
-<%@ page import="com.example.kviz.model.supporting.AdminRole" %>
-<%@ page import="com.example.kviz.model.Admin" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: haris
   Date: 7/25/25
   Time: 3:32 PM
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page import="com.example.kviz.model.supporting.AdminRole" %>
+<%@ page import="com.example.kviz.model.Admin" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>

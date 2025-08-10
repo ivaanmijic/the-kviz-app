@@ -19,6 +19,11 @@ public class AdminService {
         this.adminRepository = new AdminRepository();
     }
 
+    public Admin getAdminById(long id) {
+        return adminRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Admin with id " + id + " not found"));
+    }
+
     public Optional<Admin> getAdminByEmail(String email) {
         return adminRepository.findByEmail(email);
     }

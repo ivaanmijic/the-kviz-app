@@ -58,14 +58,11 @@ $(document).ready(() => {
                     .catch(() => AlertManager.showError("Could not display all Quizzes."));
                 break;
 
-
-            default:
-                $.ajax({
-                    url: `${window.ctx}/admin/view/${view}`,
-                    dataType: "html",
-                })
-                    .done(data => $content.html(data))
-                    .fail(() => AlertManager.showError("Failed to load content"));
+            case "profile":
+                $.get(`${window.ctx}/admins/${window.admin.id}/profile`, profileHtml => {
+                    $content.append(profileHtml);
+                }).fail(() => AlertManager.showError("Could not display profile."));
+                break;
         }
     }
 
