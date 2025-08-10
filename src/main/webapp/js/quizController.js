@@ -42,7 +42,7 @@ class QuizApi {
     }
 }
 
-class QuizController {
+class EditQuizController {
     constructor({quizId, api, contextPath}) {
         this.api = api;
         this.base = contextPath;
@@ -57,6 +57,8 @@ class QuizController {
         const image = document.getElementById('quizPreview')
         image.src = this.base + "/uploads/quizImages/" + this.quiz.img + ".jpg";
         image.style.display = 'block';
+        window.quizImageFile = null;
+        window.quizId = this.quiz.id;
         document.getElementById('removeBtn').style.display = 'block';
         document.getElementById('plusIcon').style.display = 'none';
         document.getElementById('uploadBox').style.border = 'none';
@@ -64,6 +66,8 @@ class QuizController {
         document.getElementById('quizCategory').value = this.quiz.category.toLowerCase();
         document.getElementById('quizVisibility').value = this.quiz.visibility ? "public": "private";
         document.getElementById('quizDescription').value = this.quiz.description;
+        document.getElementById('submitQuiz').innerText = 'Edit Quiz';
+        document.getElementById('submitQuiz').disabled = true;
     }
 
     async _getQuizInfo(base, quizId){
@@ -109,6 +113,7 @@ class QuestionController {
         console.log(this.quizId);
         this.questionArray = await this._getQuestionsInfo(this.base, this.quizId);
         this.questionArray.forEach(question => {
+            console.log(question);
             addQuestion(question);
         })
     }
@@ -135,7 +140,7 @@ document.querySelectorAll('.edit-quiz-btn').forEach(btn => {
     btn.addEventListener('click', async () => {
         const api = new QuizApi(contextPath);
         console.log(btn.dataset.quizId);
-        let quizCnt = new QuizController({
+        let quizCnt = new EditQuizController({
             quizId: btn.dataset.quizId,
             api: api,
             contextPath: contextPath});

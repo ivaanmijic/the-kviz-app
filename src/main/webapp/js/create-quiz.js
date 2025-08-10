@@ -87,7 +87,7 @@ function inputImageLook(quizInput, quizPreview, quizRemove, slIcon, quizBox){
     quizRemove.removeAttribute('data-imageSet');
     slIcon.style.display = 'block';
     quizBox.style.border= '1px dashed var(--sl-color-neutral-500)';
-    window.quizImageFile = null;
+    window.quizImageFile = undefined;
 }
 
 function addQuestion(question = null) {
@@ -180,6 +180,8 @@ function addQuestion(question = null) {
         const img = wrapper.querySelector('.question-img-preview')
         img.src = "/uploads/questions/" + question.img + ".jpg";
         img.style.display = 'block';
+        wrapper.imageFile = null;
+        wrapper.questionId = question.id;
         wrapper.querySelector('.remove-btn').style.display = 'block';
         wrapper.querySelector('sl-icon').style.display = 'none';
         wrapper.querySelector('.upload-box').style.border = 'none';
@@ -302,7 +304,7 @@ function questionImageListeners(wrapper){
         qRemove.style.display = 'none';
         slIcon.style.display = 'block';
         wrapper.removeAttribute('data-imageSet');
-        wrapper.imageFile = null;
+        wrapper.imageFile = undefined;
         qBox.style.border = '1px dashed var(--sl-color-neutral-500)';
     });
 }
@@ -330,7 +332,7 @@ function validateQuiz() {
     const quizCategory = document.querySelector('#quizCategory').value.trim();
     const quizDescription = document.querySelector('#quizDescription').value.trim();
     const quizVisibility = document.querySelector('#quizVisibility').value.trim();
-    const quizImagePresent = !!window.quizImageFile;
+    const quizImagePresent = window.quizImageFile !== undefined;
 
     if (!quizTitle || !quizCategory || !quizDescription || !quizImagePresent || !quizVisibility) {
         const alert = document.createElement('sl-alert');
@@ -368,7 +370,7 @@ function validateQuiz() {
         const points = question.querySelector('.question-points').value.trim();
         const time = question.querySelector('.question-time').value.trim();
         const category = question.querySelector('.question-category').value.trim();
-        const image = question.dataset.imageSet === 'true';
+        const image =  question.imageFile !== undefined;
         const answers = [...question.querySelectorAll('.answer-text')].map(el => el.value.trim());
         const selected = question.querySelector('sl-radio-group').value;
 
@@ -395,6 +397,9 @@ function submitQuizButton(e){
     } else {
         e.preventDefault();
         const formData = new FormData();
+        if(!!window.quizId){
+            formData.append('quizId', window.quizId);
+        }
         formData.append("quizTitle", document.getElementById('quizTitle').value.trim());
         console.log(document.getElementById("quizCategory").value.trim());
         formData.append("quizCategory", document.getElementById("quizCategory").value.trim());
@@ -410,6 +415,9 @@ function submitQuizButton(e){
             const category = question.querySelector('.question-category').value;
             const correctAnswerIndex = question.querySelector('sl-radio-group').value;
 
+            if(!!question.questionId){
+                formData.append(`questions[${index}][id]` , question.questionId);
+            }
             formData.append(`questions[${index}][title]`, title);
             formData.append(`questions[${index}][category]`, category);
             formData.append(`questions[${index}][points]`, points);

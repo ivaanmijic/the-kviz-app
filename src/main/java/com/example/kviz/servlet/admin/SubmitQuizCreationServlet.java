@@ -33,6 +33,10 @@ public class SubmitQuizCreationServlet extends HttpServlet {
         });
         QuizService quizService = new QuizService();
         Quiz quiz = new Quiz();
+        if(request.getParameter("quizId") != null) {
+            int quizId = Integer.parseInt(request.getParameter("quizId"));
+            quiz = quizService.findById((long) quizId).get();
+        }
         HttpSession session = request.getSession();
 
         Admin owner = (Admin) session.getAttribute("admin");
@@ -51,16 +55,20 @@ public class SubmitQuizCreationServlet extends HttpServlet {
         quiz = quizService.save(quiz);
 
         Part quizImagePart = request.getPart("quizImage");
-        saveImageToDisk(quizImagePart, "quizImages", "quizImage" + quiz.getId());
-
+        if(quizImagePart != null &&  quizImagePart.getSize() > 0) {
+            saveImageToDisk(quizImagePart, "quizImages", "quizImage" + quiz.getId());
+        }
         quiz.setThumbnail("quizImage" + quiz.getId());
 
         List<Question> questions = new ArrayList<>();
         int questionIndex = 0;
         while(true){
-            System.out.println("jodlejodlejodlejodelIOOOOOOO");
             QuestionServices questionServices = new QuestionServices();
             Question question = new Question();
+            if(request.getParameter("questions["+questionIndex + "][id]") != null) {
+                int questionId = Integer.parseInt(request.getParameter("questions["+questionIndex + "][id]"));
+                question = questionServices.findById((long) questionId).get();
+            }
             String title = request.getParameter("questions[" + questionIndex + "][title]");
             if(title == null){
                 break;
@@ -85,8 +93,9 @@ public class SubmitQuizCreationServlet extends HttpServlet {
             question = questionServices.save(question);
 
             Part questionImagePart = request.getPart("questions[" + questionIndex + "][image]");
-            saveImageToDisk(questionImagePart, "questions", "quiz" + quiz.getId() + "_" + "question" + question.getId());
-
+            if(questionImagePart != null && questionImagePart.getSize() > 0) {
+                saveImageToDisk(questionImagePart, "questions", "quiz" + quiz.getId() + "_" + "question" + question.getId());
+            }
             question.setImage("quiz" + quiz.getId() + "_" + "question" + question.getId());
             questionServices.save(question);
 
