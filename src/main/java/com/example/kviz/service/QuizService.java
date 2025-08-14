@@ -44,6 +44,10 @@ public class QuizService {
         return quizRepository.findAllByAdminId(id);
     }
 
+    public List<Quiz> findAllPublic(Long forAdminWithId) {
+        return quizRepository.findAllPublic(forAdminWithId);
+    }
+
     public void delete(Quiz quiz) {
         quizRepository.delete(quiz);
     }

@@ -47,13 +47,11 @@ $(document).ready(() => {
                 $.get(`${window.ctx}/templates/dashboard.html`, dashboardHtml => {
                     dashboardHtml = dashboardHtml.replace('{{Username}}', window.admin.username);
                     $content.append(dashboardHtml);
-
-                    $('#profileBtn').on('click', (e) =>{
-                        e.preventDefault();
-                        window.loadView("profile");
-                    });
-
                     quizController.getQuizzes(window.admin.id)
+                        .then(quizzesGrid => {
+                            $('#quiz-section').append(quizzesGrid);
+                            return quizController.getPublicQuizzes();
+                        })
                         .then(quizzesGrid => {
                             $('#quiz-section').append(quizzesGrid);
                         })

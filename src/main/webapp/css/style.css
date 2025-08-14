@@ -333,7 +333,7 @@ aside .selected {
     border-bottom-left-radius: 30px;
     border-top-left-radius: 30px;
     background-color: var(--bg-color-secondary);
-    box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow);
 }
 
 .main header {
@@ -410,7 +410,7 @@ sl-menu-item.destructive::part(base):hover {
 .user-box {
     width: calc(100% - 3rem);
     height: auto;
-    background: linear-gradient(to right, var(--brand-primary), var(--brand-secondary));
+    background-image: var(--gradient);
     border-radius: var(--sl-border-radius-medium);
     display: flex;
     justify-content: space-between;
@@ -418,7 +418,7 @@ sl-menu-item.destructive::part(base):hover {
     padding: 2.5rem;
     box-sizing: border-box;
     color: var(--sl-color-neutral-100);
-    box-shadow: 0 4px 15px 0 rgba(79, 70, 229, 0.35);
+    box-shadow: var(--shadow);
     margin: 2.5rem auto;
     flex-wrap: wrap;
 }
@@ -463,11 +463,10 @@ sl-button[variant="primary"]::part(base) {
     background-image: linear-gradient( to right, var(--brand-primary), var(--brand-secondary) );
     border: none;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px 0 rgba(79, 70, 229, 0.35);
+    box-shadow: var(--shadow);
 }
 sl-button[variant="primary"]::part(base):hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px 0 rgba(79, 70, 229, 0.4);
 }
 
 sl-button[variant="success"]::part(base) {
@@ -494,7 +493,7 @@ sl-input::part(input) {
 }
 sl-input:focus-within::part(base) {
     border-color: var(--brand-primary);
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+    box-shadow: var(--shadow);
 }
 
 /* Section Title */
@@ -535,7 +534,7 @@ sl-card img {
     height: auto;
     width: 100%;
     background-color: var(--card-color);
-    box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow);
     border-radius: var(--sl-border-radius-large);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     overflow: hidden;
@@ -592,7 +591,7 @@ sl-alert::part(base) {
     position: fixed;
     transform: translateX(-50%);
     z-index: 9999;
-    box-shadow: 0 4px 15px 0 rgba(79, 70, 229, 0.35);
+    box-shadow: var(--shadow);
     font-size: 1.1rem;
     padding: 0.75rem 1rem;
     top: 1rem;

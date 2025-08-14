@@ -121,8 +121,11 @@ export class AdminController {
                 if (!isYou) {
                     const actionWrapper = rowElement.querySelector('.action-buttons');
                     actionWrapper.innerHTML = `
-                        <sl-button outline variant="neutral" class="sl-button sl-button-secondary text-sm !p-2" data-action="edit" data-admin-id="${admin.id}">Edit</sl-button>
-                        <sl-button outline variant="danger" class="sl-button sl-button-danger text-sm !p-2 delete-admin-btn" data-username="${admin.username}" data-admin-id="${admin.id}" data-action="delete" data-email="${admin.email}">Delete</sl-button>
+                        <sl-button variant="neutral" class="text-sm !p-2" data-action="edit" data-admin-id="${admin.id}">Edit</sl-button>
+                        <sl-button variant="text" class="danger-text-btn text-sm !p-2 delete-admin-btn" data-username="${admin.username}" data-admin-id="${admin.id}" data-action="delete" data-email="${admin.email}">
+                            <sl-icon slot="suffix" name="trash"></sl-icon>
+                            Delete
+                        </sl-button>
                     `;
                 }
                 tbody.appendChild(rowElement);

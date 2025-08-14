@@ -53,7 +53,6 @@
     </div>
 </aside>
 
-
 <sl-drawer label="Menu" class="nav-drawer">
     <div class="sidebar-section">
         <p class="sidebar-heading">General</p>

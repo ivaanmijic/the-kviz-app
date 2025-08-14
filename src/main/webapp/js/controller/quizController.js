@@ -99,6 +99,25 @@ export class QuizController {
             });
     }
 
+    getPublicQuizzes() {
+        return this.apiClient.getPublicList()
+            .then(data => {
+                const quizzes = data.map(Quiz.fromJson);
+                const sectionTitle = "Public Quizzes";
+                return this.renderQuizzes(quizzes, sectionTitle, false);
+            })
+            .catch(err => {
+                let msg = 'Failed to load quizzes';
+                try {
+                    const json = JSON.parse(err.responseText);
+                    if (json.error) msg = json.error;
+                } catch (e) {}
+                AlertManager.showError(msg);
+                console.error('Quiz API error', err);
+                return null;
+            });
+    }
+
     async renderQuizzes(quizzes, sectionTitleText, showAdminActions) {
         const section = document.createElement('section');
         const sectionTitle = document.createElement('h2');
@@ -120,7 +139,10 @@ export class QuizController {
                 if (showAdminActions) {
                     adminActionsHtml = `
                        <sl-button variant="neutral" data-action="edit" data-quiz-id="${quiz.id}">Edit</sl-button>
-                       <sl-button variant="danger" outline data-action="delete" data-quiz-id="${quiz.id}" data-quiz-title="${quiz.title}">Delete</sl-button>
+                       <sl-button class="danger-text-btn" variant="text" data-action="delete" data-quiz-id="${quiz.id}" data-quiz-title="${quiz.title}">
+                            <sl-icon slot="suffix" name="trash"></sl-icon>
+                            Delete
+                       </sl-button>
                    `;
                 }
 

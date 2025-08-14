@@ -57,6 +57,14 @@ public class QuizRepository {
         }
     }
 
+    public List<Quiz> findAllPublic(Long selfId) {
+        try (EntityManager em = PersistenceManager.entityManager()) {
+            TypedQuery<Quiz> q = em.createQuery("SELECT q FROM Quiz q WHERE q.owner.id != :selfId AND q.visible", Quiz.class);
+            q.setParameter("selfId", selfId);
+            return q.getResultList();
+        }
+    }
+
     public List<Quiz> findAllByAdmin(Admin admin) {
         try (EntityManager em = PersistenceManager.entityManager()) {
             TypedQuery<Quiz> q = em.createQuery("SELECT q FROM Quiz q WHERE q.owner.id = :id", Quiz.class);

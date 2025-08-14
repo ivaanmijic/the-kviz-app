@@ -9,6 +9,10 @@ export class QuizApiClient {
         return $.get(`${this.base}/admin/quiz/list`, params)
     }
 
+    getPublicList() {
+        return $.get(`${this.base}/admin/quiz/list/public`, {});
+    }
+
     delete(quizId) {
         if (!quizId) {
             return $.Deferred().reject(new Error("Quiz ID is required for deletion.")).promise();

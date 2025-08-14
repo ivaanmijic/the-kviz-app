@@ -1,15 +1,18 @@
 package com.example.kviz.servlet.admin;
 
+import com.example.kviz.model.Admin;
 import com.example.kviz.model.Quiz;
 import com.example.kviz.model.dto.QuizDTO;
 import com.example.kviz.service.AdminService;
 import com.example.kviz.service.QuizService;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.UnavailableException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,11 +45,27 @@ public class QuizServlet extends HttpServlet {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
 
+        String path = req.getPathInfo();
+        if (path == null) {
+            log.error("Resource not found");
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            gson.toJson(Map.of("error", "Resource not found"), resp.getWriter());
+            return;
+        }
+
         boolean myQuizzes = true;
         long adminId = 0;
+        boolean publicQuizzes = false;
 
-        String path = req.getPathInfo();
-        if (path == null || !path.equals("/list")) {
+        if (path.equals("/list")) {
+            try {
+                adminId = Long.parseLong(req.getParameter("admin_id"));
+            } catch (NumberFormatException e) {
+                myQuizzes = false;
+            }
+        } else if (path.equals("/list/public")) {
+            publicQuizzes = true;
+        } else {
             log.error("Resource not found");
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
             gson.toJson(Map.of("error", "Resource not found"), resp.getWriter());
@@ -54,15 +73,20 @@ public class QuizServlet extends HttpServlet {
         }
 
         try {
-            adminId = Long.parseLong(req.getParameter("admin_id"));
-        } catch (NumberFormatException e) {
-            myQuizzes = false;
-        }
+            List<Quiz> quizzes;
+            if (publicQuizzes) {
+                HttpSession session = req.getSession();
+                Admin user = (Admin) session.getAttribute("admin");
+                if (user == null) {
+                    throw new UnavailableException("Admin not logged in");
+                }
+                quizzes = quizService.findAllPublic(user.getId());
+            } else if (myQuizzes) {
+                quizzes = quizService.findByOwnerId(adminId);
+            } else {
+                quizzes = quizService.findAll();
+            }
 
-        try {
-            List<Quiz> quizzes = (myQuizzes)
-                    ? quizService.findByOwnerId(adminId)
-                    : quizService.findAll();
             List<QuizDTO> dtos = quizzes.stream()
                     .map(QuizDTO::fromEntity)
                     .collect(Collectors.toList());
@@ -75,17 +99,21 @@ public class QuizServlet extends HttpServlet {
             gson.toJson(Map.of("error", e.getLocalizedMessage()), resp.getWriter());
 
         } catch (IllegalArgumentException e) {
-            log.error("Error finding quizzes: {}",  e.getMessage());
+            log.error("Error finding quizzes: {}", e.getMessage());
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             gson.toJson(Map.of("error", e.getLocalizedMessage()), resp.getWriter());
 
         } catch (RuntimeException e) {
-            log.error("Error finding quizzes: {}",  e.getMessage());
-            resp.setStatus(500);
+            log.error("Error finding quizzes: {}", e.getMessage());
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            gson.toJson(Map.of("error", e.getLocalizedMessage()), resp.getWriter());
+        } catch (UnavailableException e) {
+            log.error("Error finding quizzes: {}", e.getMessage());
+            resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
             gson.toJson(Map.of("error", e.getLocalizedMessage()), resp.getWriter());
         }
-
     }
+
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -88,7 +88,10 @@
                     </div>
 
                     <div class="mt-8 pt-5 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-4">
-                        <sl-button variant="danger" outline id="deleteProfileBtn">Delete Profile</sl-button>
+                        <sl-button variant="text" class="danger-text-btn" id="deleteProfileBtn">
+                            <sl-icon slot="suffix" name="trash"></sl-icon>
+                            Delete Profile
+                        </sl-button>
                         <sl-button variant="primary" type="submit" id="updateBtn" disabled>Update Profile</sl-button>
                     </div>
                 </form>
