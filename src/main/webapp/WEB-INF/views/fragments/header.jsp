@@ -8,24 +8,6 @@
 <header>
     <div class="header-container">
         <sl-icon-button name="list" label="Menu" class="hamburger-menu"></sl-icon-button>
-        <div class="search-bar">
-            <sl-input class="sl-input-color"  placeholder="Search" size="medium" pill filled>
-                <sl-icon-button name="search" slot="suffix" ></sl-icon-button>
-            </sl-input>
-        </div>
-        <div class="profile-buttons">
-            <sl-avatar label="UserProfile"></sl-avatar>
-            <sl-dropdown class="dropdown">
-                <sl-button slot="trigger" caret>Options</sl-button>
-                <sl-menu class="custom-menu">
-                    <sl-menu-item>
-                        <sl-button variant="text" class="text-button">Edit</sl-button>
-                    </sl-menu-item>
-                    <sl-menu-item class="destructive">
-                        <sl-button variant="text" class="destructive-text-button" href="/auth/logout">Sign Out</sl-button>
-                    </sl-menu-item>
-                </sl-menu>
-            </sl-dropdown>
-        </div>
+        <h1 class="header-title">The Kviz App</h1>
     </div>
 </header>

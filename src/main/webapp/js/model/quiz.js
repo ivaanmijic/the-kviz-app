@@ -1,11 +1,12 @@
 export class Quiz {
-    constructor({ id, title, description, thumbnail, owner, category, visible }) {
+    constructor({ id, title, description, thumbnail, category, visible, questions = [] }) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
         this.category = category;
         this.visible = visible;
+        this.questions = questions;
     }
 
     toJson() {
@@ -16,6 +17,7 @@ export class Quiz {
             thumbnail: this.thumbnail,
             category: this.category,
             visible: this.visible,
+            questions: this.questions,
         };
     }
 

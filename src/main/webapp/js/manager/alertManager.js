@@ -1,27 +1,40 @@
 export class AlertManager {
+    static alertElement = null;
+    static iconElement = null;
+    static messageElement = null;
+    static onHideCallback = null;
+
+    static init() {
+        this.alertElement = document.querySelector('#globalAlert');
+        if (this.alertElement) {
+            this.iconElement = this.alertElement.querySelector('#globalAlertIcon');
+            this.messageElement = this.alertElement.querySelector('#globalAlertMessage');
+
+            this.alertElement.addEventListener('sl-after-hide', () => {
+                if (typeof this.onHideCallback === 'function') {
+                    this.onHideCallback();
+                }
+                this.onHideCallback = null;
+            });
+        }
+    }
 
     static show(message, variant = 'primary', icon = 'info-circle', duration = 4000, onHide = null) {
-        const alert = document.createElement('sl-alert');
-        alert.variant = variant;
-        alert.closeable = true;
-        alert.duration = duration;
+        if (!this.alertElement) {
+            console.error('AlertManager could not find the #globalAlert element. Make sure it exists in your HTML.');
+            return;
+        }
 
-        alert.classList.add('alert');
+        this.alertElement.hide();
 
-        alert.innerHTML = `
-            <sl-icon slot="icon" name="${icon}"></sl-icon>
-            ${message}
-        `;
-        document.body.appendChild(alert);
+        this.alertElement.variant = variant;
+        this.alertElement.duration = duration;
+        this.iconElement.name = icon;
+        this.messageElement.textContent = message;
 
-        setTimeout(() => alert.show(), 10);
+        this.onHideCallback = onHide;
 
-        alert.addEventListener('sl-after-hide', () => {
-            if (typeof onHide === 'function') {
-                onHide();
-            }
-            alert.remove();
-        });
+        setTimeout(() => this.alertElement.show(), 50);
     }
 
     static showInfo(message, onHideCallback = null) {
@@ -29,11 +42,10 @@ export class AlertManager {
     }
 
     static showSuccess(message, onHideCallback = null) {
-        this.show(message, 'check2-circle', 'success-circle', 4000, onHideCallback);
+        this.show(message, 'success', 'check2-circle', 4000, onHideCallback);
     }
 
     static showError(message, onHideCallback = null) {
         this.show(message, 'danger', 'exclamation-octagon', 5000, onHideCallback);
     }
-
 }

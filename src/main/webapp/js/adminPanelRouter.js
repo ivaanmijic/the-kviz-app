@@ -21,14 +21,24 @@ document.addEventListener("DOMContentLoaded", () => {
 $(document).ready(() => {
     const quizController = new QuizController(window.ctx);
     const adminController = new AdminController(window.ctx);
+    AlertManager.init();
 
     const $content = $("#changeablePart");
     const $sidebar = $(".sidebar-list");
     const $items = $sidebar.find(".sidebar-item");
 
-    function loadView(view) {
+    const $drawer = $(".nav-drawer");
+    const $menuButton = $('.hamburger-menu');
+
+    if ($drawer.length && $menuButton.length) {
+        $menuButton.on('click', () => $drawer[0].show());
+    }
+
+    window.loadView = function (view, param = {}) {
+
+        const activeView = param.from || view;
         $items.removeClass("active");
-        $sidebar.find(`[data-view="${view}"]`).addClass("active");
+        $sidebar.find(`[data-view="${activeView}"]`).addClass("active");
 
         $content.empty();
 
@@ -37,6 +47,11 @@ $(document).ready(() => {
                 $.get(`${window.ctx}/templates/dashboard.html`, dashboardHtml => {
                     dashboardHtml = dashboardHtml.replace('{{Username}}', window.admin.username);
                     $content.append(dashboardHtml);
+
+                    $('#profileBtn').on('click', (e) =>{
+                        e.preventDefault();
+                        window.loadView("profile");
+                    });
 
                     quizController.getQuizzes(window.admin.id)
                         .then(quizzesGrid => {
@@ -59,17 +74,21 @@ $(document).ready(() => {
                 break;
 
             case "profile":
-                $.get(`${window.ctx}/admins/${window.admin.id}/profile`, profileHtml => {
+                const profileId = param.id || window.admin.id;
+
+                $.get(`${window.ctx}/admins/${profileId}/profile`, profileHtml => {
                     $content.append(profileHtml);
+                    adminController.setupProfileListeners(profileId);
+
                 }).fail(() => AlertManager.showError("Could not display profile."));
                 break;
         }
     }
 
     $items.on("click", function () {
-        loadView($(this).data("view"));
+        window.loadView($(this).data("view"));
     });
 
     const $init = $items.filter(".selected").first();
-    loadView($init.length ? $init.data("view") : $items.first().data("view"));
+    window.loadView($init.length ? $init.data("view") : $items.first().data("view"));
 });

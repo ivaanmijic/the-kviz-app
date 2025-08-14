@@ -193,15 +193,15 @@ public class AdminsServlet extends HttpServlet {
                 gson.toJson(Map.of("error", "Unauthorized"), resp.getWriter());
             }
         } catch (IllegalStateException e) {
-            log.error("AdminsServlet doPut error", e);
+            log.error("AdminsServlet doPut error {}", e.getMessage());
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             gson.toJson(Map.of("error", "Error while processing request"), resp.getWriter());
         } catch (IllegalArgumentException e) {
-            log.error("AdminsServlet doPut error", e);
+            log.error("AdminsServlet doPut error {}", e.getMessage());
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             gson.toJson(Map.of("error", "Missing required parameters"), resp.getWriter());
         } catch (JsonSyntaxException e) {
-            log.error("AdminsServlet doPut error", e);
+            log.error("AdminsServlet doPut error {}", e.getMessage());
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             gson.toJson(Map.of("error", "Error while processing request"), resp.getWriter());
         }

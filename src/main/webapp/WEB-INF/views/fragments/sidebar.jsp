@@ -44,6 +44,13 @@
             </ul>
         </div>
     </c:if>
+
+    <div class="sidebar-footer">
+        <sl-button variant="text" class="danger-text-btn" href="${pageContext.request.contextPath}/auth/logout">
+            <sl-icon slot="prefix" name="box-arrow-left"></sl-icon>
+            Sign Out
+        </sl-button>
+    </div>
 </aside>
 
 
@@ -81,4 +88,11 @@
             </ul>
         </div>
     </c:if>
+
+    <div class="sidebar-footer">
+        <sl-button variant="text" class="danger-text-btn" href="${pageContext.request.contextPath}/auth/logout">
+            <sl-icon slot="prefix" name="box-arrow-left"></sl-icon>
+            Sign Out
+        </sl-button>
+    </div>
 </sl-drawer>

@@ -4,18 +4,19 @@ export class AdminApiClient {
     }
 
     delete(id, self = false) {
-        return new Promise((resolve, reject) => {
-            $.delete(this.base + `/admins/${id}`, {self: String(self)})
-                .done(data => resolve(data))
-                .fail((jqXHR) => reject(jqXHR));
+        return $.ajax({
+            url: `${this.base}/admins/${id}`,
+            type: 'DELETE',
+            data: {self: String(self)},
         });
     }
 
-    update(admin, newPassword) {
-        return fetch(`${this.base}/admins/${admin.id}`, {
-            method: 'PUT',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({admin: admin.toJSON(), newPassword})
+    update(id, data) {
+        return $.ajax({
+            url: `${this.base}/admins/${id}`,
+            type: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(data)
         });
     }
 
