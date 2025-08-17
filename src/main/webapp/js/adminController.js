@@ -115,7 +115,7 @@ class AdminUpdateController {
     }
 
     _bindEvents() {
-        this.dialog.addEventListener('sl-show', () => {
+        this.dialog.addEventListener('sl-show', () => {('submitQuiz').innerText = 'Edit Quiz';
             this._storeOriginalValues();
             this._toggleUpdate();
         });

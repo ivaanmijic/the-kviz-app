@@ -53,9 +53,11 @@ public class Quiz {
     )
     private List<Question> questions = new ArrayList<>();
 
+    @Expose
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @Expose
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 

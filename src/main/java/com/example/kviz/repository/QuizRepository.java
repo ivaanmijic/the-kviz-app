@@ -65,6 +65,7 @@ public class QuizRepository {
     public void delete(Quiz quiz) {
         try (EntityManager em = PersistenceManager.entityManager()) {
             em.getTransaction().begin();
+            quiz = em.find(Quiz.class, quiz.getId());
             em.remove(quiz);
             em.getTransaction().commit();
         }

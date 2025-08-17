@@ -37,6 +37,7 @@
 
 <script src="${pageContext.request.contextPath}/js/admin-home.js"></script>
 <script type="module" src="${pageContext.request.contextPath}/js/adminController.js"></script>
+<script src="${pageContext.request.contextPath}/js/createQuizController.js"></script>
 <script src="${pageContext.request.contextPath}/js/create-quiz.js"></script>
 </body>
 <jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/fragments/footer.jsp"></jsp:include>
