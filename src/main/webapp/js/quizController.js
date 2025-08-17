@@ -33,13 +33,6 @@ class QuizApi {
             method: 'DELETE'
         })
     }
-    update(quiz){
-        return fetch( `${this.base}/admin/updateQuiz?id=${quiz.id}`, {
-            method: 'PUT',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(quiz)
-        })
-    }
 }
 
 class EditQuizController {
@@ -55,10 +48,14 @@ class EditQuizController {
         this.quiz = await this._getQuizInfo(this.base, this.quizId);
         console.log(this.quiz);
         const image = document.getElementById('quizPreview')
-        image.src = this.base + "/uploads/quizImages/" + this.quiz.img + ".jpg";
+        image.src = this.base + "/uploads/quizImages/" + this.quiz.img;
         image.style.display = 'block';
         window.quizImageFile = null;
         window.quizId = this.quiz.id;
+        console.log(this.quiz.category);
+        console.log(this.quiz.visibility ? "public": "private")
+        document.getElementById('deleteQuiz').style.display = 'block';
+        document.getElementById('deleteQuiz').addEventListener('click', ()=>this.api.delete(this.quizId))
         document.getElementById('removeBtn').style.display = 'block';
         document.getElementById('plusIcon').style.display = 'none';
         document.getElementById('uploadBox').style.border = 'none';
@@ -67,7 +64,6 @@ class EditQuizController {
         document.getElementById('quizVisibility').value = this.quiz.visibility ? "public": "private";
         document.getElementById('quizDescription').value = this.quiz.description;
         document.getElementById('submitQuiz').innerText = 'Edit Quiz';
-        document.getElementById('submitQuiz').disabled = true;
     }
 
     async _getQuizInfo(base, quizId){
@@ -96,9 +92,14 @@ class EditQuizController {
                 const editDialog = document.getElementById('editQuizDialog');
                 editDialog.innerHTML = html;
                 editDialog.show();
-                scriptForCreateQuiz();
+                this.quizForm = new QuizForm(this.quizId);
+                console.log(this.quizForm)
             })
             .catch(error => console.log(error));
+    }
+
+    addQuestion(question){
+        this.quizForm.addQuestion(question);
     }
 }
 
@@ -109,12 +110,12 @@ class QuestionController {
         this.quizId = quizId;
     }
 
-    async fetchAndFillQuestions() {
+    async fetchAndFillQuestions(quiz) {
         console.log(this.quizId);
         this.questionArray = await this._getQuestionsInfo(this.base, this.quizId);
         this.questionArray.forEach(question => {
             console.log(question);
-            addQuestion(question);
+            quiz.addQuestion(question);
         })
     }
 
@@ -135,7 +136,6 @@ class QuestionController {
 }
 
 
-
 document.querySelectorAll('.edit-quiz-btn').forEach(btn => {
     btn.addEventListener('click', async () => {
         const api = new QuizApi(contextPath);
@@ -149,7 +149,7 @@ document.querySelectorAll('.edit-quiz-btn').forEach(btn => {
             api: api,
             contextPath: contextPath});
         quizCnt.fetchAndFillEditWindow().then(()=>{
-            questionCnt.fetchAndFillQuestions();
+            questionCnt.fetchAndFillQuestions(quizCnt);
         });
     })
 })

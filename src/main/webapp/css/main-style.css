@@ -444,6 +444,19 @@ footer > p {
     padding: 20px;
 }
 
+.delete-quiz {
+    align-self: end;
+    width: 150px;
+    border-radius: 15px;
+    background: linear-gradient(to right, #4481eb, #04befe);
+    border: none;
+    height: 50px;
+    color: var(--bg-color);
+    font-size: var(--font-size-small);
+    margin-bottom: 10px;
+    display:none;
+}
+
 .submit-quiz {
     align-self: end;
     width: 150px;
@@ -633,6 +646,7 @@ sl-details{
 
 #editQuizDialog{
     --width: 80%;
+    <button class="delete-quiz" id="deleteQuiz">Delete quiz</button>
 }
 
 @media (prefers-color-scheme: dark) {

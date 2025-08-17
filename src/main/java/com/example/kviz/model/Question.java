@@ -52,6 +52,10 @@ public class Question {
     @JoinColumn(name = "quiz_id", nullable = false)
     private Quiz quiz;
 
+    @Expose
+    @Column(nullable = false)
+    private int orderNumber;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
@@ -144,6 +148,13 @@ public class Question {
     }
     public void setQuiz(Quiz quiz) {
         this.quiz = quiz;
+    }
+
+    public int getOrderNumber() {
+        return orderNumber;
+    }
+    public void setOrderNumber(int orderNumber) {
+        this.orderNumber = orderNumber;
     }
 
     public LocalDateTime getCreatedAt() {

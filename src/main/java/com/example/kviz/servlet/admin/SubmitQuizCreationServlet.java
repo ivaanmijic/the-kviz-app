@@ -58,7 +58,7 @@ public class SubmitQuizCreationServlet extends HttpServlet {
         if(quizImagePart != null &&  quizImagePart.getSize() > 0) {
             saveImageToDisk(quizImagePart, "quizImages", "quizImage" + quiz.getId());
         }
-        quiz.setThumbnail("quizImage" + quiz.getId());
+        quiz.setThumbnail("quizImage" + quiz.getId() + ".jpg");
 
         List<Question> questions = new ArrayList<>();
         int questionIndex = 0;
@@ -78,6 +78,7 @@ public class SubmitQuizCreationServlet extends HttpServlet {
             question.setPoints(Integer.parseInt(request.getParameter("questions[" + questionIndex + "][points]")));
             question.setTime(Integer.parseInt(request.getParameter("questions[" + questionIndex + "][time]")));
             question.setQuiz(quiz);
+            question.setOrderNumber(questionIndex);
 
             List<String> answers = new ArrayList<>();
             for (int i = 0; i < 4; i++) {
@@ -96,7 +97,7 @@ public class SubmitQuizCreationServlet extends HttpServlet {
             if(questionImagePart != null && questionImagePart.getSize() > 0) {
                 saveImageToDisk(questionImagePart, "questions", "quiz" + quiz.getId() + "_" + "question" + question.getId());
             }
-            question.setImage("quiz" + quiz.getId() + "_" + "question" + question.getId());
+            question.setImage("quiz" + quiz.getId() + "_" + "question" + question.getId() + ".jpg");
             questionServices.save(question);
 
             questions.add(question);

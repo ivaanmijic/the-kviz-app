@@ -6,11 +6,13 @@ fetch(window.ctx + "create-quiz-window", {
     .then(response => response.text())
     .then(html => {
         document.getElementById('changeablePart').innerHTML = html;
-        scriptForCreateQuiz()
+    })
+    .then(()=>{
+        let qf = new QuizForm();
     })
     .catch(error => console.log(error));
 }
-
+/*
 var qCount = 0;
 
 function scriptForCreateQuiz() {
@@ -33,7 +35,7 @@ function scriptForCreateQuiz() {
     submitButton.addEventListener('click', submitQuizButton)
 }
 
-function allowQuizSubmit(){
+function allowQuiezSubmit(){
     document.getElementById('createQuiz').addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
             e.preventDefault();
@@ -91,7 +93,6 @@ function inputImageLook(quizInput, quizPreview, quizRemove, slIcon, quizBox){
 }
 
 function addQuestion(question = null) {
-    let answerType = 1;
     const questionsContainer = document.getElementById('questions-container');
     const qcnt = ++qCount;
     const wrapper = document.createElement("sl-details");
@@ -330,7 +331,7 @@ function openingAndClosingDetails(){
 function validateQuiz() {
     const quizTitle = document.querySelector('#quizTitle').value.trim();
     const quizCategory = document.querySelector('#quizCategory').value.trim();
-    const quizDescription = document.querySelector('#quizDescription').value.trim();
+    const quizDescthis.questionsContainer document.querySelector('#quizDescription').value.trim();
     const quizVisibility = document.querySelector('#quizVisibility').value.trim();
     const quizImagePresent = window.quizImageFile !== undefined;
 
@@ -464,3 +465,5 @@ function submitQuizButton(e){
             .catch(error => console.error("Error saving quiz: ", error));
     }
 }
+
+ */

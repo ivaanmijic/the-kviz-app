@@ -16,6 +16,7 @@
     <strong>Your quiz submission has been canceled</strong><br />
 </sl-alert>
 <form class="create-quiz" id="createQuiz" method="post" enctype="multipart/form-data">
+    <button class="delete-quiz" id="deleteQuiz">Delete quiz</button>
     <button class="submit-quiz" id="submitQuiz" submit>Add Quiz</button>
     <div class="main-quiz-info">
         <label class="upload-box" id="uploadBox">

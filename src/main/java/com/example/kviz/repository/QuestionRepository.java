@@ -55,7 +55,7 @@ public class QuestionRepository {
     }
     public List<Question> findByQuizId(long quizId){
         try (EntityManager em = PersistenceManager.entityManager()) {
-            TypedQuery<Question> q = em.createQuery("SELECT q FROM Question q WHERE q.quiz.id = :id", Question.class);
+            TypedQuery<Question> q = em.createQuery("SELECT q FROM Question q WHERE q.quiz.id = :id ORDER BY q.orderNumber", Question.class);
             q.setParameter("id", quizId);
             return q.getResultList();
         }
