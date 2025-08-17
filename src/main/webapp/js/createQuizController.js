@@ -319,13 +319,14 @@ class QuizForm{
             const formData = new FormData();
             if(!!this.quizId){
                 formData.append('quizId', this.quizId);
+                console.log(window.quizImageFile);
             }
             formData.append("quizTitle", document.getElementById('quizTitle').value.trim());
             console.log(document.getElementById("quizCategory").value.trim());
             formData.append("quizCategory", document.getElementById("quizCategory").value.trim());
             formData.append("quizDescription", document.getElementById("quizDescription").value.trim());
             formData.append("quizVisibility", document.getElementById("quizVisibility").value.trim());
-            formData.append("quizImage", window.quizImageFile);
+            if(window.quizImageFile !== null) formData.append("quizImage", window.quizImageFile);
 
             const questionWrappers = document.querySelectorAll('.question-wrapper');
             questionWrappers.forEach((question, index) => {
@@ -350,7 +351,7 @@ class QuizForm{
                 })
 
                 const imgFile = question.imageFile;
-                formData.append(`questions[${index}][image]`, imgFile);
+                if(imgFile !== null) formData.append(`questions[${index}][image]`, imgFile);
             });
             console.log(window.ctx + "submit-quiz-creation");
             console.log(formData.get("quizCategory"));
