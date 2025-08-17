@@ -31,7 +31,18 @@ class QuizApi {
     delete(id){
         return fetch(`${this.base}/admin/deleteQuiz?id=${id}`, {
             method: 'DELETE'
-        })
+        }).then(resp => {
+            if(resp.ok) {
+                window.location.href = '/admin/home';
+            }
+                console.log("SEnding get")
+                fetch(`${this.base}/admin/home`, {
+                    method: 'GET'
+                })
+                    .then(resp => resp.text())
+                    .then(html => document.getElementById("changeablePart").innerHTML = html
+            )}
+        )
     }
 }
 

@@ -21,4 +21,10 @@ public class AdminHomeServlet extends HttpServlet {
     request.setAttribute("myQuizzes", myQuizzes);
     request.getRequestDispatcher("/WEB-INF/views/admin/home.jsp").forward(request, response);
   }
+  @Override
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Quiz> myQuizzes = quizService.findAll();
+        request.setAttribute("myQuizzes", myQuizzes);
+        request.getRequestDispatcher("/WEB-INF/views/admin/home.jsp").forward(request, response);
+  }
 }

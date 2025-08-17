@@ -36,6 +36,7 @@ public class SubmitQuizCreationServlet extends HttpServlet {
         if(request.getParameter("quizId") != null) {
             int quizId = Integer.parseInt(request.getParameter("quizId"));
             quiz = quizService.findById((long) quizId).get();
+            System.out.println(request.getPart("quizImage"));
         }
         HttpSession session = request.getSession();
 
@@ -57,6 +58,8 @@ public class SubmitQuizCreationServlet extends HttpServlet {
         Part quizImagePart = request.getPart("quizImage");
         if(quizImagePart != null &&  quizImagePart.getSize() > 0) {
             saveImageToDisk(quizImagePart, "quizImages", "quizImage" + quiz.getId());
+            System.out.println("saving image for some reason");
+            System.out.println(quizImagePart);
         }
         quiz.setThumbnail("quizImage" + quiz.getId() + ".jpg");
 
@@ -114,7 +117,7 @@ public class SubmitQuizCreationServlet extends HttpServlet {
 
     private String saveImageToDisk(Part part, String folder, String filename) throws IOException {
         if (part == null || part.getSize() == 0) return null;
-        String uploads = getServletContext().getRealPath("uploads/" + folder);
+        String uploads = Paths.get(System.getProperty("user.dir"), "uploads", folder).toString();
         System.out.println("Resolved uploads path: " + uploads);
 
         Files.createDirectories(Paths.get(uploads));
