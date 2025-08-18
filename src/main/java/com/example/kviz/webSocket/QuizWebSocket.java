@@ -26,6 +26,7 @@ public class QuizWebSocket {
 
         if (game == null && "player".equals(role)) {
             try {
+                session.getBasicRemote().sendText("{\"type\":\"error\", \"message\":\"Invalid code\"}");
                 session.close(new CloseReason(
                         CloseReason.CloseCodes.CANNOT_ACCEPT, "Game does not exist"));
             } catch (IOException ignored) {}
@@ -36,6 +37,21 @@ public class QuizWebSocket {
             if (game != null) game.setAdmin(session);
         } else if ("player".equals(role)) {
             game.addPlayer(session);
+            try{
+                session.getBasicRemote().sendText("{\"type\":\"ok\", \"message\":\"Joning the game\"}");
+            } catch (IOException ignored) {}
+
+            Session admin = game.getAdmin();
+            if (admin != null && admin.isOpen()) {
+                try {
+                    int playerCount = game.getPlayers().size();
+                    admin.getBasicRemote().sendText(
+                            "{\"type\":\"playerCount\",\"count\":" + playerCount + "}"
+                    );
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -64,8 +80,13 @@ public class QuizWebSocket {
             Session admin = game.getAdmin();
             if (admin != null && admin.isOpen()) {
                 try {
-                    admin.getBasicRemote().sendText("Player left");
-                } catch (IOException ignored) {}
+                    int playerCount = game.getPlayers().size();
+                    admin.getBasicRemote().sendText(
+                            "{\"type\":\"playerCount\",\"count\":" + playerCount + "}"
+                    );
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

@@ -649,6 +649,20 @@ sl-details{
     <button class="delete-quiz" id="deleteQuiz">Delete quiz</button>
 }
 
+.lobby-main-screen{
+    padding: 2rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-image: linear-gradient(
+            to bottom right,
+            #111827,
+            #1e1b4b
+    );
+}
+
 @media (prefers-color-scheme: dark) {
     .main, .user-grid {
         background-color: var(--bg-color);

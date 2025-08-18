@@ -22,7 +22,8 @@ public class StartGameServlet extends HttpServlet {
         GameManager.activeGames.put(gameId, game);
 
         req.setAttribute("gameId", gameId);
-        req.getRequestDispatcher("/WEB-INF/views/lobby.jsp").forward(req, resp);
+        req.setAttribute("joinedPlayers", 0);
+        req.getRequestDispatcher("/WEB-INF/views/admin/gameLobby.jsp").forward(req, resp);
     }
 
 
