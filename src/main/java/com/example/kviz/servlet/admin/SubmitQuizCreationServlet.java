@@ -37,6 +37,11 @@ public class SubmitQuizCreationServlet extends HttpServlet {
         });
         QuizService quizService = new QuizService();
         Quiz quiz = new Quiz();
+        if(request.getParameter("quizId") != null) {
+            int quizId = Integer.parseInt(request.getParameter("quizId"));
+            quiz = quizService.findById((long) quizId).get();
+            System.out.println(request.getPart("quizImage"));
+        }
         HttpSession session = request.getSession();
 
         Admin owner = (Admin) session.getAttribute("admin");
@@ -55,15 +60,22 @@ public class SubmitQuizCreationServlet extends HttpServlet {
         quiz = quizService.save(quiz);
 
         Part quizImagePart = request.getPart("quizImage");
-        String thumbnailPath = saveImageToDisk(quizImagePart, "quizImages", "quizImage" + quiz.getId(), request);
-        quiz.setThumbnail(thumbnailPath);
+        if(quizImagePart != null &&  quizImagePart.getSize() > 0) {
+            saveImageToDisk(quizImagePart, "quizImages", "quizImage" + quiz.getId());
+            System.out.println("saving image for some reason");
+            System.out.println(quizImagePart);
+        }
+        quiz.setThumbnail("quizImage" + quiz.getId() + ".jpg");
 
         List<Question> questions = new ArrayList<>();
         int questionIndex = 0;
         while(true){
-            System.out.println("jodlejodlejodlejodelIOOOOOOO");
             QuestionServices questionServices = new QuestionServices();
             Question question = new Question();
+            if(request.getParameter("questions["+questionIndex + "][id]") != null) {
+                int questionId = Integer.parseInt(request.getParameter("questions["+questionIndex + "][id]"));
+                question = questionServices.findById((long) questionId).get();
+            }
             String title = request.getParameter("questions[" + questionIndex + "][title]");
             if(title == null){
                 break;
@@ -73,6 +85,7 @@ public class SubmitQuizCreationServlet extends HttpServlet {
             question.setPoints(Integer.parseInt(request.getParameter("questions[" + questionIndex + "][points]")));
             question.setTime(Integer.parseInt(request.getParameter("questions[" + questionIndex + "][time]")));
             question.setQuiz(quiz);
+            question.setOrderNumber(questionIndex);
 
             List<String> answers = new ArrayList<>();
             for (int i = 0; i < 4; i++) {
@@ -88,8 +101,10 @@ public class SubmitQuizCreationServlet extends HttpServlet {
             question = questionServices.save(question);
 
             Part questionImagePart = request.getPart("questions[" + questionIndex + "][image]");
-            String questionImage = saveImageToDisk(questionImagePart, "questions", "quiz" + quiz.getId() + "_" + "question" + question.getId(), request);
-            question.setImage(questionImage);
+            if(questionImagePart != null && questionImagePart.getSize() > 0) {
+                saveImageToDisk(questionImagePart, "questions", "quiz" + quiz.getId() + "_" + "question" + question.getId());
+            }
+            question.setImage("quiz" + quiz.getId() + "_" + "question" + question.getId() + ".jpg");
             questionServices.save(question);
 
             questions.add(question);
@@ -104,32 +119,16 @@ public class SubmitQuizCreationServlet extends HttpServlet {
         response.getWriter().write("{\"message\":\"ok\"}");
     }
 
-    private String saveImageToDisk(Part part, String folder, String filenameBase, HttpServletRequest request) throws IOException {
+    private String saveImageToDisk(Part part, String folder, String filename) throws IOException {
         if (part == null || part.getSize() == 0) return null;
+        String uploads = Paths.get(System.getProperty("user.dir"), "uploads", folder).toString();
+        System.out.println("Resolved uploads path: " + uploads);
 
-        String uploadsReal = getServletContext().getRealPath("/uploads/" + folder);
-        if (uploadsReal == null) {
-            File tmp = (File) getServletContext().getAttribute("javax.servlet.context.tempdir");
-            uploadsReal = new File(tmp, "uploads/" + folder).getAbsolutePath();
-        }
-        Path uploadsPath = Paths.get(uploadsReal);
-        Files.createDirectories(uploadsPath);
+        Files.createDirectories(Paths.get(uploads));
+        String filePath = uploads + "/" + filename + ".jpg";
+        System.out.println("Final file path: " + filePath);
 
-        String submitted = part.getSubmittedFileName();
-        String ext = ".jpg";
-        if (submitted != null && submitted.contains(".")) {
-            ext = submitted.substring(submitted.lastIndexOf('.'));
-        }
-
-        String filename = filenameBase + ext;
-        Path filePath = uploadsPath.resolve(filename);
-
-        try (InputStream in = part.getInputStream()) {
-            Files.copy(in, filePath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return "uploads/" + folder + "/" + filename;
+        part.write(filePath);
+        return "uploads/" + folder + "/" + filename + ".jpg";
     }
 }

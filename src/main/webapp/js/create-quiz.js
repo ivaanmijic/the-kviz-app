@@ -6,11 +6,13 @@ fetch(window.ctx + "create-quiz-window", {
     .then(response => response.text())
     .then(html => {
         document.getElementById('changeablePart').innerHTML = html;
-        scriptForCreateQuiz()
+    })
+    .then(()=>{
+        let qf = new QuizForm();
     })
     .catch(error => console.log(error));
 }
-
+/*
 var qCount = 0;
 
 function scriptForCreateQuiz() {
@@ -33,7 +35,7 @@ function scriptForCreateQuiz() {
     submitButton.addEventListener('click', submitQuizButton)
 }
 
-function allowQuizSubmit(){
+function allowQuiezSubmit(){
     document.getElementById('createQuiz').addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
             e.preventDefault();
@@ -87,17 +89,16 @@ function inputImageLook(quizInput, quizPreview, quizRemove, slIcon, quizBox){
     quizRemove.removeAttribute('data-imageSet');
     slIcon.style.display = 'block';
     quizBox.style.border= '1px dashed var(--sl-color-neutral-500)';
-    window.quizImageFile = null;
+    window.quizImageFile = undefined;
 }
 
-function addQuestion() {
-    let answerType = 1;
+function addQuestion(question = null) {
     const questionsContainer = document.getElementById('questions-container');
     const qcnt = ++qCount;
     const wrapper = document.createElement("sl-details");
     wrapper.className = "question-wrapper";
     wrapper.draggable = true;
-    const initialTitle = "Question " + qcnt;
+    const initialTitle = question!=null ? question.question : "Question " + qcnt;
     wrapper.innerHTML =
         '<span slot="summary"><span class="summary-title">' + initialTitle + '</span><sl-icon-button class="remove-question-btn" style="margin-left:10px;" name="trash"></sl-icon-button></span>' +
         '<div class="question-cont">' +
@@ -171,6 +172,43 @@ function addQuestion() {
         }
     }
 
+    if(question != null){
+        fillTheFields(question);
+        wrapper.dataset.questionId = question.id;
+    }
+
+    function fillTheFields(question){
+        const img = wrapper.querySelector('.question-img-preview')
+        img.src = "/uploads/questions/" + question.img + ".jpg";
+        img.style.display = 'block';
+        wrapper.imageFile = null;
+        wrapper.questionId = question.id;
+        wrapper.querySelector('.remove-btn').style.display = 'block';
+        wrapper.querySelector('sl-icon').style.display = 'none';
+        wrapper.querySelector('.upload-box').style.border = 'none';
+        wrapper.querySelector('.question-points').value = question.points.toString();
+        wrapper.querySelector('.question-time').value = question.time.toString();
+        console.log(question.category.toLowerCase());
+        wrapper.querySelector('.question-category').value = question.category.toLowerCase();
+        wrapper.querySelector('.question').value = question.question;
+        const answers = question.answers;
+        const answersSpan = wrapper.querySelectorAll('.answer-text');
+        let correctIdx;
+        answers.forEach((ans, idx) =>{
+            if(ans === question.correctAnswer){
+                correctIdx = idx;
+            }
+            if(answersSpan[idx]){
+                answersSpan[idx].value = ans;
+            }
+        })
+
+        if(correctIdx != null){
+            wrapper.querySelector('.radio-group').value = correctIdx.toString();
+        }
+
+    }
+
 
 }
 
@@ -218,8 +256,8 @@ function questionHtml(){
     '<sl-option value="30">30s</sl-option>' +
     '</sl-select>' +
     '<sl-select class="question-category" placeholder="Type">' +
-    '<sl-option value="one_correct">One correct answer</sl-option>' +
-    '<sl-option value="more_correct">Multiple correct answers</sl-option>' +
+    '<sl-option value="classic">One correct answer</sl-option>' +
+    '<sl-option value="multiple_correct">Multiple correct answers</sl-option>' +
     '<sl-option value="slider">Slider</sl-option>' +
     '</sl-select>' +
     '<sl-input class="question" type="text" placeholder="Question"></sl-input>';
@@ -267,7 +305,7 @@ function questionImageListeners(wrapper){
         qRemove.style.display = 'none';
         slIcon.style.display = 'block';
         wrapper.removeAttribute('data-imageSet');
-        wrapper.imageFile = null;
+        wrapper.imageFile = undefined;
         qBox.style.border = '1px dashed var(--sl-color-neutral-500)';
     });
 }
@@ -293,9 +331,9 @@ function openingAndClosingDetails(){
 function validateQuiz() {
     const quizTitle = document.querySelector('#quizTitle').value.trim();
     const quizCategory = document.querySelector('#quizCategory').value.trim();
-    const quizDescription = document.querySelector('#quizDescription').value.trim();
+    const quizDescthis.questionsContainer document.querySelector('#quizDescription').value.trim();
     const quizVisibility = document.querySelector('#quizVisibility').value.trim();
-    const quizImagePresent = !!window.quizImageFile;
+    const quizImagePresent = window.quizImageFile !== undefined;
 
     if (!quizTitle || !quizCategory || !quizDescription || !quizImagePresent || !quizVisibility) {
         const alert = document.createElement('sl-alert');
@@ -333,7 +371,7 @@ function validateQuiz() {
         const points = question.querySelector('.question-points').value.trim();
         const time = question.querySelector('.question-time').value.trim();
         const category = question.querySelector('.question-category').value.trim();
-        const image = question.dataset.imageSet === 'true';
+        const image =  question.imageFile !== undefined;
         const answers = [...question.querySelectorAll('.answer-text')].map(el => el.value.trim());
         const selected = question.querySelector('sl-radio-group').value;
 
@@ -360,6 +398,9 @@ function submitQuizButton(e){
     } else {
         e.preventDefault();
         const formData = new FormData();
+        if(!!window.quizId){
+            formData.append('quizId', window.quizId);
+        }
         formData.append("quizTitle", document.getElementById('quizTitle').value.trim());
         console.log(document.getElementById("quizCategory").value.trim());
         formData.append("quizCategory", document.getElementById("quizCategory").value.trim());
@@ -375,6 +416,9 @@ function submitQuizButton(e){
             const category = question.querySelector('.question-category').value;
             const correctAnswerIndex = question.querySelector('sl-radio-group').value;
 
+            if(!!question.questionId){
+                formData.append(`questions[${index}][id]` , question.questionId);
+            }
             formData.append(`questions[${index}][title]`, title);
             formData.append(`questions[${index}][category]`, category);
             formData.append(`questions[${index}][points]`, points);
@@ -421,3 +465,5 @@ function submitQuizButton(e){
             .catch(error => console.error("Error saving quiz: ", error));
     }
 }
+
+ */

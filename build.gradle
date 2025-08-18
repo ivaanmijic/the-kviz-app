@@ -34,6 +34,9 @@ dependencies {
     // Serialization - Gson
     implementation 'com.google.code.gson:gson:2.10.1'
 
+    // JSON formater
+    // implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
+
     implementation 'org.slf4j:slf4j-simple:1.7.36'            // simple logging
     implementation 'org.mindrot:jbcrypt:0.4'
 }
