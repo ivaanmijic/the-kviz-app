@@ -81,6 +81,7 @@
 <script src="${pageContext.request.contextPath}/webjars/jquery/3.7.1/jquery.min.js"></script>
 <script type="module" src="${pageContext.request.contextPath}/js/adminPanelRouter.js"></script>
 <script src="${pageContext.request.contextPath}/js/create-quiz.js"></script>
+<script src="${pageContext.request.contextPath}/js/createQuizController.js"></script>
 </body>
 <jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/fragments/footer.jsp"></jsp:include>
 </html>
