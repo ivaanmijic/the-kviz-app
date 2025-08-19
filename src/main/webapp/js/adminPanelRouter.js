@@ -1,5 +1,6 @@
 import { AdminController } from './controller/adminController.js';
 import { AlertManager } from "./manager/alertManager.js";
+import { QuizController } from "./controller/quizController.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     const drawer = document.querySelector(".nav-drawer");
@@ -19,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 $(document).ready(() => {
     const adminController = new AdminController(window.ctx);
+    const quizController = new QuizController();
     AlertManager.init();
 
     const $content = $("#changeablePart");
@@ -51,6 +53,7 @@ $(document).ready(() => {
                     }).then(() => {
                         return $.get(`${window.ctx}/admin/quiz/list/public`, html => {
                             $content.append(html);
+                            quizController.setupListeners();
                         });
                     }).fail(
                         () => AlertManager.showError("Could not display quizzes.")
@@ -67,6 +70,7 @@ $(document).ready(() => {
             case "all-quizzes":
                 $.get(`${window.ctx}/admin/quiz/list`, html => {
                     $content.append(html);
+                    quizController.setupListeners();
                 }).fail(() => AlertManager.showError("Could not display quizzes."));
                 break;
 

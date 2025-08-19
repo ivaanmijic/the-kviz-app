@@ -24,7 +24,7 @@
                         <div class="quiz-description-clipped">
                                 ${quiz.description}
                         </div>
-                        <sl-button size="small" pill data-action="details" data-quiz-id="${quiz.id}">
+                        <sl-button class="read-more-btn" size="small" pill data-quiz-id="${quiz.id}" data-quiz-description="${quiz.description}">
                             Read more...
                         </sl-button>
                     </div>
@@ -59,15 +59,11 @@
                 </sl-card>
             </c:forEach>
 
-            <sl-dialog id="descriptionModal" label="Quiz Details">
+            <sl-dialog id="descriptionModal" label="Description">
                 <p id="modalDescriptionContent" style="white-space: pre-wrap;"></p>
-                <sl-button slot="footer" variant="primary">Close</sl-button>
             </sl-dialog>
 
             <sl-dialog class="editQuizDialog" id="editQuizDialog"></sl-dialog>
         </div>
     </section>
-    <script src="${pageContext.request.contextPath}/js/controller/quizController.js"></script>
-    <script>
-    </script>
 </c:if>
