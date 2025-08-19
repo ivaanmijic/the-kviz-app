@@ -3,11 +3,14 @@ package com.example.kviz.repository;
 import com.example.kviz.database.PersistenceManager;
 import com.example.kviz.model.Admin;
 import com.example.kviz.model.Quiz;
+import com.example.kviz.model.dto.QuizDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class QuizRepository {
 
@@ -54,6 +57,14 @@ public class QuizRepository {
         }
     }
 
+    public List<Quiz> findAllPublic(Long selfId) {
+        try (EntityManager em = PersistenceManager.entityManager()) {
+            TypedQuery<Quiz> q = em.createQuery("SELECT q FROM Quiz q WHERE q.owner.id != :selfId AND q.visible", Quiz.class);
+            q.setParameter("selfId", selfId);
+            return q.getResultList();
+        }
+    }
+
     public List<Quiz> findAllByAdmin(Admin admin) {
         try (EntityManager em = PersistenceManager.entityManager()) {
             TypedQuery<Quiz> q = em.createQuery("SELECT q FROM Quiz q WHERE q.owner.id = :id", Quiz.class);
@@ -62,12 +73,24 @@ public class QuizRepository {
         }
     }
 
+    public List<Quiz> findAllByAdminId(Long id) {
+        try (EntityManager em = PersistenceManager.entityManager()) {
+            return em.createQuery("SELECT q FROM Quiz q WHERE q.owner.id = :id", Quiz.class)
+                    .setParameter("id", id)
+                    .getResultList();
+        }
+    }
+
     public void delete(Quiz quiz) {
         try (EntityManager em = PersistenceManager.entityManager()) {
             em.getTransaction().begin();
-            quiz = em.find(Quiz.class, quiz.getId());
-            em.remove(quiz);
+            Quiz managedQuiz = em.merge(quiz);
+            em.remove(managedQuiz);
             em.getTransaction().commit();
         }
+    }
+
+    public void deleteById(Long id) {
+        findById(id).ifPresent(this::delete);
     }
 }
