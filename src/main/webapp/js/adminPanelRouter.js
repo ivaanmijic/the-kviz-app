@@ -1,4 +1,3 @@
-import { QuizController } from './controller/quizController.js';
 import { AdminController } from './controller/adminController.js';
 import { AlertManager } from "./manager/alertManager.js";
 
@@ -19,7 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 $(document).ready(() => {
-    const quizController = new QuizController(window.ctx);
     const adminController = new AdminController(window.ctx);
     AlertManager.init();
 
@@ -47,15 +45,16 @@ $(document).ready(() => {
                 $.get(`${window.ctx}/templates/dashboard.html`, dashboardHtml => {
                     dashboardHtml = dashboardHtml.replace('{{Username}}', window.admin.username);
                     $content.append(dashboardHtml);
-                    quizController.getQuizzes(window.admin.id)
-                        .then(quizzesGrid => {
-                            $('#quiz-section').append(quizzesGrid);
-                            return quizController.getPublicQuizzes();
-                        })
-                        .then(quizzesGrid => {
-                            $('#quiz-section').append(quizzesGrid);
-                        })
-                        .catch(() => AlertManager.showError('Could not display quizzes.'));
+
+                    $.get(`${window.ctx}/admin/quiz/list`, { admin_id: window.admin.id }, html => {
+                        $content.append(html);
+                    }).then(() => {
+                        return $.get(`${window.ctx}/admin/quiz/list/public`, html => {
+                            $content.append(html);
+                        });
+                    }).fail(
+                        () => AlertManager.showError("Could not display quizzes.")
+                    );
                 }).fail(() => AlertManager.showError('Could not display dashboard.'));
                 break;
 
@@ -66,9 +65,9 @@ $(document).ready(() => {
                 break;
 
             case "all-quizzes":
-                quizController.getQuizzes()
-                    .then(allQuizzesView => $content.append(allQuizzesView))
-                    .catch(() => AlertManager.showError("Could not display all Quizzes."));
+                $.get(`${window.ctx}/admin/quiz/list`, html => {
+                    $content.append(html);
+                }).fail(() => AlertManager.showError("Could not display quizzes."));
                 break;
 
             case "profile":

@@ -1,9 +1,11 @@
 package com.example.kviz.servlet.admin;
 
 import com.example.kviz.model.Admin;
+import com.example.kviz.model.Question;
 import com.example.kviz.model.Quiz;
 import com.example.kviz.model.dto.QuizDTO;
 import com.example.kviz.service.AdminService;
+import com.example.kviz.service.QuestionServices;
 import com.example.kviz.service.QuizService;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
@@ -16,25 +18,29 @@ import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @WebServlet("/admin/quiz/*")
 public class QuizServlet extends HttpServlet {
 
     private static final Logger log =  LoggerFactory.getLogger(QuizServlet.class);
+    private static final String uploads = Paths.get(System.getProperty("user.dir"), "uploads").toString();
 
     private QuizService quizService;
-    private AdminService adminService;
+    private QuestionServices questionServices;
     private Gson gson;
 
     @Override
     public void init() throws ServletException {
         super.init();
         quizService = new QuizService();
-        adminService = new AdminService();
+        questionServices = new QuestionServices();
         gson = new Gson();
     }
 
@@ -74,6 +80,7 @@ public class QuizServlet extends HttpServlet {
 
         try {
             List<Quiz> quizzes;
+            String title;
             if (publicQuizzes) {
                 HttpSession session = req.getSession();
                 Admin user = (Admin) session.getAttribute("admin");
@@ -81,17 +88,18 @@ public class QuizServlet extends HttpServlet {
                     throw new UnavailableException("Admin not logged in");
                 }
                 quizzes = quizService.findAllPublic(user.getId());
+                title = "Public Quizzes";
             } else if (myQuizzes) {
                 quizzes = quizService.findByOwnerId(adminId);
+                title = "My Quizzes";
             } else {
                 quizzes = quizService.findAll();
+                title = "All Quizzes";
             }
 
-            List<QuizDTO> dtos = quizzes.stream()
-                    .map(QuizDTO::fromEntity)
-                    .collect(Collectors.toList());
-            resp.setStatus(HttpServletResponse.SC_OK);
-            gson.toJson(dtos, resp.getWriter());
+            req.setAttribute("quizzes", quizzes);
+            req.setAttribute("title", title);
+            req.getRequestDispatcher("/WEB-INF/views/admin/quizzes.jsp").forward(req, resp);
 
         } catch (IllegalStateException e) {
             log.error("Bad request");
@@ -134,6 +142,7 @@ public class QuizServlet extends HttpServlet {
         long quizId;
         try {
             quizId = Long.parseLong(path.substring(1));
+
         } catch (NumberFormatException e) {
             log.error("Invalid quiz ID format in path: {}", path);
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -142,10 +151,28 @@ public class QuizServlet extends HttpServlet {
         }
 
         try {
-            quizService.deleteById(quizId);
+            Quiz quiz = quizService.findById(quizId).get();
+            String quizImage = quiz.getThumbnail();
+
+            File file = new File(uploads + "/quizImages/" + quizImage);
+            file.delete();
+
+            List<Question> questions = questionServices.findByQuizId((long) quizId);
+            for (Question question : questions) {
+                file = new File(uploads + "/questions/" + question.getImage());
+                file.delete();
+            }
+
+            quizService.delete(quiz);
+
             log.info("Quiz with id {} has been deleted", quizId);
             resp.setStatus(HttpServletResponse.SC_OK);
             gson.toJson(Map.of("success", "Quiz has been deleted successfully."), resp.getWriter());
+
+        } catch (NoSuchElementException e) {
+            log.error(e.getMessage());
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            gson.toJson(Map.of("error", e.getMessage()), resp.getWriter());
 
         } catch (IllegalArgumentException e) {
             log.error("Bad request during quiz deletion: {}", e.getMessage(), e);

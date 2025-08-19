@@ -1,231 +1,236 @@
-import { Quiz } from "../model/quiz.js";
-import { QuizApiClient } from "../client/quizApiClient.js";
-import { AlertManager } from "../manager/alertManager.js";
-
-export class QuizController {
-    constructor(baseUrl = '', adminId = null) {
-        this.apiClient = new QuizApiClient(baseUrl);
-        this.init();
-        this._initializeDeleteDialogListeners();
-        this._initializeDescriptionModalListeners();
+class Quiz {
+    constructor(id, img, title, category, visibility, description) {
+        this.id = id;
+        this.img = img;
+        this.title = title;
+        this.category = category;
+        this.visibility = visibility;
+        this.description = description;
     }
 
-    init() {}
+}
 
-    _initializeDeleteDialogListeners() {
-        const deleteDialog = document.querySelector('#deleteQuizDialog');
-        if (!deleteDialog) {
-            console.warn('Delete dialog for quizzes (#deleteQuizDialog) not found.');
-            return;
-        }
+class Question {
+    constructor({id, question, thumbnail, points, time, category, answers, correctAnswer}) {
+        this.id = id;
+        this.img = thumbnail;
+        this.question = question;
+        this.points = points;
+        this.time = time;
+        this.category = category;
+        this.answers = answers;
+        this.correctAnswer = correctAnswer;
+    }
+}
 
-        const confirmButton = deleteDialog.querySelector('#confirmDeleteBtn');
-        const cancelButton = deleteDialog.querySelector('#cancelDeleteBtn');
-
-        if (!confirmButton || !cancelButton) {
-            console.error('Confirm or Cancel button not found in #deleteQuizDialog.');
-            return;
-        }
-
-        confirmButton.addEventListener('click', async () => {
-            const quizId = deleteDialog.dataset.quizId;
-            if (!quizId) return;
-
-            confirmButton.loading = true;
-            cancelButton.disabled = true;
-
-            try {
-                await this.apiClient.delete(quizId);
-                deleteDialog.dataset.deleteStatus = 'success';
-            } catch (jqXHR) {
-                deleteDialog.dataset.deleteStatus = 'fail';
-                const errorMsg = jqXHR.responseJSON?.error || 'Failed to delete quiz';
-                deleteDialog.dataset.errorMessage = errorMsg;
-            } finally {
-                deleteDialog.hide();
-            }
-        });
-
-        cancelButton.addEventListener('click', () => deleteDialog.hide());
-
-        deleteDialog.addEventListener('sl-after-hide', () => {
-            const quizId = deleteDialog.dataset.quizId;
-            const quizTitle = deleteDialog.dataset.quizTitle;
-
-            if (deleteDialog.dataset.deleteStatus === 'success') {
-                document.querySelector(`.quiz-card-wrapper[data-quiz-id='${quizId}']`)?.remove();
-                AlertManager.showSuccess(`Successfully deleted quiz: ${quizTitle}`);
-            } else if (deleteDialog.dataset.deleteStatus === 'fail') {
-                AlertManager.showError(deleteDialog.dataset.errorMessage);
-            }
-
-            confirmButton.loading = false;
-            cancelButton.disabled = false;
-            delete deleteDialog.dataset.quizId;
-            delete deleteDialog.dataset.quizTitle;
-            delete deleteDialog.dataset.deleteStatus;
-            delete deleteDialog.dataset.errorMessage;
-        });
+class QuizEditor {
+    constructor({quizId, contextPath}) {
+        this.base = contextPath;
+        this.quizId = quizId;
     }
 
-    _initializeDescriptionModalListeners() {
-        const descriptionModal = document.querySelector('#descriptionModal');
-        if (!descriptionModal) {
-            console.warn('Description modal (#descriptionModal) not found.');
-            return;
-        }
-        const closeButton = descriptionModal.querySelector('sl-button[slot="footer"]');
-        if (closeButton) {
-            closeButton.addEventListener('click', () => descriptionModal.hide());
-        }
+    async fetchAndFillEditWindow() {
+        const ret = await this._getQuizCreateQuiz(this.base);
+        console.log(ret);
+        this.quiz = await this._getQuizInfo(this.base, this.quizId);
+        console.log(this.quiz);
+        const image = document.getElementById('quizPreview')
+        image.src = this.base + "/uploads/quizImages/" + this.quiz.img;
+        image.style.display = 'block';
+        window.quizImageFile = null;
+        window.quizId = this.quiz.id;
+        console.log(this.quiz.category);
+        console.log(this.quiz.visibility ? "public" : "private")
+        document.getElementById('removeBtn').style.display = 'block';
+        document.getElementById('plusIcon').style.display = 'none';
+        document.getElementById('uploadBox').style.border = 'none';
+        document.getElementById('quizTitle').value = this.quiz.title;
+        document.getElementById('quizCategory').value = this.quiz.category.toLowerCase();
+        document.getElementById('quizVisibility').value = this.quiz.visibility ? "public" : "private";
+        document.getElementById('quizDescription').value = this.quiz.description;
+        document.getElementById('submitQuiz').innerText = 'Edit Quiz';
+        document.getElementById('quizEditorTitle').innerText = 'Edit Quiz';
     }
 
-    getQuizzes(adminId = null) {
-        return this.apiClient.getList(adminId)
-            .then(data => {
-                const quizzes = data.map(Quiz.fromJson);
-                const sectionTitle = adminId ? "My Quizzes" : "All Quizzes";
-                return this.renderQuizzes(quizzes, sectionTitle, true);
-            })
-            .catch(err => {
-                let msg = 'Failed to load quizzes';
-                try {
-                    const json = JSON.parse(err.responseText);
-                    if (json.error) msg = json.error;
-                } catch (e) {}
-                AlertManager.showError(msg);
-                console.error('Quiz API error', err);
-                return null;
-            });
-    }
-
-    getPublicQuizzes() {
-        return this.apiClient.getPublicList()
-            .then(data => {
-                const quizzes = data.map(Quiz.fromJson);
-                const sectionTitle = "Public Quizzes";
-                return this.renderQuizzes(quizzes, sectionTitle, false);
-            })
-            .catch(err => {
-                let msg = 'Failed to load quizzes';
-                try {
-                    const json = JSON.parse(err.responseText);
-                    if (json.error) msg = json.error;
-                } catch (e) {}
-                AlertManager.showError(msg);
-                console.error('Quiz API error', err);
-                return null;
-            });
-    }
-
-    async renderQuizzes(quizzes, sectionTitleText, showAdminActions) {
-        const section = document.createElement('section');
-        const sectionTitle = document.createElement('h2');
-        sectionTitle.classList.add('section-title');
-        sectionTitle.textContent = sectionTitleText;
-        section.appendChild(sectionTitle);
-
-        const grid = document.createElement('div');
-        grid.classList.add('card-grid');
-        grid.id = 'card-grid';
-
+    async _getQuizInfo(base, quizId) {
         try {
-            const response = await fetch(`${window.ctx}/templates/quiz-card.html`);
-            if (!response.ok) throw new Error('Failed to load quiz card template');
-            const cardTemplate = await response.text();
+            let result = await fetch(`${base}/admin/quiz-information?id=${quizId}`, {
+                method: 'GET',
+                headers: {'Content-Type': 'application/json'},
+            })
+            console.log(result);
+            const {id, title, thumbnail, description, category, visible} = await result.json();
+            return new Quiz(id, thumbnail, title, category, visible, description);
 
-            quizzes.forEach((quiz) => {
-                let adminActionsHtml = '';
-                if (showAdminActions) {
-                    adminActionsHtml = `
-                       <sl-button variant="neutral" data-action="edit" data-quiz-id="${quiz.id}">Edit</sl-button>
-                       <sl-button class="danger-text-btn" variant="text" data-action="delete" data-quiz-id="${quiz.id}" data-quiz-title="${quiz.title}">
-                            <sl-icon slot="suffix" name="trash"></sl-icon>
-                            Delete
-                       </sl-button>
-                   `;
-                }
-
-                const description = quiz.description || 'No description available.';
-                const cardHTML = cardTemplate
-                    .replace('{{Thumbnail}}', `${window.ctx}/${quiz.thumbnail}`)
-                    .replace('{{Title}}', quiz.title)
-                    .replace(/{{Description}}/g, description)
-                    .replace('{{QuestionCount}}', quiz.questions.length)
-                    .replace(/{{QuizID}}/g, quiz.id)
-                    .replace('{{AdminActions}}', adminActionsHtml);
-
-                const cardWrapper = document.createElement('div');
-                cardWrapper.className = 'quiz-card-wrapper';
-                cardWrapper.dataset.quizId = quiz.id;
-                cardWrapper.innerHTML = cardHTML;
-
-                grid.appendChild(cardWrapper);
-            });
-
-            grid.addEventListener('click', (e) => {
-                const button = e.target.closest('sl-button[data-action]');
-                if (!button) return;
-
-                const quizId = button.dataset.quizId;
-                const action = button.dataset.action;
-
-                if (action === 'details') {
-                    const quiz = quizzes.find(q => String(q.id) === quizId);
-                    if (quiz) {
-                        this.showDetailsModal(quiz.title, quiz.description);
-                    }
-                } else if (action === 'delete') {
-                    const quizTitle = button.dataset.quizTitle;
-                    this.showDeleteDialog(quizId, quizTitle);
-                } else if (action === 'edit') {
-                    console.log(`Edit quiz ${quizId}`);
-                } else if (action === 'start') {
-                    console.log(`Start quiz ${quizId}`);
-                }
-            });
-
-        } catch (error) {
-            console.error('Failed to render quizzes', error);
-            AlertManager.showError('Could not display the quizzes');
+        } catch (err) {
+            console.log(err);
         }
-
-        section.appendChild(grid);
-        return section;
     }
 
-    showDeleteDialog(quizId, quizTitle) {
-        const deleteDialog = document.querySelector('#deleteQuizDialog');
-        if (!deleteDialog) {
-            console.error('Delete dialog element #deleteQuizDialog not found');
-            AlertManager.showError('Error: Could not open the delete confirmation dialog');
-            return;
-        }
+    async _getQuizCreateQuiz(base) {
+        await fetch(`${base}/admin/create-quiz-window`, {
+            method: 'GET',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        })
+            .then(response => response.text())
+            .then(html => {
+                console.log(html);
+                const editDialog = document.getElementById('editQuizDialog');
+                editDialog.innerHTML = html;
+                editDialog.show();
+                this.quizForm = new QuizForm(this.quizId);
+                console.log(this.quizForm)
+            })
+            .catch(error => console.log(error));
+    }
 
-        const titleSpan = deleteDialog.querySelector('#deleteQuizTitle');
-        if (titleSpan) {
-            titleSpan.textContent = quizTitle;
+    addQuestion(question) {
+        this.quizForm.addQuestion(question);
+    }
+}
+
+class QuestionEditor {
+    constructor({quizId, api, contextPath}) {
+        this.api = api;
+        this.base = contextPath;
+        this.quizId = quizId;
+    }
+
+    async fetchAndFillQuestions(quiz) {
+        console.log(this.quizId);
+        this.questionArray = await this._getQuestionsInfo(this.base, this.quizId);
+        this.questionArray.forEach(question => {
+            console.log(question);
+            quiz.addQuestion(question);
+        })
+    }
+
+    async _getQuestionsInfo(base, quizId) {
+        try {
+            let result = await fetch(`${base}/admin/questions-info?id=${quizId}`, {
+                method: 'GET',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            })
+            console.log(result);
+            let questionArray = await result.json();
+            console.log(questionArray);
+            return questionArray.map((qJsonData) => new Question(qJsonData));
+        } catch (err) {
+            console.log(err);
         }
+    }
+}
+
+const deleteDialog = document.getElementById('deleteQuizDialog');
+const deleteQuizTitle = document.getElementById('deleteQuizTitle');
+const confirmDeleteBtn = document.getElementById('confirmQuizDeleteBtn');
+const cancelDeleteBtn = document.getElementById('cancelQuizDeleteBtn');
+
+document.querySelectorAll('.delete-quiz-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const quizId = btn.dataset.quizId;
+        const quizTitle = btn.dataset.quizTitle;
 
         deleteDialog.dataset.quizId = quizId;
-        deleteDialog.dataset.quizTitle = quizTitle;
+        deleteDialog.dataset.quizTitle = quizTitle || "this quiz";
+        deleteQuizTitle.textContent = quizTitle || "this quiz";
+
         deleteDialog.show();
+    });
+});
+
+confirmDeleteBtn.addEventListener('click', async () => {
+    const quizId = deleteDialog.dataset.quizId;
+    if (!quizId) return;
+
+    confirmDeleteBtn.loading = true;
+    cancelDeleteBtn.disabled = true;
+
+    try {
+        await deleteQuiz(quizId);
+        deleteDialog.dataset.deleteStatus = 'success';
+    } catch (err) {
+        deleteDialog.dataset.deleteStatus = 'fail';
+        deleteDialog.dataset.errorMessage = "Could not delete quiz.";
+    } finally {
+        deleteDialog.hide();
+    }
+});
+
+// Handle cancel button
+cancelDeleteBtn.addEventListener('click', () => {
+    deleteDialog.hide();
+});
+
+deleteDialog.addEventListener('sl-after-hide', () => {
+    const quizId = deleteDialog.dataset.quizId;
+    const quizTitle = deleteDialog.dataset.quizTitle;
+
+    if (deleteDialog.dataset.deleteStatus === 'success') {
+        document.querySelector(`.quiz-card[data-quiz-id='${quizId}']`)?.remove();
+        showSuccess(`Successfully deleted quiz: ${quizTitle}`);
+    } else if (deleteDialog.dataset.deleteStatus === 'fail') {
+        showError(deleteDialog.dataset.errorMessage);
     }
 
-    showDetailsModal(title, description) {
-        const modal = document.querySelector('#descriptionModal');
-        if (!modal) {
-            console.error('Description modal element #descriptionModal not found');
-            AlertManager.showError('Error: Could not open the details dialog');
-            return;
-        }
+    confirmDeleteBtn.loading = false;
+    cancelDeleteBtn.disabled = false;
 
-        modal.label = title;
-        const contentEl = modal.querySelector('#modalDescriptionContent');
-        if (contentEl) {
-            contentEl.textContent = description || 'No description available.';
-        }
+    delete deleteDialog.dataset.quizId;
+    delete deleteDialog.dataset.quizTitle;
+    delete deleteDialog.dataset.deleteStatus;
+    delete deleteDialog.dataset.errorMessage;
+});
 
-        modal.show();
+function deleteQuiz(id) {
+    if (!id) {
+        return $.Deferred().reject(new Error("Quiz ID is required for deletion"));
     }
+
+    return $.ajax({
+        url: `${window.ctx}/admin/quiz/${id}`,
+        type: 'DELETE'
+    });
+}
+
+
+
+document.querySelectorAll('.edit-quiz-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+        console.log(btn.dataset.quizId);
+        let quizEditor = new QuizEditor({quizId: btn.dataset.quizId, contextPath: window.ctx});
+        let questionEditor = new QuestionEditor({quizId: btn.dataset.quizId, contextPath: window.ctx});
+
+        quizEditor.fetchAndFillEditWindow().then(() => {
+            questionEditor.fetchAndFillQuestions(quizEditor);
+        });
+    })
+})
+
+function showAlert(message, variant = 'primary', icon = 'info-circle', duration = 4000) {
+    const alertElement = document.querySelector('#globalAlert');
+    const iconElement = alertElement?.querySelector('#globalAlertIcon');
+    const messageElement = alertElement?.querySelector('#globalAlertMessage');
+
+    if (!alertElement) {
+        console.error('Could not find #globalAlert element. Make sure it exists in your HTML.');
+        return;
+    }
+
+    alertElement.hide();
+
+    alertElement.variant = variant;
+    alertElement.duration = duration;
+    if (iconElement) iconElement.name = icon;
+    if (messageElement) messageElement.textContent = message;
+
+    setTimeout(() => alertElement.show(), 50);
+}
+
+function showSuccess(message) {
+    showAlert(message, 'success', 'check2-circle', 4000);
+}
+
+function showError(message) {
+    showAlert(message, 'danger', 'exclamation-octagon', 5000);
 }

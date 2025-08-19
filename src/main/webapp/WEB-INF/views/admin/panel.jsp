@@ -67,8 +67,8 @@
         with this quiz will be permanently removed.
     </p>
 
-    <sl-button slot="footer" id="cancelDeleteBtn">Cancel</sl-button>
-    <sl-button slot="footer" id="confirmDeleteBtn" variant="danger">Delete</sl-button>
+    <sl-button slot="footer" id="cancelQuizDeleteBtn">Cancel</sl-button>
+    <sl-button slot="footer" id="confirmQuizDeleteBtn" variant="danger">Delete</sl-button>
 </sl-dialog>
 
 <div class="alert-container">
@@ -81,7 +81,7 @@
 <script src="${pageContext.request.contextPath}/webjars/jquery/3.7.1/jquery.min.js"></script>
 <script type="module" src="${pageContext.request.contextPath}/js/adminPanelRouter.js"></script>
 <script src="${pageContext.request.contextPath}/js/create-quiz.js"></script>
-<script src="${pageContext.request.contextPath}/js/createQuizController.js"></script>
+<script src="${pageContext.request.contextPath}/js/controller/quizFactory.js"></script>
 </body>
 <jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/fragments/footer.jsp"></jsp:include>
 </html>

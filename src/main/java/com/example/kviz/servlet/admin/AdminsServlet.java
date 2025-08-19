@@ -236,12 +236,12 @@ public class AdminsServlet extends HttpServlet {
             req.getRequestDispatcher("/WEB-INF/views/admin/profile.jsp").forward(req, resp);
 
         } catch (NumberFormatException e) {
-            log.error("AdminsProfileServlet doGet: invalid admin id {}", idPart);
+            log.error("AdminsServlet doGet: invalid admin id {}", idPart);
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             gson.toJson(Map.of("error", "Invalid admin id " + idPart), resp.getWriter());
 
         } catch (EntityNotFoundException e) {
-            log.error("AdminsProfileServlet doGet: Admin with id {} not found", idPart);
+            log.error("AdminsServlet doGet: Admin with id {} not found", idPart);
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
             gson.toJson(Map.of("error", "Admin with id " + idPart + " not found"), resp.getWriter());
         }

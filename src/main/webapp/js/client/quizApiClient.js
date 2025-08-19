@@ -1,7 +1,4 @@
 export class QuizApiClient {
-    constructor(baseUrl = '') {
-        this.base = baseUrl;
-    }
 
     getList(adminId = null) {
         const params = {}
