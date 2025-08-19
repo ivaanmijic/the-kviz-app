@@ -7,7 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    request.getRequestDispatcher("/signin").forward(request, response);
+    request.getRequestDispatcher("/auth").forward(request, response);
 %>
 <%--<html>--%>
 <%--<head>--%>

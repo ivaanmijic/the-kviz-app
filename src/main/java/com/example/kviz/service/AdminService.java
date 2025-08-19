@@ -19,6 +19,11 @@ public class AdminService {
         this.adminRepository = new AdminRepository();
     }
 
+    public Admin getAdminById(long id) {
+        return adminRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Admin with id " + id + " not found"));
+    }
+
     public Optional<Admin> getAdminByEmail(String email) {
         return adminRepository.findByEmail(email);
     }
@@ -27,8 +32,8 @@ public class AdminService {
         return adminRepository.findByUsername(username);
     }
 
-    public List<Admin> getAllEditors() {
-        return adminRepository.findByRole(AdminRole.EDITOR);
+    public List<Admin> getAllAdmins() {
+        return adminRepository.findAll();
     }
 
     public Admin updateAdmin(Long id, Admin admin, String newPassword) {

@@ -11,7 +11,7 @@
     --sl-color-primary-900: var(--sl-color-blue-900);
     --sl-color-primary-950: var(--sl-color-blue-950);
 
-    --sl-color-blue-50: rgb(247 250 254);
+
     --sl-color-blue-100: rgb(228 237 252);
     --sl-color-blue-200: rgb(207 223 250);
     --sl-color-blue-300: rgb(185 208 247);
@@ -23,17 +23,12 @@
     --sl-color-blue-900: rgb(33 62 113);
     --sl-color-blue-950: rgb(20 38 70);
 
-    --sl-color-blue2-50: rgb(241 251 255);
-    --sl-color-blue2-100: rgb(206 242 255);
-    --sl-color-blue2-200: rgb(166 232 255);
-    --sl-color-blue2-300: rgb(118 220 254);
-    --sl-color-blue2-400: rgb(43 200 254);
-    --sl-color-blue2-500: rgb(4 171 229);
-    --sl-color-blue2-600: rgb(3 142 190);
-    --sl-color-blue2-700: rgb(2 116 156);
-    --sl-color-blue2-800: rgb(2 96 129);
-    --sl-color-blue2-900: rgb(1 69 92);
-    --sl-color-blue2-950: rgb(1 43 57);
+
+    --brand-primary: #4481eb;
+    --brand-secondary: #04befe;
+
+    --gradient: linear-gradient(-45deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
+    --shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.1);
 
     --bg-color: var(--sl-color-neutral-0);
     --bg-color-secondary: var(--sl-color-neutral-50);
