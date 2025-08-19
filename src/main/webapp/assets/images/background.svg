@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080">
+  <defs>
+   
+    <linearGradient id="kvizGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4481eb"/>
+      <stop offset="100%" stop-color="#04befe"/>
+    </linearGradient>
+
+    <linearGradient id="pill" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0.0"/>
+    </linearGradient>
+
+    <filter id="softBlur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#kvizGradient)"/>
+
+  <radialGradient id="vignette" cx="50%" cy="40%" r="70%">
+    <stop offset="0%" stop-color="black" stop-opacity="0"/>
+    <stop offset="100%" stop-color="black" stop-opacity="0.18"/>
+  </radialGradient>
+  <rect width="1920" height="1080" fill="url(#vignette)"/>
+
+  <g transform="rotate(-18, 960, 540)">
+ 
+    <g opacity="0.20">
+      <rect x="100" y="120" rx="40" ry="40" width="360" height="110" fill="white" filter="url(#softBlur)"/>
+      <rect x="1480" y="200" rx="40" ry="40" width="280" height="90" fill="white" filter="url(#softBlur)"/>
+      <rect x="340" y="780" rx="50" ry="50" width="420" height="120" fill="white" filter="url(#softBlur)"/>
+      <rect x="1200" y="820" rx="45" ry="45" width="360" height="110" fill="white" filter="url(#softBlur)"/>
+    </g>
+  
+    <g opacity="0.55">
+      <rect x="120" y="140" rx="40" ry="40" width="360" height="110" fill="url(#pill)"/>
+      <rect x="1500" y="220" rx="40" ry="40" width="280" height="90" fill="url(#pill)"/>
+      <rect x="360" y="800" rx="50" ry="50" width="420" height="120" fill="url(#pill)"/>
+      <rect x="1220" y="840" rx="45" ry="45" width="360" height="110" fill="url(#pill)"/>
+    </g>
+
+    <g fill="white" opacity="0.25">
+      <circle cx="580" cy="300" r="12"/>
+      <circle cx="1620" cy="370" r="10"/>
+      <circle cx="1280" cy="650" r="8"/>
+      <circle cx="260" cy="610" r="9"/>
+      <circle cx="980" cy="250" r="7"/>
+      <circle cx="860" cy="920" r="10"/>
+    </g>
+  </g>
+</svg>
