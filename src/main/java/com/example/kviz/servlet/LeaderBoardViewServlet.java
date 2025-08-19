@@ -8,10 +8,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet("/playerMainPage")
-public class PlayerMainPageServlet extends HttpServlet {
+@WebServlet("/getLeaderboardView")
+public class LeaderBoardViewServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/WEB-INF/views/player/playerMain.jsp").forward(req, resp);
+        req.getRequestDispatcher("WEB-INF/views/leaderBoard.jsp").forward(req, resp);
     }
 }

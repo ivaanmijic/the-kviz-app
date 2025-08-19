@@ -8,10 +8,11 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet("/playerMainPage")
-public class PlayerMainPageServlet extends HttpServlet {
+@WebServlet("/enterName")
+public class InputNameServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/WEB-INF/views/player/playerMain.jsp").forward(req, resp);
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        req.getRequestDispatcher("/WEB-INF/views/player/enterPlayerName.jsp").forward(req, resp);
     }
 }

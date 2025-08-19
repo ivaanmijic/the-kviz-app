@@ -16,7 +16,8 @@
 </head>
 <body>
 <div class="lobby-main-screen bg-gray-900 text-white">
-    <div class="text-center">
+    <sl-button variant="success" size="large" class="mt-12 !text-2xl !px-12 !py-4 next-btn" id="nextQuestion">Next</sl-button>
+    <div class="text-center" id="replaceable">
         <p class="text-2xl text-gray-300">Pridružite se na</p>
         <p class="text-3xl text-gray-300">PIN Kviz</p>
         <div class="my-6 bg-white/10 text-white rounded-lg p-8 inline-block backdrop-blur-sm border border-white/20">
@@ -36,6 +37,7 @@
                 variant="success"
                 size="large"
                 class="mt-12 !text-2xl !px-12 !py-4"
+                id="startQuiz"
         >
             Započni Kviz!
         </sl-button>
