@@ -45,8 +45,11 @@ public class GameState {
 
     public Question nextQuestion() {
         currentQuestionIndex++;
+        System.out.println(quiz.getQuestions().size() + " " + currentQuestionIndex);
         if (currentQuestionIndex >= quiz.getQuestions().size()) {
+            System.out.println("No more questions in this game");
             currentQuestionIndex = 0;
+            finalLeaderboard();
             return null;
         }else{
             deadline = System.currentTimeMillis() + quiz.getQuestions().get(currentQuestionIndex).getTime() * 1000L;
@@ -70,7 +73,9 @@ public class GameState {
     private void broadcastQuestionAndDeadline(){
         Question q = quiz.getQuestions().get(currentQuestionIndex);
         String question = q.getQuestion();
+        System.out.println("Question: " + question);
         String answers = gson.toJson(q.getAnswers());
+        System.out.println("Answers: " + answers);
         String time = q.getTime().toString();
         String deadlineString = gson.toJson(deadline);
         String payload = "{\"type\":\"question\", \"question\":\"" + question + "\", \"answers\":" + answers + ", \"time\":\"" + time + "\", \"deadline\":\"" + deadlineString + "\"}";
@@ -87,25 +92,29 @@ public class GameState {
         }
     }
 
-    private void endQuestion(){
-        System.out.println("end question");
-        broadcastLeaderboard();
+    private void finalLeaderboard(){
+        broadcastLeaderboard("finalLeaderboard");
     }
 
-    public String serializeLeaderboard() {
+    private void endQuestion(){
+        System.out.println("end question");
+        broadcastLeaderboard("endQuestion");
+    }
+
+    public String serializeLeaderboard(String type) {
         List<UserData> sorted = new ArrayList<>(players.values());
         sorted.sort((a, b) -> Integer.compare(b.getPoints(), a.getPoints()));
 
         Map<String, Object> wrapper = new HashMap<>();
-        wrapper.put("type", "endQuestion");
+        wrapper.put("type", type);
         wrapper.put("players", sorted);
 
         System.out.println(gson.toJson(wrapper));
         return gson.toJson(wrapper);
     }
 
-    public void broadcastLeaderboard() {
-        String json = serializeLeaderboard();
+    public void broadcastLeaderboard(String type) {
+        String json = serializeLeaderboard(type);
         try{
            admin.getBasicRemote().sendText(json);
         }catch (IOException e){

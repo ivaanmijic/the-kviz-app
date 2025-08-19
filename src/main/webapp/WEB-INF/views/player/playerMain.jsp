@@ -17,5 +17,6 @@
 <body id="body">
 
 </body>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script type="module" src="${pageContext.request.contextPath}/js/playerScreenInitialization.js"></script>
 </html>

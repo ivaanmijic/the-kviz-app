@@ -8,6 +8,7 @@ export class InputNameScreen {
 
         document.getElementById("startQuiz").addEventListener("click", () => {
             const name = document.getElementById("playerName").value.trim();
+            window.myName = name;
             if (name.length <= 0) {
                 alert("Must enter the name");
                 return;

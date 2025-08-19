@@ -1,3 +1,10 @@
+function downloadLeaderboard(leaderboard) {
+    const ws = XLSX.utils.json_to_sheet(leaderboard);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Leaderboard");
+    XLSX.writeFile(wb, "leaderboard.xlsx");
+}
+
 export class PlayerQuizSocket {
     constructor(manager) {
         this.ws = null;
@@ -63,7 +70,8 @@ export class PlayerQuizSocket {
                     .then(()=>{
                         const playerList = data.players;
                         const cont = document.getElementById("leaderboardCont")
-                        playerList.forEach((player, index) =>{
+                        playerList.every((player, index) =>{
+                            if(index>=5)return false;
                             const person = document.createElement("div")
                             person.className = "flex items-center bg-gray-100 p-3 rounded-lg"
                             person.innerHTML = this.createAndFillPersonInfo(player, index);
@@ -82,6 +90,38 @@ export class PlayerQuizSocket {
                         }
                     })
                 break;
+            case "finalLeaderboard":
+                this.manager.loadScreen("finalLeaderboard", '/finalLeaderboard')
+                    .then(()=>{
+                        const playerList = data.players
+                        const cont = document.getElementById("leaderboardCont")
+                        playerList.every((player, index) => {
+                            let person;
+                            switch(index){
+                                case 0:
+                                    person = this.firstPlace(player)
+                                    break;
+                                case 1:
+                                    person = this.secondPlace(player)
+                                    break;
+                                case 2:
+                                    person = this.thirdPlace(player)
+                                    break;
+                                default:
+                                    person = this.restPlayers(player, index)
+                            }
+                            if(player.name === window.myName) {
+                                person.classList.add("ring-4")
+                                person.classList.add("ring-indigo-500")
+                            }
+                            cont.appendChild(person)
+                        })
+                        document.getElementById("downloadXLS").addEventListener('click', ()=>{
+                            downloadLeaderboard(playerList)
+                        })
+
+                    })
+                break;
         }
     }
 
@@ -93,6 +133,42 @@ export class PlayerQuizSocket {
         return '<span class="font-bold w-8">' + index+1 + '</span>' +
         '<span class="flex-grow font-semibold text-left">'+ player.name +'</span>' +
         '<span class="font-bold text-lg w-20 text-right">' + player.points + '</span>';
+    }
+
+    firstPlace(player) {
+        const firstPlace = document.createElement("div");
+        firstPlace.className = "flex items-center p-4 rounded-lg bg-gradient-to-r from-amber-300 to-yellow-400 text-yellow-900 shadow-lg"
+        firstPlace.innerHTML = '<span class="text-2xl font-bold w-10">🥇</span>' +
+        '<span class="flex-grow font-bold text-lg text-left">'+ player.name +'</span>' +
+        '<span class="font-bold text-lg">'+ player.points +'</span>';
+        return firstPlace;
+    }
+
+    secondPlace(player) {
+        const secondPlace = document.createElement("div");
+        secondPlace.className = "flex items-center p-4 rounded-lg bg-gradient-to-r from-slate-200 to-gray-300 text-gray-800 shadow-lg"
+        secondPlace.innerHTML = '<span class="text-2xl font-bold w-10">🥈</span>' +
+        '<span class="flex-grow font-bold text-lg text-left">'+ player.name +'</span>' +
+        '<span class="font-bold text-lg">'+ player.points +'</span>';
+        return secondPlace
+    }
+
+    thirdPlace(player) {
+        const thirdPlace = document.createElement("div");
+        thirdPlace.className = "flex items-center p-4 rounded-lg bg-gradient-to-r from-amber-400 to-yellow-600 text-white shadow-lg"
+        thirdPlace.innerHTML = '<span class="text-2xl font-bold w-10">🥉</span>' +
+            '<span class="flex-grow font-bold text-lg text-left">'+ player.name +'</span>' +
+            '<span class="font-bold text-lg">'+ player.points +'</span>';
+        return thirdPlace
+    }
+
+    restPlayers(player, index) {
+        const rest = document.createElement("div");
+        rest.className = "flex items-center p-3 rounded-lg bg-white"
+        rest.innerHTML = '<span class="text-2xl font-bold w-10">'+ index+1 +'.</span>' +
+            '<span class="flex-grow font-bold text-lg text-left">'+ player.name +'</span>' +
+            '<span class="font-bold text-lg">'+ player.points +'</span>';
+        return rest
     }
 }
 

@@ -44,5 +44,6 @@
     </div>
 </div>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/adminWebSocket.js"></script>
 </html>
