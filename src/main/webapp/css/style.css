@@ -65,7 +65,7 @@ form {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    padding: 0rem 5rem;
+    padding: 0 5rem;
     transition: all 0.2s 0.7s;
     overflow: hidden;
     grid-column: 1/2;
@@ -258,7 +258,7 @@ aside .sidebar-footer {
 
 sl-drawer .sidebar-footer {
     padding: 1rem;
-    border-top: 1px solid var(--brand-neutral);
+    border-top: 1px solid var(--sl-color-neutral-500);
 }
 
 aside header {
@@ -470,7 +470,7 @@ sl-button[variant="primary"]::part(base):hover {
 }
 
 sl-button[variant="success"]::part(base) {
-    background-color: var(--brand-success);
+    background-color: var(--sl-color-success-600);
 }
 
 .danger-text-btn::part(base) {
@@ -589,13 +589,13 @@ sl-dialog sl-icon-button:hover {
 /* Shoelace Alert */
 sl-alert::part(base) {
     position: fixed;
+    top: 1rem;
+    left: 50%;
     transform: translateX(-50%);
     z-index: 9999;
     box-shadow: var(--shadow);
     font-size: 1.1rem;
     padding: 0.75rem 1rem;
-    top: 1rem;
-    right: 50%;
     width: clamp(300px, 90vw, 450px);
 }
 

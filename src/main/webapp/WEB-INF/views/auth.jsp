@@ -32,7 +32,7 @@
                 <h2 class="title">Sign Up</h2>
                 <sl-input class="input-field" type="email" placeholder="Email" filled pill required></sl-input>
                 <sl-input class="input-field" type="text" placeholder="Username" filled pill required></sl-input>
-                <sl-input class="input-field" type="password" placeholder="Password" filled pill requiredpassword-toggle></sl-input>
+                <sl-input class="input-field" type="password" placeholder="Password" filled pill required password-toggle></sl-input>
                 <sl-button class="input-field" type="submit" variant="primary" style="margin-top: 1rem;">
                     Submit
                 </sl-button>

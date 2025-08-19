@@ -34,6 +34,10 @@ $(document).ready(() => {
         $menuButton.on('click', () => $drawer[0].show());
     }
 
+    window.getCurrentView = () => {
+        return $sidebar.find(".sidebar-item.active").data("view");
+    }
+
     window.loadView = function (view, param = {}) {
 
         const activeView = param.from || view;
@@ -44,6 +48,7 @@ $(document).ready(() => {
 
         switch (view) {
             case "dashboard":
+                document.title = "Dashboard"
                 $.get(`${window.ctx}/templates/dashboard.html`, dashboardHtml => {
                     dashboardHtml = dashboardHtml.replace('{{Username}}', window.admin.username);
                     $content.append(dashboardHtml);
@@ -62,12 +67,14 @@ $(document).ready(() => {
                 break;
 
             case "admin-list":
+                document.title = "Users";
                 adminController.getAdmins()
                     .then(adminsView => $content.append(adminsView))
                     .catch(() => AlertManager.showError("Could not display user list."));
                 break;
 
             case "all-quizzes":
+                document.title = "All Quizzes";
                 $.get(`${window.ctx}/admin/quiz/list`, html => {
                     $content.append(html);
                     quizController.setupListeners();
@@ -75,11 +82,12 @@ $(document).ready(() => {
                 break;
 
             case "profile":
+                document.title = "Account Info";
                 const profileId = param.id || window.admin.id;
 
                 $.get(`${window.ctx}/admins/${profileId}/profile`, profileHtml => {
                     $content.append(profileHtml);
-                    adminController.setupProfileListeners(profileId);
+                    adminController.setupProfileListeners(profileId, param.from);
 
                 }).fail(() => AlertManager.showError("Could not display profile."));
                 break;

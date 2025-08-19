@@ -50,7 +50,6 @@ public class AuthServlet extends HttpServlet {
         if (action == null || action.isBlank()) {
             log.info("No action provided");
             req.getRequestDispatcher("/WEB-INF/views/auth.jsp").forward(req, resp);
-            return;
         } else if  (action.equals("/logout")) {
             handleLogout(req, resp);
         } else {
@@ -172,7 +171,7 @@ public class AuthServlet extends HttpServlet {
                     resp.addCookie(tokenCookie);
                 }
 
-                resp.sendRedirect("/admin/view");
+                resp.sendRedirect("/admin/panel");
             } else {
                 HttpResponseUtil.sendBadRequest(resp, "Invalid email/username or password");
             }
