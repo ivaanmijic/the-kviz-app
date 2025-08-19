@@ -10,7 +10,7 @@
 <head>
     <script src="https://cdn.tailwindcss.com"></script>
     <%@ include file="/WEB-INF/views/shoelace-imoprt.jsp"%>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main-style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/theme.css">
     <script>window.ctx='${pageContext.request.contextPath}'</script>
 </head>
