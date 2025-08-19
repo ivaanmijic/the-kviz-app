@@ -1,12 +1,14 @@
 package com.example.kviz.servlet.admin;
 
 import com.example.kviz.model.Admin;
+import com.example.kviz.model.Answer;
 import com.example.kviz.model.Question;
 import com.example.kviz.model.Quiz;
 import com.example.kviz.model.supporting.QuestionType;
 import com.example.kviz.model.supporting.QuestionTypeFactory;
 import com.example.kviz.model.supporting.QuizCategory;
 import com.example.kviz.model.supporting.QuizCategoryFactory;
+import com.example.kviz.service.AnswerServices;
 import com.example.kviz.service.QuestionServices;
 import com.example.kviz.service.QuizService;
 import com.mysql.cj.Session;
@@ -35,6 +37,7 @@ public class SubmitQuizCreationServlet extends HttpServlet {
         request.getParts().forEach(part -> {
             System.out.println("Part: " + part.getName());
         });
+        AnswerServices answerServices = new AnswerServices();
         QuizService quizService = new QuizService();
         Quiz quiz = new Quiz();
         if(request.getParameter("quizId") != null) {
@@ -87,18 +90,19 @@ public class SubmitQuizCreationServlet extends HttpServlet {
             question.setQuiz(quiz);
             question.setOrderNumber(questionIndex);
 
-            List<String> answers = new ArrayList<>();
+            question = questionServices.save(question);
+
+            List<Answer> answers = new ArrayList<>();
             for (int i = 0; i < 4; i++) {
                 String answer = request.getParameter("questions[" + questionIndex + "][answers][" + i + "]");
-                if (answer != null) answers.add(answer);
+                String isCorrect = request.getParameter("questions[" + questionIndex + "][answerIsCorrect][" + i + "]");
+                Answer a = new Answer(answer, question, isCorrect.equals("true"));
+                if (answer != null) answers.add(answerServices.save(a));
                 System.out.println(answer);
             }
 
             question.setAnswers(answers);
 
-            question.setCorrectAnswer(answers.get(Integer.parseInt(request.getParameter("questions[" + questionIndex + "][correctAnswer]"))));
-
-            question = questionServices.save(question);
 
             Part questionImagePart = request.getPart("questions[" + questionIndex + "][image]");
             if(questionImagePart != null && questionImagePart.getSize() > 0) {

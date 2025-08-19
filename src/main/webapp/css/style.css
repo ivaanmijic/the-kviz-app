@@ -1041,7 +1041,20 @@ sl-details {
 .question-cont .answers sl-input::part(form-control) {
     width: 100%;
 }
+.question-cont .answers sl-checkbox::part(base) {
+    flex: 1;
+    width: 100%;
+    font-size: 1rem;
+    align-items: center;
+}
 
+.question-cont .answers sl-checkbox::part(label) {
+    width: 100%;
+}
+
+.question-cont .answers sl-checkbox::part(form-control) {
+    width: 100%;
+}
 .dragging {
     opacity: 0.5;
     border: 1px dashed;

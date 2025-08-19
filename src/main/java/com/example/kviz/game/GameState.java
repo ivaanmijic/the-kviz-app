@@ -6,12 +6,16 @@ import com.example.kviz.model.supporting.QuestionDTO;
 import com.example.kviz.webSocket.UserData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import jakarta.websocket.CloseReason;
 import jakarta.websocket.Session;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class GameState {
     Quiz quiz;
@@ -95,17 +99,32 @@ public class GameState {
         }
         return correct;
     }
-    public void handleAnswer(Session player, List<String> answers){}
+    public boolean handleAnswer(Session player, JsonArray answers){
+        Question q = quiz.getQuestions().get(currentQuestionIndex);
+        List<String> list = StreamSupport.stream(answers.spliterator(), false)
+                .map(JsonElement::getAsString)
+                .collect(Collectors.toList());
+        for (String s : list) {
+           System.out.println(s + " " + players.get(player).getName());
+        }
+        double percent = q.checkIfCorrectAnswers(list);
+        if (percent != 0) {
+            players.get(player).addPoints((int)(q.getPoints()*percent));
+            return true;
+        }
+        return false;
+    }
 
     private void broadcastQuestionAndDeadline(){
         Question q = quiz.getQuestions().get(currentQuestionIndex);
+        String questionType = q.getType().toString().toLowerCase();
         String question = q.getQuestion();
         System.out.println("Question: " + question);
-        String answers = gson.toJson(q.getAnswers());
+        String answers = gson.toJson(q.getAnswersAsString());
         System.out.println("Answers: " + answers);
         String time = q.getTime().toString();
         String deadlineString = gson.toJson(deadline);
-        String payload = "{\"type\":\"question\", \"question\":\"" + question + "\", \"answers\":" + answers + ", \"time\":\"" + time + "\", \"deadline\":\"" + deadlineString + "\"}";
+        String payload = "{\"type\":\"question\",\"questionType\":\"" + questionType +"\", \"question\":\"" + question + "\", \"answers\":" + answers + ", \"time\":\"" + time + "\", \"deadline\":\"" + deadlineString + "\"}";
         System.out.println(payload);
         try {
             admin.getBasicRemote().sendText(payload);

@@ -15,7 +15,7 @@ public class QuestionDTO {
     @Expose private Integer time;
     @Expose private String category;
     @Expose private List<String> answers;
-    @Expose private String correctAnswer;
+    @Expose private List<String> correctAnswers;
     @Expose private String createdAt;
     @Expose private String updatedAt;
 
@@ -27,8 +27,8 @@ public class QuestionDTO {
         dto.points = question.getPoints();
         dto.time = question.getTime();
         dto.category = question.getType().name();
-        dto.answers = question.getAnswers();
-        dto.correctAnswer = question.getCorrectAnswer();
+        dto.answers = question.getAnswersAsString();
+        dto.correctAnswers = question.getCorrectAnswersAsString();
         dto.createdAt = question.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME);
         dto.updatedAt = question.getUpdatedAt() != null
                 ? question.getUpdatedAt().format(DateTimeFormatter.ISO_DATE_TIME) : null;

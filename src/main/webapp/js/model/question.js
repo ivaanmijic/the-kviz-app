@@ -1,5 +1,5 @@
 export class Question {
-    constructor({id, question, thumbnail, points, time, category, answers, correctAnswer}) {
+    constructor({id, question, thumbnail, points, time, category, answers, correctAnswers}) {
         this.id = id;
         this.img = thumbnail;
         this.question = question;
@@ -7,6 +7,6 @@ export class Question {
         this.time = time;
         this.category = category;
         this.answers = answers;
-        this.correctAnswer = correctAnswer;
+        this.correctAnswers = correctAnswers;
     }
 }

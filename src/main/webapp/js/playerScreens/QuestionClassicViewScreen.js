@@ -1,4 +1,4 @@
-export class QuestionViewScreen{
+export class QuestionClassicViewScreen {
     constructor(manager, ws) {
         this.manager = manager;
         this.ws = ws;
@@ -11,5 +11,6 @@ export class QuestionViewScreen{
                 this.ws.send({"type":"answer","answer": answer});
             })
         })
+        document.getElementById("submitMultipleBtn").style.display='none';
     }
 }

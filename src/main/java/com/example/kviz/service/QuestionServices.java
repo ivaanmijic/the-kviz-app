@@ -32,7 +32,12 @@ public class QuestionServices {
     }
 
     public List<Question> findByQuizId(long quizId) {
-        return questionRepository.findByQuizId(quizId);
+        List<Question> questions = questionRepository.findByQuizId(quizId);
+        AnswerServices answerServices = new AnswerServices();
+        for(Question question : questions){
+           question.setAnswers(answerServices.findByQuestionId(question.getId()));
+        }
+        return questions;
     }
 
     public void delete(Question question) {

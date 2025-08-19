@@ -136,17 +136,18 @@ public class QuizWebSocket {
 
     private void playerMessageHandler(String message, Session session, GameState game) throws IOException {
         Gson gson = new Gson();
+        System.out.println(message);
         JsonObject json = gson.fromJson(message, JsonObject.class);
         String type = json.get("type").getAsString();
-
+        boolean correct;
+        String msg;
         switch (type) {
             case "setUserName":
                 game.editName(session, json.get("name").getAsString());
                 System.out.println(json.get("name").getAsString());
                 break;
             case "answer":
-                boolean correct = game.handleAnswer(session, json.get("answer").getAsString());
-                String msg;
+                correct = game.handleAnswer(session, json.get("answer").getAsString());
                 if(correct){
                     msg = "{\"type\":\"answerReceived\", \"correctAnswer\": \"yes\"}";
                 }else{
@@ -155,6 +156,18 @@ public class QuizWebSocket {
                 try{
                     session.getBasicRemote().sendText(msg);
                 }catch (IOException ignored) {}
+                break;
+            case "answers":
+                correct = game.handleAnswer(session, json.get("answer").getAsJsonArray());
+                if(correct){
+                    msg = "{\"type\":\"answerReceived\", \"correctAnswer\": \"yes\"}";
+                }else{
+                    msg = "{\"type\":\"answerReceived\", \"correctAnswer\": \"no\"}";
+                }
+                try{
+                    session.getBasicRemote().sendText(msg);
+                }catch (IOException ignored) {}
+                break;
         }
     }
 
