@@ -64,7 +64,13 @@ public class GameState {
         Question q = quiz.getQuestions().get(currentQuestionIndex);
         boolean correct = q.checkIfCorrectAnswer(answer);
         if (correct) {
-            players.get(player).addPoints(q.getPoints());
+            long timeLeft = deadline - System.currentTimeMillis();
+            long totalTime = q.getTime() * 1000L;
+            double timeFactor = Math.max(0.0, (double)totalTime / timeLeft);
+
+            int scaledPoints = (int) Math.round(q.getPoints() * timeFactor);
+
+            players.get(player).addPoints(scaledPoints);
         }
         return correct;
     }

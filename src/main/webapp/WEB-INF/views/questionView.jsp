@@ -5,15 +5,13 @@
   Time: 10:05 AM
   To change this template use File | Settings | File Templates.
 --%>
-<div class="screen-mockup !justify-between !p-6">
     <div class="w-full">
         <div class="flex justify-between items-center mb-4">
             <span class="text-gray-500 font-semibold" id="numberOfPlayers"></span>
             <div class="flex items-center space-x-2">
-                <div class="w-24 bg-gray-200 rounded-full h-2.5">try {
+                <div class="w-24 bg-gray-200 rounded-full h-2.5">
                     <sl-progress-bar id="progress" value="100"></sl-progress-bar>
                 </div>
-                <span class="font-bold text-lg text-blue-600">21</span>
             </div>
         </div>
         <h2 class="text-center text-3xl font-bold text-gray-800 my-8" id="questionText"></h2>
@@ -24,4 +22,3 @@
         <button class="sl-button !h-24 !text-xl bg-yellow-500 text-white hover:bg-yellow-600 answers"><sl-icon name="square-fill" slot="prefix"></sl-icon><span id="answ2"></span></button>
         <button class="sl-button !h-24 !text-xl bg-green-500 text-white hover:bg-green-600 answers"><sl-icon name="diamond-fill" slot="prefix"></sl-icon><span id="answ3"></span></button>
     </div>
-</div>

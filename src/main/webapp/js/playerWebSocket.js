@@ -9,6 +9,7 @@ export class PlayerQuizSocket {
     constructor(manager) {
         this.ws = null;
         this.manager = manager;
+        this.playerCount = 0;
     }
 
     connect(url) {
@@ -41,7 +42,9 @@ export class PlayerQuizSocket {
                     })
                 break;
             case "playerCount":
-                document.getElementById("numberOfPlayers").innerText = data.count;
+                this.playerCount = data.count;
+                const countElement = document.getElementById("numberOfPlayers");
+                if (countElement) countElement.innerText = this.playerCount;
                 break;
             case "question":
                 this.manager.loadScreen("question", `/getQuestionView`)
@@ -49,6 +52,7 @@ export class PlayerQuizSocket {
                         const deadline = data.deadline; // millis from server
                         const duration = data.time * 1000; // ms
                         const progressBar = document.querySelector("#progress");
+                        document.getElementById("numberOfPlayers").innerText = this.playerCount;
                         document.getElementById("questionText").innerText = data.question;
                         document.getElementById("answ0").innerText = data.answers[0];
                         document.getElementById("answ1").innerText = data.answers[1];
@@ -70,10 +74,10 @@ export class PlayerQuizSocket {
                     .then(()=>{
                         const playerList = data.players;
                         const cont = document.getElementById("leaderboardCont")
-                        playerList.every((player, index) =>{
-                            if(index>=5)return false;
+                        playerList.forEach((player, index) =>{
+                            if(index>=10) return;
                             const person = document.createElement("div")
-                            person.className = "flex items-center bg-gray-100 p-3 rounded-lg"
+                            person.className = "flex items-center p-3 rounded-lg"
                             person.innerHTML = this.createAndFillPersonInfo(player, index);
                             cont.appendChild(person);
                         })
@@ -82,7 +86,7 @@ export class PlayerQuizSocket {
             case "answerReceived":
                 this.manager.loadScreen("waiting", '/waitingLobby')
                     .then(()=>{
-                        document.getElementById("waitingReason").innerText = "Sacekajte sledece pitanje..."
+                        document.getElementById("waitingReason").innerText = "Get ready for the next question..."
                         if(data.correctAnswer === 'yes'){
                             document.getElementById("correctness").innerText = "Correct answer";
                         }else{
@@ -91,11 +95,12 @@ export class PlayerQuizSocket {
                     })
                 break;
             case "finalLeaderboard":
+                console.log(data);
                 this.manager.loadScreen("finalLeaderboard", '/finalLeaderboard')
                     .then(()=>{
                         const playerList = data.players
                         const cont = document.getElementById("leaderboardCont")
-                        playerList.every((player, index) => {
+                        playerList.forEach((player, index) => {
                             let person;
                             switch(index){
                                 case 0:
@@ -130,7 +135,7 @@ export class PlayerQuizSocket {
     }
 
     createAndFillPersonInfo(player, index) {
-        return '<span class="font-bold w-8">' + index+1 + '</span>' +
+        return '<span class="font-bold w-8">' + (index+1) + '</span>' +
         '<span class="flex-grow font-semibold text-left">'+ player.name +'</span>' +
         '<span class="font-bold text-lg w-20 text-right">' + player.points + '</span>';
     }
@@ -139,7 +144,7 @@ export class PlayerQuizSocket {
         const firstPlace = document.createElement("div");
         firstPlace.className = "flex items-center p-4 rounded-lg bg-gradient-to-r from-amber-300 to-yellow-400 text-yellow-900 shadow-lg"
         firstPlace.innerHTML = '<span class="text-2xl font-bold w-10">🥇</span>' +
-        '<span class="flex-grow font-bold text-lg text-left">'+ player.name +'</span>' +
+        '<span class="flex-grow font-bold text-lg text-left">'+ player.name +' </span>' +
         '<span class="font-bold text-lg">'+ player.points +'</span>';
         return firstPlace;
     }
@@ -165,7 +170,7 @@ export class PlayerQuizSocket {
     restPlayers(player, index) {
         const rest = document.createElement("div");
         rest.className = "flex items-center p-3 rounded-lg bg-white"
-        rest.innerHTML = '<span class="text-2xl font-bold w-10">'+ index+1 +'.</span>' +
+        rest.innerHTML = '<span class="text-2xl font-bold w-10">'+ (index+1) +'.</span>' +
             '<span class="flex-grow font-bold text-lg text-left">'+ player.name +'</span>' +
             '<span class="font-bold text-lg">'+ player.points +'</span>';
         return rest
