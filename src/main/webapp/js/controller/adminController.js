@@ -180,7 +180,7 @@ export class AdminController {
         deleteDialog.show();
     }
 
-    setupProfileListeners(profileId) {
+    setupProfileListeners(profileId, fromView) {
         console.log('setupProfileListeners for admin profile', profileId);
         const $form = $('#editProfileForm');
         if (!$form.length) return;
@@ -216,6 +216,10 @@ export class AdminController {
                 console.log(payload);
                 await this.api.update(profileId, payload);
                 AlertManager.showSuccess('Successfully updated profile');
+
+                const viewToLoad = fromView || window.getCurrentView();
+                window.loadView(viewToLoad, { id: profileId });
+
                 $updateBtn.prop('disabled', true);
             } catch (jqXHR) {
                 const errorMsg = jqXHR.responseJSON?.error || 'Failed to update profile';
@@ -240,7 +244,7 @@ export class AdminController {
                 await this.api.delete(profileId, self);
 
                 if (self) {
-                    window.location.reload();
+                    window.location.href = '/auth/logout';
                 } else {
                     window.loadView('admin-list');
                 }

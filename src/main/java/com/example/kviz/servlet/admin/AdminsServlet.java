@@ -183,8 +183,13 @@ public class AdminsServlet extends HttpServlet {
         try {
             if (adminService.authenticateById(adminId, payload.getAdmin().getPassword())) {
                 Admin updated = adminService.updateAdmin(adminId, payload.getAdmin(), payload.getNewPassword());
+
                 resp.setStatus(HttpServletResponse.SC_OK);
                 gson.toJson(Map.of("success", "Account has been updated"), resp.getWriter());
+
+                Admin currentUser = (Admin) req.getSession().getAttribute("admin");
+                if (currentUser != null && !currentUser.getId().equals(updated.getId())) { return; }
+
                 updateSession(req.getSession(false), updated);
                 updateCookie(req, updated);
             } else {

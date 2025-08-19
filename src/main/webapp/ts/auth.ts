@@ -8,6 +8,10 @@ interface ShoelaceCheckboxElement extends HTMLElement {
     checked: boolean;
 }
 
+interface ShoelaceButtonElement extends HTMLElement {
+    loading: boolean;
+}
+
 type FormType = "login" | "register";
 
 interface FormConfiguration {
@@ -45,6 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!form) return;
 
         const errorLabel = form.querySelector<HTMLElement>('.error-label');
+        const submitButton = document.querySelector<ShoelaceButtonElement>('sl-button[type="submit"]');
 
         form.addEventListener('submit', async e => {
             e.preventDefault();
@@ -76,6 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
             if (!isValid) return;
+            if (submitButton) submitButton.loading = true;
 
             try {
                 const username = await sendRequest(endpoint, payload);
@@ -84,6 +90,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             } catch (err) {
                 showError(err, errorLabel);
+            } finally {
+                if (submitButton) submitButton.loading = false;
             }
         });
     });

@@ -7,7 +7,7 @@ public class IdentifierChecker {
             "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
 
     private static final String USERNAME_REGEX =
-            "^[A-Za-z0-9_]{3,20}$";
+            "^[A-Za-z0-9_.]{3,20}$";
 
     private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
     private static final Pattern USERNAME_PATTERN = Pattern.compile(USERNAME_REGEX);

@@ -388,6 +388,9 @@ class QuizForm {
                                     'You can continue with createing more quizzes';
                                 document.getElementsByTagName('body')[0].appendChild(alert);
                                 alert.toast();
+                                if (this.quizId) {
+                                    window.loadView(window.getCurrentView());
+                                }
                             })
                 })
                 .catch(error => console.error("Error saving quiz: ", error));

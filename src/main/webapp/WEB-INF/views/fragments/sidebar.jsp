@@ -18,7 +18,7 @@
                 <sl-icon name="house" class="sidebar-icon"></sl-icon>
                 Dashboard
             </li>
-            <li onclick=createQuizWindow()>
+            <li onclick="createQuizWindow(); document.title = 'Quiz Maker';">
                 <sl-icon name="plus-square" class="sidebar-icon"></sl-icon>
                 Create Quiz
             </li>
@@ -61,7 +61,7 @@
                 <sl-icon name="house" class="sidebar-icon"></sl-icon>
                 Dashboard
             </li>
-            <li onclick=createQuizWindow()>
+            <li onclick="createQuizWindow(); document.title = 'Quiz Maker';">
                 <sl-icon name="plus-square" class="sidebar-icon"></sl-icon>
                 Create Quiz
             </li>
