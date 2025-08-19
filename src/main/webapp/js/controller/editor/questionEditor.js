@@ -1,8 +1,7 @@
 import { Question } from "../../model/question.js";
 
 export class QuestionEditor {
-    constructor({quizId, api, contextPath}) {
-        this.api = api;
+    constructor({quizId, contextPath}) {
         this.base = contextPath;
         this.quizId = quizId;
     }

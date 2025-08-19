@@ -1,6 +1,7 @@
 import { QuizEditor } from "./editor/quizEditor.js";
 import { QuestionEditor } from "./editor/questionEditor.js";
 import { AlertManager } from "../manager/alertManager.js";
+import { QuizApiClient } from "../client/quizApiClient.js";
 
 export class QuizController {
     constructor() {
@@ -10,7 +11,7 @@ export class QuizController {
         this.cancelDeleteBtn = null;
         this.descriptionDialog = null;
         this.modalDescriptionContent = null;
-        this.closeDescriptionBtn = null;
+        this.api = new QuizApiClient(`${window.ctx}`);
     }
 
     setupListeners() {
@@ -25,6 +26,14 @@ export class QuizController {
             btn.addEventListener('click', () => {
                 this.modalDescriptionContent.innerText = btn.dataset.quizDescription;
                 this.descriptionDialog.show();
+            });
+        });
+
+        document.querySelectorAll(".play-quiz-btn").forEach(btn => {
+            btn.addEventListener('click', () => {
+               const quizId = btn.dataset.quizId;
+               this.api.startGameForQuiz(quizId)
+                   .catch(e => AlertManager.showError("Failed to start quiz:", e));
             });
         });
 
@@ -49,7 +58,7 @@ export class QuizController {
             this.cancelDeleteBtn.disabled = true;
 
             try {
-                await this._deleteQuiz(quizId);
+                await this.api.delete(quizId);
                 this.deleteDialog.dataset.deleteStatus = 'success';
             } catch (err) {
                 this.deleteDialog.dataset.deleteStatus = 'fail';
@@ -95,17 +104,6 @@ export class QuizController {
             })
         })
 
-    }
-
-    _deleteQuiz(id) {
-        if (!id) {
-            return $.Deferred().reject(new Error("Quiz ID is required for deletion"));
-        }
-
-        return $.ajax({
-            url: `${window.ctx}/admin/quiz/${id}`,
-            type: 'DELETE'
-        });
     }
 
 }
