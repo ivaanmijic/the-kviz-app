@@ -2,6 +2,7 @@ package com.example.kviz.webSocket;
 
 import com.example.kviz.game.GameManager;
 import com.example.kviz.game.GameState;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import jakarta.websocket.*;
@@ -26,6 +27,7 @@ public class QuizWebSocket {
 
         if (game == null && "player".equals(role)) {
             try {
+                session.getBasicRemote().sendText("{\"type\":\"error\", \"message\":\"Invalid code\"}");
                 session.close(new CloseReason(
                         CloseReason.CloseCodes.CANNOT_ACCEPT, "Game does not exist"));
             } catch (IOException ignored) {}
@@ -36,6 +38,28 @@ public class QuizWebSocket {
             if (game != null) game.setAdmin(session);
         } else if ("player".equals(role)) {
             game.addPlayer(session);
+            try{
+                session.getBasicRemote().sendText("{\"type\":\"codeOk\", \"gameId\":\"" + gameId + "\", \"quizTitle\":" + "\"" + game.getQuiz().getTitle() + "\"}");
+            } catch (IOException ignored) {}
+
+            Session admin = game.getAdmin();
+            if (admin != null && admin.isOpen()) {
+                try {
+                    int playerCount = game.getPlayers().size();
+                    admin.getBasicRemote().sendText(
+                            "{\"type\":\"playerCount\",\"count\":" + playerCount + "}"
+                    );
+                    game.getPlayers().forEach(player -> {
+                        try {
+                            player.getBasicRemote().sendText("{\"type\":\"playerCount\",\"count\":" + playerCount + "}");
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -64,8 +88,13 @@ public class QuizWebSocket {
             Session admin = game.getAdmin();
             if (admin != null && admin.isOpen()) {
                 try {
-                    admin.getBasicRemote().sendText("Player left");
-                } catch (IOException ignored) {}
+                    int playerCount = game.getPlayers().size();
+                    admin.getBasicRemote().sendText(
+                            "{\"type\":\"playerCount\",\"count\":" + playerCount + "}"
+                    );
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -81,18 +110,54 @@ public class QuizWebSocket {
         try {
             if ("admin".equals(role)) {
                 // Example: forward message from admin to all players
-                for (Session p : game.getPlayers()) {
-                    if (p.isOpen()) p.getBasicRemote().sendText(message);
-                }
+                adminMessageHandler(message, session, game);
             } else if ("player".equals(role)) {
+                playerMessageHandler(message, session, game);
                 // Example: forward message from player to admin
-                Session admin = game.getAdmin();
-                if (admin != null && admin.isOpen()) {
-                    admin.getBasicRemote().sendText(message);
-                }
+                //Session admin = game.getAdmin();
+                //if (admin != null && admin.isOpen()) {
+                  //  admin.getBasicRemote().sendText(message);
+                //}
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    private void playerMessageHandler(String message, Session session, GameState game) throws IOException {
+        Gson gson = new Gson();
+        JsonObject json = gson.fromJson(message, JsonObject.class);
+        String type = json.get("type").getAsString();
+
+        switch (type) {
+            case "setUserName":
+                game.editName(session, json.get("name").getAsString());
+                System.out.println(json.get("name").getAsString());
+                break;
+            case "answer":
+                boolean correct = game.handleAnswer(session, json.get("answer").getAsString());
+                String msg;
+                if(correct){
+                    msg = "{\"type\":\"answerReceived\", \"correctAnswer\": \"yes\"}";
+                }else{
+                    msg = "{\"type\":\"answerReceived\", \"correctAnswer\": \"no\"}";
+                }
+                try{
+                    session.getBasicRemote().sendText(msg);
+                }catch (IOException ignored) {}
+        }
+    }
+
+    private void adminMessageHandler(String message, Session session, GameState game) throws IOException {
+        Gson gson = new Gson();
+        JsonObject json = gson.fromJson(message, JsonObject.class);
+        String type = json.get("type").getAsString();
+        switch (type){
+            case "nextQuestion":
+                game.nextQuestion();
+                break;
+        }
+    }
 }
+
+
