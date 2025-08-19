@@ -26,15 +26,15 @@
 <body class="min-h-screen flex items-center justify-center">
 <div class="glass p-10 max-w-lg w-full text-center">
     <img src="${pageContext.request.contextPath}/assets/logo.png" alt="The Kviz App Logo" class="mx-auto h-24 mb-6" />
-    <h1 class="text-4xl font-extrabold mb-2">Dobrodošli u</h1>
+    <h1 class="text-4xl font-extrabold mb-2">Welcome to</h1>
     <h1 class="text-4xl font-extrabold mb-2">The Quiz App</h1>
-    <p class="mb-8">Zabavite se i testirajte svoje znanje!</p>
+    <p class="mb-8">Have fun and test your knowledge!</p>
     <div class="space-y-4">
         <sl-button variant="primary" size="large" class="w-full" href="${pageContext.request.contextPath}/playerMainPage">
-            🎮 Igraj kviz
+            🎮 Play the quiz
         </sl-button>
         <sl-button variant="success" size="large" class="w-full" href="${pageContext.request.contextPath}/admin/panel">
-            ⚙️ Upravljanje i vođenje kvizova (Admin) 📊
+            ⚙️ Managing and hosting quizzes (Admin) 📊
         </sl-button>
     </div>
 </div>
