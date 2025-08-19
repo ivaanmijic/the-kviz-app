@@ -25,7 +25,7 @@ public class QuizWebSocket {
 
         GameState game = GameManager.activeGames.get(gameId);
 
-        if (game == null && "player".equals(role)) {
+        if ((game == null && "player".equals(role)) || (game!=null && game.isStarted())) {
             try {
                 session.getBasicRemote().sendText("{\"type\":\"error\", \"message\":\"Invalid code\"}");
                 session.close(new CloseReason(
@@ -73,28 +73,38 @@ public class QuizWebSocket {
         if (game == null) return;
 
         if ("admin".equals(role)) {
-            // If admin disconnects → close game & notify players
-            for (Session p : game.getPlayers()) {
+            closeGame(gameId, game);
+        } else if ("player".equals(role)) {
+            game.removePlayer(session);
+            // Optionally notify admin about player leaving
+            notifyAllAboutLeaving(game);
+        }
+    }
+    private void notifyAllAboutLeaving(GameState game){
+        Session admin = game.getAdmin();
+        if (admin != null && admin.isOpen()) {
+            try {
+                int playerCount = game.getPlayers().size();
+                admin.getBasicRemote().sendText(
+                        "{\"type\":\"playerCount\",\"count\":" + playerCount + "}"
+                );
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    private void closeGame(String gameId, GameState game) {
+        // remove game first to prevent recursion issues
+        GameManager.activeGames.remove(gameId);
+
+        // close players safely
+        for (Session p : game.getPlayers()) {
+            if (p.isOpen()) {
                 try {
                     p.close(new CloseReason(
                             CloseReason.CloseCodes.GOING_AWAY,
                             "Game ended because admin disconnected"));
                 } catch (IOException ignored) {}
-            }
-            GameManager.activeGames.remove(gameId);
-        } else if ("player".equals(role)) {
-            game.removePlayer(session);
-            // Optionally notify admin about player leaving
-            Session admin = game.getAdmin();
-            if (admin != null && admin.isOpen()) {
-                try {
-                    int playerCount = game.getPlayers().size();
-                    admin.getBasicRemote().sendText(
-                            "{\"type\":\"playerCount\",\"count\":" + playerCount + "}"
-                    );
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }

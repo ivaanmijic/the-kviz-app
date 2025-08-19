@@ -6,14 +6,12 @@ import com.example.kviz.model.supporting.QuestionDTO;
 import com.example.kviz.webSocket.UserData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import jakarta.websocket.CloseReason;
 import jakarta.websocket.Session;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class GameState {
     Quiz quiz;
@@ -22,6 +20,14 @@ public class GameState {
     private final Map<Session, UserData> players = new ConcurrentHashMap<>();
     private final String gameId;
     private long deadline;
+    private boolean started;
+
+    public boolean isStarted() {
+        return started;
+    }
+    public void setStarted(boolean started) {
+        this.started = started;
+    }
 
     private final Gson gson = new GsonBuilder().create();
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -42,8 +48,29 @@ public class GameState {
     public void editName(Session p, String name){ players.get(p).setName(name);}
     public void removePlayer(Session p) { players.remove(p); }
     public Set<Session> getPlayers() { return players.keySet(); }
+    public Set<Session> removeAllNoNamePlayers(){
+        Set<Session> toRemove = ConcurrentHashMap.newKeySet();
+        players.forEach((p, u) -> {
+            if(u.getName() == null || u.getName().isBlank()){
+                toRemove.add(p);
+            }
+        });
+        toRemove.forEach(players::remove);
+        return toRemove;
+    };
 
     public Question nextQuestion() {
+        if(currentQuestionIndex == -1) {
+            Set<Session> toRemove = removeAllNoNamePlayers();
+            toRemove.forEach((p)->{
+                try {
+                    p.close(new CloseReason(
+                            CloseReason.CloseCodes.GOING_AWAY,
+                            "Game ended because game has already started"));
+                } catch (IOException ignored) {}
+            });
+            setStarted(true);
+        }
         currentQuestionIndex++;
         System.out.println(quiz.getQuestions().size() + " " + currentQuestionIndex);
         if (currentQuestionIndex >= quiz.getQuestions().size()) {

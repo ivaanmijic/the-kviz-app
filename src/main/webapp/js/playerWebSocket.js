@@ -24,7 +24,7 @@ export class PlayerQuizSocket {
             this.handleMessage(data);
         };
 
-        this.ws.onclose = () => console.log("Connection closed");
+        this.ws.onclose = () => this.manager.loadScreen("inputCode", "/inputCode");
     }
 
     handleMessage(data) {
