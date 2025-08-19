@@ -10,6 +10,11 @@ const manager = new ScreenManager("body")
 
 const ws = new PlayerQuizSocket(manager);
 
+document.getElementById("leaveQuiz").addEventListener('click', () => {
+    ws.close();
+})
+document.getElementById("nextQuestion").style.display = 'none';
+
 manager.registerScreen("inputCode", new InputCodeScreen(manager, ws));
 manager.registerScreen("inputName", new InputNameScreen(manager, ws));
 manager.registerScreen("waiting", new WaitingScreen(manager, ws));

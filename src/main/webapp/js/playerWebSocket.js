@@ -170,5 +170,9 @@ export class PlayerQuizSocket {
             '<span class="font-bold text-lg">'+ player.points +'</span>';
         return rest
     }
+
+    close() {
+        this.ws.close();
+    }
 }
 
