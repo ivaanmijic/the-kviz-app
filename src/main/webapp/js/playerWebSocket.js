@@ -150,7 +150,7 @@ export class PlayerQuizSocket {
 
     thirdPlace(player) {
         const thirdPlace = document.createElement("div");
-        thirdPlace.className = "flex items-center p-4 rounded-lg bg-gradient-to-r from-amber-400 to-yellow-600 text-white shadow-lg"
+        thirdPlace.className = "flex items-center p-4 rounded-lg bg-gradient-to-r from-amber-300 to-yellow-400 text-yellow-900 shadow-lg"
         thirdPlace.innerHTML = '<span class="text-2xl font-bold w-10">🥉</span>' +
             '<span class="flex-grow font-bold text-lg text-left">'+ player.name +'</span>' +
             '<span class="font-bold text-lg">'+ player.points +'</span>';

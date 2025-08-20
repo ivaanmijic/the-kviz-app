@@ -16,11 +16,10 @@
 </head>
 <body>
 <jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/fragments/playerHeader.jsp"></jsp:include>
-<div class="lobby-main-screen bg-gray-900 text-white">
-    <div class="text-center" id="replaceable">
-        <p class="text-2xl text-gray-300">Join the quiz with</p>
-        <p class="text-3xl text-gray-300">PIN</p>
-        <div class="my-6 bg-white/10 text-white rounded-lg p-8 inline-block backdrop-blur-sm border border-white/20">
+<div class="lobby-main-screen" id="replaceable">
+        <p class="text-2xl">Join the quiz with</p>
+        <p class="text-3xl">PIN</p>
+        <div class="my-6 bg-white/10 rounded-lg p-8 inline-block backdrop-blur-sm border">
             <p class="text-8xl font-extrabold tracking-widest pin-screen-glow" id="gameId">
             ${gameId}
             </p>
@@ -28,20 +27,18 @@
         <div class="mt-8 flex items-center justify-center space-x-4">
             <sl-icon
                     name="people-fill"
-                    class="text-4xl text-indigo-300"
+                    class="text-4xl text-indigo-500"
             ></sl-icon>
             <p class="text-5xl font-bold" id="playerCount">${joinedPlayers}</p>
-            <p class="text-2xl text-gray-300">Players Joined</p>
+            <p class="text-2xl">Players Joined</p>
         </div>
         <sl-button
                 variant="success"
                 size="large"
                 class="mt-12 !text-2xl !px-12 !py-4"
-                id="startQuiz"
-        >
+                id="startQuiz">
             Start!
         </sl-button>
-    </div>
 </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>

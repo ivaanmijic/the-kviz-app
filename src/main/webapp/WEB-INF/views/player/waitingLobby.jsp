@@ -14,7 +14,7 @@
     <div class="mt-12 flex items-center justify-center space-x-2">
         <sl-icon
                 name="people-fill"
-                class="text-4xl text-indigo-300"
+                class="text-4xl"
         ></sl-icon>
         <span class="font-semibold text-lg"><span id="numberOfPlayers">${playerNumber}</span> connected players</span>
     </div>
