@@ -14,8 +14,11 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/theme.css">
     <script>window.ctx='${pageContext.request.contextPath}'</script>
 </head>
-<body id="body">
+<body>
+<jsp:include page="/WEB-INF/views/fragments/playerHeader.jsp"></jsp:include>
+<div id="body">
 
+</div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script type="module" src="${pageContext.request.contextPath}/js/playerScreenInitialization.js"></script>

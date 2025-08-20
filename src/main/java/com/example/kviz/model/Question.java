@@ -35,13 +35,13 @@ public class Question {
     @Column
     private String image;
 
-    @Expose
-    @Column(nullable = false)
-    private List<String> answers = new ArrayList<>();
 
-    @Expose
-    @Column(name = "correct_answer")
-    private String correctAnswer;
+    @OneToMany(
+            mappedBy = "question",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Answer> answers = new ArrayList<>();
 
     @Expose
     @Enumerated(EnumType.STRING)
@@ -77,10 +77,9 @@ public class Question {
     public Question() {
     }
 
-    public Question(String question, List<String> answers, String correctAnswer, Quiz quiz, QuestionType type) {
+    public Question(String question, List<Answer> answers, String correctAnswer, Quiz quiz, QuestionType type) {
         this.question = question;
         this.answers = answers;
-        this.correctAnswer = correctAnswer;
         this.quiz = quiz;
         this.type = type;
     }
@@ -122,18 +121,11 @@ public class Question {
         this.image = image;
     }
 
-    public List<String> getAnswers() {
+    public List<Answer> getAnswers() {
         return answers;
     }
-    public void setAnswers(List<String> answers) {
+    public void setAnswers(List<Answer> answers) {
         this.answers = answers;
-    }
-
-    public String getCorrectAnswer() {
-        return correctAnswer;
-    }
-    public void setCorrectAnswer(String correctAnswer) {
-        this.correctAnswer = correctAnswer;
     }
 
     public QuestionType getType() {
@@ -171,7 +163,38 @@ public class Question {
     }
 
     public boolean checkIfCorrectAnswer(String answer){
-        return answer.equals(this.correctAnswer);
+        return answer.equals(getCorrectAnswersAsString().getFirst());
+    }
+    public double checkIfCorrectAnswers(List<String> answers){
+        int n = 0;
+        for(Answer a : this.answers){
+            if(a.isCorrect()) n++;
+        }
+        int m = 0;
+        List<String> correctAnswers = getCorrectAnswersAsString();
+        for(String a : answers){
+            if(correctAnswers.contains(a)) m++;
+            else m--;
+        }
+        if(m > 0) return ((double) m) /n;
+        else return 0;
+    }
+
+    public List<String> getAnswersAsString(){
+        List<String> answersAsString = new ArrayList<>();
+        for(Answer a : this.answers){
+            answersAsString.add(a.getAnswer());
+        }
+        return answersAsString;
+    }
+    public List<String> getCorrectAnswersAsString(){
+        List<String> correctAnswersAsString = new ArrayList<>();
+        for(Answer a : this.answers){
+            if(a.isCorrect()){
+                correctAnswersAsString.add(a.getAnswer());
+            }
+        }
+        return  correctAnswersAsString;
     }
 
 }

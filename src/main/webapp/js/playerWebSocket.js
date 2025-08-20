@@ -25,7 +25,7 @@ export class PlayerQuizSocket {
             this.handleMessage(data);
         };
 
-        this.ws.onclose = () => console.log("Connection closed");
+        this.ws.onclose = () => this.manager.loadScreen("inputCode", "/inputCode");
     }
 
     handleMessage(data) {
@@ -47,27 +47,17 @@ export class PlayerQuizSocket {
                 if (countElement) countElement.innerText = this.playerCount;
                 break;
             case "question":
-                this.manager.loadScreen("question", `/getQuestionView`)
-                    .then(() => {
-                        const deadline = data.deadline; // millis from server
-                        const duration = data.time * 1000; // ms
-                        const progressBar = document.querySelector("#progress");
-                        document.getElementById("numberOfPlayers").innerText = this.playerCount;
-                        document.getElementById("questionText").innerText = data.question;
-                        document.getElementById("answ0").innerText = data.answers[0];
-                        document.getElementById("answ1").innerText = data.answers[1];
-                        document.getElementById("answ2").innerText = data.answers[2];
-                        document.getElementById("answ3").innerText = data.answers[3];
-                        const interval = setInterval(() => {
-                            const now = Date.now();
-                            const remaining = Math.max(0, deadline - now);
-                            progressBar.value = (remaining / duration) * 100;
-
-                            if (remaining <= 0) {
-                                clearInterval(interval);
-                            }
-                        }, 100);
+                if(data.questionType === "classic"){
+                    this.manager.loadScreen("questionClassic", `/getQuestionView`)
+                        .then(() => {
+                            this.fillQuestionFields(data)
                     })
+                }else{
+                    this.manager.loadScreen("questionMultiple", `/getQuestionView`)
+                        .then(() => {
+                            this.fillQuestionFields(data)
+                        })
+                }
                 break;
             case "endQuestion":
                 this.manager.loadScreen("leaderboard", '/getLeaderboardView')
@@ -174,6 +164,30 @@ export class PlayerQuizSocket {
             '<span class="flex-grow font-bold text-lg text-left">'+ player.name +'</span>' +
             '<span class="font-bold text-lg">'+ player.points +'</span>';
         return rest
+    }
+
+    close() {
+        this.ws.close();
+    }
+
+    fillQuestionFields(data){
+        const deadline = data.deadline; // millis from server
+        const duration = data.time * 1000; // ms
+        const progressBar = document.querySelector("#progress");
+        document.getElementById("questionText").innerText = data.question;
+        document.getElementById("answ0").innerText = data.answers[0];
+        document.getElementById("answ1").innerText = data.answers[1];
+        document.getElementById("answ2").innerText = data.answers[2];
+        document.getElementById("answ3").innerText = data.answers[3];
+        const interval = setInterval(() => {
+            const now = Date.now();
+            const remaining = Math.max(0, deadline - now);
+            progressBar.value = (remaining / duration) * 100;
+
+            if (remaining <= 0) {
+                clearInterval(interval);
+            }
+        }, 100);
     }
 }
 

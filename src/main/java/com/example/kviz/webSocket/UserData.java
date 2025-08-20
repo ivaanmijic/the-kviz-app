@@ -9,6 +9,7 @@ public class UserData {
     }
 
     public void setName(String name){this.name = name;}
+    public String getName(){return this.name;}
 
     public void addPoints(int points) {
         this.points += points;

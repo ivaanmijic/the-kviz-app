@@ -90,6 +90,11 @@ socket.onerror = (err) => {
     console.error("WS error:", err);
 };
 
+document.getElementById("leaveQuiz").addEventListener('click', ()=>{
+    socket.close();
+    window.location.href = window.ctx + "/admin/panel";
+})
+
 document.getElementById("startQuiz").addEventListener('click', () =>{
         fetch(window.ctx + '/admin/nextQuestion')
             .then(resp => resp.text())
