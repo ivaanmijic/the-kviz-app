@@ -47,7 +47,7 @@ socket.onmessage = (event) => {
                 playerList.forEach((player, index) =>{
                     if(index>=10)return;
                     const person = document.createElement("div")
-                    person.className = "flex items-center bg-gray-100 p-3 rounded-lg"
+                    person.className = "flex items-center p-3 rounded-lg"
                     person.innerHTML = this.createAndFillPersonInfo(player, index);
                     cont.appendChild(person);
                 })
@@ -139,7 +139,7 @@ function secondPlace(player) {
 
 function thirdPlace(player) {
     const thirdPlace = document.createElement("div");
-    thirdPlace.className = "flex items-center p-4 rounded-lg bg-gradient-to-r from-amber-400 to-yellow-600 text-white shadow-lg"
+    thirdPlace.className = "flex items-center p-4 rounded-lg bg-gradient-to-r from-amber-400 to-yellow-600 shadow-lg"
     thirdPlace.innerHTML = '<span class="text-2xl font-bold w-10">🥉</span>' +
         '<span class="flex-grow font-bold text-lg text-left">'+ player.name +'</span>' +
         '<span class="font-bold text-lg">'+ player.points +'</span>';
@@ -148,7 +148,7 @@ function thirdPlace(player) {
 
 function restPlayers(player, index) {
     const rest = document.createElement("div");
-    rest.className = "flex items-center p-3 rounded-lg bg-white"
+    rest.className = "flex items-center p-3 rounded-lg"
     rest.innerHTML = '<span class="text-2xl font-bold w-10">'+ (index+1) +'.</span>' +
         '<span class="flex-grow font-bold text-lg text-left">'+ player.name +'</span>' +
         '<span class="font-bold text-lg">'+ player.points +'</span>';
