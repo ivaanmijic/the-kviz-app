@@ -24,6 +24,7 @@
     <%@ include file="/WEB-INF/views/shoelace-imoprt.jsp"%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/theme.css">
+    <link rel="icon" type="image/svg+xml" href="${pageContext.request.contextPath}/assets/images/logo.svg">
 
     <script>
         window.ctx=`${pageContext.request.contextPath}`
