@@ -5,7 +5,7 @@
   Time: 11:41 AM
   To change this template use File | Settings | File Templates.
 --%>
-<div class="player-insert-code-screen min-h-screen flex items-center justify-center bg-gray-100">
+<div class="player-insert-code-screen min-h-screen flex items-center justify-center">
     <div class="w-full max-w-md text-center p-4">
         <h1 class="text-5xl font-extrabold mb-4">The Kviz App</h1>
         <p class="text-xl mb-8">Enter PIN to join the quiz.</p>
