@@ -9,7 +9,6 @@ class QuestionBlock {
     }
 
     createElement() {
-        this.answerType = 1; //in case of the multiple correct answers this will be changed with action listener
         const wrapper = document.createElement("sl-details");
         wrapper.className = "question-wrapper";
         const initialTitle = this.question !== null ? this.question.question : "Question " + this.index;
@@ -17,9 +16,10 @@ class QuestionBlock {
             '<span slot="summary"><span class="summary-title">' + initialTitle + '</span><sl-icon-button class="remove-question-btn" style="margin-left:10px;" name="trash"></sl-icon-button></span>' +
             '<div class="question-cont">' +
             this._questionHtml() +
-            this._answersBoxHtml(this.answerType) +
+            '<div id="typeOfAnswers"></div>' +
             '</div>';
 
+        this._answersBoxHtml(wrapper, 1);
         return wrapper;
     }
 
@@ -29,6 +29,7 @@ class QuestionBlock {
         this._removeQuestionButton();
         this._disableSpaceButton();
         this._makeDraggable();
+        this._onChangeType();
     }
 
     fillData(question) {
@@ -46,19 +47,48 @@ class QuestionBlock {
         this.element.querySelector('.question-category').value = question.category.toLowerCase();
         this.element.querySelector('.question').value = question.question;
         const answers = question.answers;
-        const answersSpan = this.element.querySelectorAll('.answer-text');
-        let correctIdx;
-        answers.forEach((ans, idx) => {
-            if (ans === question.correctAnswer) {
-                correctIdx = idx;
-            }
-            if (answersSpan[idx]) {
-                answersSpan[idx].value = ans;
-            }
-        })
+        if(question.category.toLowerCase() === "classic") {
+            this._answersBoxHtml(this.element, 1)
+            const answersSpan = this.element.querySelectorAll('.answer-text');
+            let correctIdx;
+            answers.forEach((ans, idx) => {
+                if (question.correctAnswers.includes(ans)) {
+                    correctIdx = idx;
+                }
+                if (answersSpan[idx]) {
+                    answersSpan[idx].value = ans;
+                    console.log(answersSpan[idx].value)
+                }
+            })
 
-        if (correctIdx != null) {
-            this.element.querySelector('.radio-group').value = correctIdx.toString();
+            if (correctIdx != null) {
+                this.element.querySelector('.radio-group').value = correctIdx.toString();
+            }
+        }else{
+            this._answersBoxHtml(this.element, 2)
+            const answersSpan = this.element.querySelectorAll('.answer-text');
+            let correctAnswers = [];
+            answers.forEach((ans, idx) => {
+                if (question.correctAnswers.includes(ans)) {
+                    correctAnswers.push(idx.toString())
+                }
+                if (answersSpan[idx]) {
+                    answersSpan[idx].value = ans;
+                }
+            })
+            const checkboxes = this.element.querySelectorAll("sl-checkbox");
+
+            checkboxes.forEach(cb => {
+                console.log(correctAnswers)
+                console.log(cb.value)
+                if (correctAnswers.includes(cb.getAttribute("data-value"))) {
+                    console.log("it is true")
+                    cb.checked = true;   // Check it
+                } else {
+                    console.log("it is false")
+                    cb.checked = false;  // Uncheck others (optional)
+                }
+            });
         }
     }
 
@@ -77,30 +107,28 @@ class QuestionBlock {
             '<sl-option value="20">20s</sl-option>' +
             '<sl-option value="30">30s</sl-option>' +
             '</sl-select>' +
-            '<sl-select class="question-category" placeholder="Type">' +
+            '<sl-select class="question-category" placeholder="Type" id="questionType">' +
             '<sl-option value="classic">One correct answer</sl-option>' +
             '<sl-option value="multiple_correct">Multiple correct answers</sl-option>' +
-            '<sl-option value="slider">Slider</sl-option>' +
             '</sl-select>' +
             '<sl-input class="question" type="text" placeholder="Question"></sl-input>';
     }
 
-    _answersBoxHtml(answerType) {
+    _answersBoxHtml(object, answerType) {
         switch (answerType) {
             case 1: {
-                return this._oneCorrectAnswer();
+                object.querySelector("#typeOfAnswers").outerHTML = this._oneCorrectAnswer();
+                break;
             }
             case 2: {
-                return this._multipleCorrectAnswer();
-            }
-            case 3: {
-                return this._sliderAnswer();
+                object.querySelector("#typeOfAnswers").outerHTML = this._multipleCorrectAnswer();
+                break;
             }
         }
     }
 
     _oneCorrectAnswer() {
-        return '<sl-radio-group class="radio-group" name="qcnt" value="1">' +
+        return '<sl-radio-group class="radio-group" name="qcnt" value="1" id="typeOfAnswers">' +
             '<div class="answers">' +
             '<sl-radio style="width: 100%" value="0"><sl-input class="answer-text" style="width: 100%" type="text" placeholder="Answer1"></sl-input></sl-radio>' +
             '<sl-radio style="width: 100%" value="1"><sl-input class="answer-text" style="width: 100%" type="text" placeholder="Answer2"></sl-input></sl-radio>' +
@@ -111,9 +139,22 @@ class QuestionBlock {
     }
 
     _multipleCorrectAnswer() {
-    }
-
-    _sliderAnswer() {
+        return '<div class="radio-group" name="qcnt" id="typeOfAnswers">' +
+            '<div class="answers">' +
+            '<sl-checkbox style="width: 100%" data-value="0">' +
+            '<sl-input class="answer-text" style="width: 100%" type="text" placeholder="Answer1"></sl-input>' +
+            '</sl-checkbox>' +
+            '<sl-checkbox style="width: 100%" data-value="1">' +
+            '<sl-input class="answer-text" style="width: 100%" type="text" placeholder="Answer2"></sl-input>' +
+            '</sl-checkbox>' +
+            '<sl-checkbox style="width: 100%" data-value="2">' +
+            '<sl-input class="answer-text" style="width: 100%" type="text" placeholder="Answer3"></sl-input>' +
+            '</sl-checkbox>' +
+            '<sl-checkbox style="width: 100%" data-value="3">' +
+            '<sl-input class="answer-text" style="width: 100%" type="text" placeholder="Answer4"></sl-input>' +
+            '</sl-checkbox>' +
+            '</div>' +
+            '</div>';
     }
 
 //Bind events additional functions
@@ -222,6 +263,17 @@ class QuestionBlock {
                 }
             }, {offset: Number.NEGATIVE_INFINITY, element: null}).element;
         }
+    }
+    _onChangeType(){
+        const select = this.element.querySelector('.question-category');
+        select.addEventListener('sl-change', (event) => {
+            console.log("i fired");
+            if(event.target.value === "classic") {
+                this._answersBoxHtml(this.element, 1) // call your function
+            }else{
+                this._answersBoxHtml(this.element, 2)
+            }
+        });
     }
 
 }
@@ -342,7 +394,14 @@ class QuizForm {
                 const points = question.querySelector('.question-points').value;
                 const time = question.querySelector('.question-time').value;
                 const category = question.querySelector('.question-category').value;
-                const correctAnswerIndex = question.querySelector('sl-radio-group').value;
+                let correctAnswerIndexes;
+                if(category === "classic"){
+                    correctAnswerIndexes = question.querySelector('sl-radio-group').value;
+                }else{
+                    correctAnswerIndexes = Array.from(question.querySelectorAll('.answers sl-checkbox'))
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.getAttribute("data-value"));
+                }
 
                 if (!!question.questionId) {
                     formData.append(`questions[${index}][id]`, question.questionId);
@@ -351,11 +410,15 @@ class QuizForm {
                 formData.append(`questions[${index}][category]`, category);
                 formData.append(`questions[${index}][points]`, points);
                 formData.append(`questions[${index}][time]`, time);
-                formData.append(`questions[${index}][correctAnswer]`, correctAnswerIndex);
 
                 const answers = question.querySelectorAll('.answer-text');
                 answers.forEach((ansInput, i) => {
                     formData.append(`questions[${index}][answers][${i}]`, ansInput.value)
+                    if(correctAnswerIndexes.includes(i.toString())){
+                        formData.append(`questions[${index}][answerIsCorrect][${i}]`, "true")
+                    }else{
+                        formData.append(`questions[${index}][answerIsCorrect][${i}]`, "false")
+                    }
                 })
 
                 const imgFile = question.imageFile;
@@ -442,7 +505,13 @@ class QuizForm {
             const category = question.querySelector('.question-category').value.trim();
             const image = question.imageFile !== undefined;
             const answers = [...question.querySelectorAll('.answer-text')].map(el => el.value.trim());
-            const selected = question.querySelector('sl-radio-group').value;
+            let selected;
+            if(category === "classic"){
+                selected = question.querySelector('sl-radio-group').value;
+            }else if(category === "multiple_correct"){
+                const checkboxes = question.querySelectorAll('.radio-group sl-checkbox')
+                selected = Array.from(checkboxes).some(cb=>cb.checked) ? "selected" : '';
+            }
 
             if (!title || !time || !points || !category || !image || answers.some(a => !a) || selected === '') {
                 const alert = document.createElement('sl-alert');

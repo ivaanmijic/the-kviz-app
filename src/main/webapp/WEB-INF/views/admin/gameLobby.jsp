@@ -15,8 +15,8 @@
     <script>window.ctx='${pageContext.request.contextPath}'</script>
 </head>
 <body>
+<jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/fragments/playerHeader.jsp"></jsp:include>
 <div class="lobby-main-screen bg-gray-900 text-white">
-    <sl-button variant="success" size="large" class="mt-12 !text-2xl !px-12 !py-4 next-btn" id="nextQuestion">Next</sl-button>
     <div class="text-center" id="replaceable">
         <p class="text-2xl text-gray-300">Join the quiz with</p>
         <p class="text-3xl text-gray-300">PIN</p>

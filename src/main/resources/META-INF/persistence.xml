@@ -6,6 +6,7 @@
     <persistence-unit name="kvizPU" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>com.example.kviz.model.Admin</class>
+        <class>com.example.kviz.model.Answer</class>
         <class>com.example.kviz.model.Question</class>
         <class>com.example.kviz.model.Quiz</class>
         <class>com.example.kviz.model.SessionAuthToken</class>
