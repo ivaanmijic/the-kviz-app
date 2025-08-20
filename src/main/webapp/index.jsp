@@ -10,7 +10,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Quiz App</title>
+    <title>The Kviz App</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <%@include file="./WEB-INF/views/shoelace-imoprt.jsp"%>
@@ -27,7 +27,7 @@
 <div class="glass p-10 max-w-lg w-full text-center">
     <img src="${pageContext.request.contextPath}/assets/logo.png" alt="The Kviz App Logo" class="mx-auto h-24 mb-6" />
     <h1 class="text-4xl font-extrabold mb-2">Welcome to</h1>
-    <h1 class="text-4xl font-extrabold mb-2">The Quiz App</h1>
+    <h1 class="text-4xl font-extrabold mb-2">The Kviz App</h1>
     <p class="mb-8">Have fun and test your knowledge!</p>
     <div class="space-y-4">
         <sl-button variant="primary" size="large" class="w-full" href="${pageContext.request.contextPath}/playerMainPage">

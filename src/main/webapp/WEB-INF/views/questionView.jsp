@@ -5,13 +5,12 @@
   Time: 10:05 AM
   To change this template use File | Settings | File Templates.
 --%>
-    <div class="w-full">
-        <div class="flex justify-between items-center mb-4">
-            <span class="text-gray-500 font-semibold" id="numberOfPlayers"></span>
-            <div class="flex items-center space-x-2">
-                <div class="w-24 bg-gray-200 rounded-full h-2.5">
-                    <sl-progress-bar id="progress" value="100"></sl-progress-bar>
-                </div>
+<div class="w-full">
+    <div class="flex justify-between items-center mb-4">
+        <span class="text-gray-500 font-semibold" id="numberOfPlayers"></span>
+        <div class="flex items-center space-x-2">
+            <div class="w-24 bg-gray-200 rounded-full h-2.5">
+                <sl-progress-bar id="progress" value="100"></sl-progress-bar>
             </div>
         </div>
         <h2 class="text-center text-3xl font-bold text-gray-800 my-8" id="questionText"></h2>
@@ -25,3 +24,5 @@
     <div class="flex justify-center mt-6">
         <sl-button id="submitMultipleBtn" variant="primary">Submit</sl-button>
     </div>
+    <h2 class="text-center text-3xl font-bold text-gray-800 my-8" id="questionText"></h2>
+</div>
