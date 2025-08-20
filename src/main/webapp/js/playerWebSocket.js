@@ -120,6 +120,10 @@ export class PlayerQuizSocket {
         }
     }
 
+    getPlayerCount(){
+        return this.playerCount;
+    }
+
     send(payload) {
         this.ws.send(JSON.stringify(payload));
     }
@@ -188,6 +192,7 @@ export class PlayerQuizSocket {
                 clearInterval(interval);
             }
         }, 100);
+        document.getElementById("questionImage").src = "/uploads/questions/" + data.image;
     }
 }
 

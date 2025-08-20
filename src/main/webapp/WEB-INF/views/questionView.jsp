@@ -14,6 +14,7 @@
         </div>
     </div>
 
+
     <h2 id="questionText" class="text-center text-3xl font-bold mb-6">
         Question will appear here
     </h2>
@@ -21,6 +22,7 @@
     <div id="questionImagePlaceholder" class="flex justify-center items-center mb-6">
         <img id="questionImage" src="${pageContext.request.contextPath}/assets/images/background.svg" alt="question image"
              class="max-h-64 w-auto object-contain rounded shadow-sm" />
+
     </div>
 
     <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">

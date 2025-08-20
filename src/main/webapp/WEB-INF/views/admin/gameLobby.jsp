@@ -31,8 +31,10 @@
                     name="people-fill"
                     class="text-4xl text-indigo-500"
             ></sl-icon>
-            <p class="text-5xl font-bold" id="playerCount">${joinedPlayers}</p>
-            <p class="text-2xl">Players Joined</p>
+         
+            <p class="text-5xl font-bold" id="numberOfPlayers">${joinedPlayers}</p>
+            <p class="text-2xl text-gray-300">Players Joined</p>
+
         </div>
         <sl-button
                 variant="success"

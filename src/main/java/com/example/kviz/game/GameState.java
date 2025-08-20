@@ -124,13 +124,16 @@ public class GameState {
     private void broadcastQuestionAndDeadline(){
         Question q = quiz.getQuestions().get(currentQuestionIndex);
         String questionType = q.getType().toString().toLowerCase();
+        String image = q.getImage();
         String question = q.getQuestion();
         System.out.println("Question: " + question);
-        String answers = gson.toJson(q.getAnswersAsString());
+        List<String> a = q.getAnswersAsString();
+        Collections.shuffle(a);
+        String answers = gson.toJson(a);
         System.out.println("Answers: " + answers);
         String time = q.getTime().toString();
         String deadlineString = gson.toJson(deadline);
-        String payload = "{\"type\":\"question\",\"questionType\":\"" + questionType +"\", \"question\":\"" + question + "\", \"answers\":" + answers + ", \"time\":\"" + time + "\", \"deadline\":\"" + deadlineString + "\"}";
+        String payload = "{\"type\":\"question\",\"questionType\":\"" + questionType +"\", \"question\":\"" + question + "\", \"answers\":" + answers + ", \"time\":\"" + time + "\", \"deadline\":\"" + deadlineString + "\", \"image\":\"" + image + "\"}";
         System.out.println(payload);
         try {
             admin.getBasicRemote().sendText(payload);

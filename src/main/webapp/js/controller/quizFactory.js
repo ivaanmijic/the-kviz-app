@@ -49,6 +49,7 @@ class QuestionBlock {
         const answers = question.answers;
         if(question.category.toLowerCase() === "classic") {
             this._answersBoxHtml(this.element, 1)
+            this._disableSpaceButton();
             const answersSpan = this.element.querySelectorAll('.answer-text');
             let correctIdx;
             answers.forEach((ans, idx) => {
@@ -66,6 +67,7 @@ class QuestionBlock {
             }
         }else{
             this._answersBoxHtml(this.element, 2)
+            this._disableSpaceButton();
             const answersSpan = this.element.querySelectorAll('.answer-text');
             let correctAnswers = [];
             answers.forEach((ans, idx) => {
@@ -270,8 +272,10 @@ class QuestionBlock {
             console.log("i fired");
             if(event.target.value === "classic") {
                 this._answersBoxHtml(this.element, 1) // call your function
+                this._disableSpaceButton();
             }else{
                 this._answersBoxHtml(this.element, 2)
+                this._disableSpaceButton();
             }
         });
     }
