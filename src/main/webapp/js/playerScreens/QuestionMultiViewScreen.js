@@ -6,6 +6,7 @@ export class QuestionMultiViewScreen {
     }
 
     init() {
+        document.getElementById("numberOfPlayers").innerText = this.ws.getPlayerCount();
 
         document.querySelectorAll('.answers-toggle').forEach(btn => {
             btn.addEventListener('click', () => {

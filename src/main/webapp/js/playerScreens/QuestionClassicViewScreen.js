@@ -12,5 +12,6 @@ export class QuestionClassicViewScreen {
             })
         })
         document.getElementById("submitMultipleBtn").style.display='none';
+        document.getElementById("numberOfPlayers").innerText = this.ws.getPlayerCount();
     }
 }

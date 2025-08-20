@@ -1,4 +1,13 @@
+function downloadLeaderboard(leaderboard) {
+    const ws = XLSX.utils.json_to_sheet(leaderboard);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Leaderboard");
+    XLSX.writeFile(wb, "leaderboard.xlsx");
+}
+
 const gameCode = document.getElementById("gameId").innerText;
+
+let playerCount;
 
 const socket = new WebSocket(
     `ws://localhost:8080/quiz?gameId=${gameCode}&role=admin`
@@ -12,7 +21,8 @@ socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
 
     if (data.type === "playerCount") {
-        document.getElementById("playerCount").innerText = data.count;
+        playerCount = data.count;
+        document.getElementById("numberOfPlayers").innerText = data.count;
     }
     if(data.type === "question"){
         fetch(window.ctx + "/admin/nextQuestion")
@@ -34,6 +44,8 @@ socket.onmessage = (event) => {
                         clearInterval(interval);
                     }
                 }, 100);
+                document.getElementById("questionImage").src = "/uploads/questions/" + data.image;
+                document.getElementById("numberOfPlayers").innerText = playerCount;
             })
     }
     if(data.type === "endQuestion"){
@@ -51,6 +63,7 @@ socket.onmessage = (event) => {
                     person.innerHTML = this.createAndFillPersonInfo(player, index);
                     cont.appendChild(person);
                 })
+                document.getElementById("numberOfPlayers").innerText = playerCount;
             })
     }
     if(data.type === "finalLeaderboard"){
@@ -77,6 +90,9 @@ socket.onmessage = (event) => {
                             person = restPlayers(player, index)
                     }
                     cont.appendChild(person)
+                })
+                document.getElementById("downloadXLS").addEventListener('click', ()=>{
+                    downloadLeaderboard(playerList)
                 })
             })
     }

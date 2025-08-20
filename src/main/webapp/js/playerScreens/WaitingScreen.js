@@ -5,6 +5,6 @@ export class WaitingScreen{
     }
 
     init() {
-
+        document.getElementById("numberOfPlayers").innerText = this.ws.getPlayerCount();
     }
 }

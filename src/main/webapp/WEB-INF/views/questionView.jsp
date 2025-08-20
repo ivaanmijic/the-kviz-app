@@ -15,6 +15,7 @@
         </div>
         <h2 class="text-center text-3xl font-bold text-gray-800 my-8" id="questionText"></h2>
     </div>
+    <img id="questionImage" alt="NOImage" class="max-h-64 w-auto object-contain rounded shadow-sm">
     <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
         <button class="answers-toggle sl-button !h-24 !text-xl bg-red-500 text-white hover:bg-red-600 answers"><sl-icon name="triangle-fill" slot="prefix"></sl-icon><span id="answ0"></span></button>
         <button class="answers-toggle sl-button !h-24 !text-xl bg-blue-500 text-white hover:bg-blue-600 answers"><sl-icon name="circle-fill" slot="prefix"></sl-icon><span id="answ1"></span></button>
