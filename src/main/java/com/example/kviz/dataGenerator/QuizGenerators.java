@@ -29,11 +29,10 @@ public class QuizGenerators {
 
     private static final Admin admin = adminService.getAdminByUsername("admin").get();
     public static void main(String[] args) throws IOException {
-        //generateQuiz1();
-        //generateQuiz2();
-        ImageSave.save("quizImages", "js1.jpg", "imgUspjela");
+        generateQuiz1();
+        generateQuiz2();
     }
-    private static void generateQuiz1() {
+    private static void generateQuiz1() throws IOException {
         Quiz quiz = new Quiz();
         quiz.setOwner(admin);
         quiz.setId((long)-1);
@@ -41,23 +40,25 @@ public class QuizGenerators {
         quiz.setDescription("Ovaj kviz testira tvoje znanje iz JavaScript-a, jednog od najvažnijih jezika za razvoj web aplikacija. Pitanja pokrivaju osnovne pojmove, tipove podataka, rad sa nizovima, operatore, kao i specifične koncepte poput hoistinga i arrow funkcija.");
         quiz.setCategory(QuizCategoryFactory.getCategory("technology"));
         quiz.setVisible(true);
-        quiz.setTitle("quizImage-1.jpg");
         quiz = quizService.save(quiz);
+        ImageSave.save("quizImages", "imageQuiz1.jpg", "quizImages" + quiz.getId());
+        quiz.setThumbnail("quizImages" + quiz.getId() + ".jpg");
 
         List<Question> questions = new ArrayList<>();
         List<QuestionString> lista = Quiz1GeneratorString.generateQuestions();
         for(int i = 0; i<10; i++){
             Question q =  new Question();
             q.setQuiz(quiz);
-            q.setImage("quiz-1_question" + (i-21) + ".jpg");
             q.setQuestion(lista.get(i).getText());
             q.setTime(10);
             q.setType(i<8? QuestionTypeFactory.getType("classic"): QuestionTypeFactory.getType("multiple_correct"));
             q.setPoints(i%2*10+30);
             q = questionServices.save(q);
-            Answer a = new Answer();
+            ImageSave.save("questions", "im1q1.jpg", "quiz" + quiz.getId() + "_question" + q.getId());
+            q.setImage("quiz" + quiz.getId() + "_question" + q.getId() + ".jpg");
             List<Answer> answers = new ArrayList<>();
             for(int j = 0; j<4; j++){
+                Answer a = new Answer();
                 a.setQuestion(q);
                 a.setAnswer(lista.get(i).getOptions().get(j));
                 if(lista.get(i).getCorrectAnswers().contains(j)){
@@ -76,15 +77,16 @@ public class QuizGenerators {
         quizService.save(quiz);
 
     }
-    private static void generateQuiz2() {
+    private static void generateQuiz2() throws IOException {
         Quiz quiz = new Quiz();
         quiz.setOwner(admin);
         quiz.setTitle("Java Servlets");
         quiz.setDescription("Ovaj kviz proverava tvoje znanje o osnovama Java Servlet tehnologije. Pitanja obuhvataju životni ciklus servleta, rad sa HttpServletRequest i HttpServletResponse, sesije, servlet mapiranja i HTTP status kodove. Kviz se sastoji od 10 pitanja – većina sa jednim tačnim odgovorom, dok 30% pitanja ima više tacnih odgovora. Pogodan je za pocetnike i one koji zele da provere svoje razumevanje Java Servleta na osnovnom i srednjem nivou.");
         quiz.setCategory(QuizCategoryFactory.getCategory("technology"));
         quiz.setVisible(true);
-        quiz.setTitle("quizImage-2.jpg");
         quiz = quizService.save(quiz);
+        ImageSave.save("quizImages", "imageQuiz2.jpg", "quizImages" + quiz.getId());
+        quiz.setThumbnail("quizImages" + quiz.getId() + ".jpg");
 
         List<Question> questions = new ArrayList<>();
         List<QuestionString> lista = Quiz2GeneratorString.generateQuestions();
@@ -97,9 +99,11 @@ public class QuizGenerators {
             q.setType(i<8? QuestionTypeFactory.getType("classic"): QuestionTypeFactory.getType("multiple_correct"));
             q.setPoints(i%2*10+30);
             q = questionServices.save(q);
-            Answer a = new Answer();
+            ImageSave.save("questions", "im2q1.jpg", "quiz" + quiz.getId() + "_question" + q.getId());
+            q.setImage("quiz" + quiz.getId() + "_question" + q.getId() + ".jpg");
             List<Answer> answers = new ArrayList<>();
             for(int j = 0; j<4; j++){
+                Answer a = new Answer();
                 a.setQuestion(q);
                 a.setAnswer(lista.get(i).getOptions().get(j));
                 if(lista.get(i).getCorrectAnswers().contains(j)){
