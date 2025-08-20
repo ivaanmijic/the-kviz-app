@@ -11,6 +11,8 @@
     <title>Sign In</title>
     <%@include file="shoelace-imoprt.jsp"%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <link rel="icon" type="image/svg+xml" href="${pageContext.request.contextPath}/assets/images/logo.svg">
+
     <script>window.ctx='${pageContext.request.contextPath}'</script>
 </head>
 <body>
