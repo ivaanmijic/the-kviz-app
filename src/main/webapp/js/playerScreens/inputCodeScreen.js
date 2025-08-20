@@ -1,3 +1,5 @@
+import { AlertManager } from "../manager/alertManager.js";
+
 export class InputCodeScreen {
     constructor(manager, ws) {
         this.manager = manager;
@@ -5,11 +7,12 @@ export class InputCodeScreen {
     }
 
     init() {
+        AlertManager.init();
         document.getElementById("joinBtn").addEventListener("click", () => {
 
             const code = document.getElementById("quizId").value.trim();
             if (code.length !== 6) {
-                alert("Code must be 6 characters");
+                AlertManager.showError("Code must be 6 characters");
                 return;
             }
 

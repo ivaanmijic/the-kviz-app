@@ -1,3 +1,5 @@
+import { AlertManager } from "../manager/alertManager.js";
+
 export class InputNameScreen {
     constructor(manager, ws) {
         this.manager = manager;
@@ -10,7 +12,7 @@ export class InputNameScreen {
             const name = document.getElementById("playerName").value.trim();
             window.myName = name;
             if (name.length <= 0) {
-                alert("Must enter the name");
+                AlertManager.showError("Must enter the name");
                 return;
             }
 

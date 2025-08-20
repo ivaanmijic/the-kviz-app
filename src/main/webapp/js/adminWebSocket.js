@@ -4,12 +4,10 @@ const socket = new WebSocket(
     `ws://localhost:8080/quiz?gameId=${gameCode}&role=admin`
 );
 
-// handle open
 socket.onopen = () => {
     console.log("Admin connected to WS");
 };
 
-// handle messages from server
 socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
 
@@ -46,8 +44,8 @@ socket.onmessage = (event) => {
                 document.getElementById("nextQuestion").style.display = 'block';
                 const playerList = data.players;
                 const cont = document.getElementById("leaderboardCont")
-                playerList.every((player, index) =>{
-                    if(index>=5)return false;
+                playerList.forEach((player, index) =>{
+                    if(index>=10)return;
                     const person = document.createElement("div")
                     person.className = "flex items-center bg-gray-100 p-3 rounded-lg"
                     person.innerHTML = this.createAndFillPersonInfo(player, index);
@@ -62,7 +60,8 @@ socket.onmessage = (event) => {
             .then(()=>{
                 const playerList = data.players
                 const cont = document.getElementById("leaderboardCont")
-                playerList.every((player, index) => {
+                playerList.forEach((player, index) => {
+                    if (index >= 10) return;
                     let person;
                     switch(index){
                         case 0:
@@ -83,12 +82,10 @@ socket.onmessage = (event) => {
     }
 };
 
-// handle close
 socket.onclose = () => {
     console.log("Admin WS closed");
 };
 
-// handle error
 socket.onerror = (err) => {
     console.error("WS error:", err);
 };
@@ -152,7 +149,7 @@ function thirdPlace(player) {
 function restPlayers(player, index) {
     const rest = document.createElement("div");
     rest.className = "flex items-center p-3 rounded-lg bg-white"
-    rest.innerHTML = '<span class="text-2xl font-bold w-10">'+ index+1 +'.</span>' +
+    rest.innerHTML = '<span class="text-2xl font-bold w-10">'+ (index+1) +'.</span>' +
         '<span class="flex-grow font-bold text-lg text-left">'+ player.name +'</span>' +
         '<span class="font-bold text-lg">'+ player.points +'</span>';
     return rest

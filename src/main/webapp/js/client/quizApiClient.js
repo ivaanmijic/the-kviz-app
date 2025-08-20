@@ -1,13 +1,6 @@
 export class QuizApiClient {
-
-    getList(adminId = null) {
-        const params = {}
-        if (adminId && adminId !== '') params.admin_id = adminId;
-        return $.get(`${this.base}/admin/quiz/list`, params)
-    }
-
-    getPublicList() {
-        return $.get(`${this.base}/admin/quiz/list/public`, {});
+    constructor(contextPath) {
+        this.base = contextPath;
     }
 
     delete(quizId) {
@@ -19,5 +12,14 @@ export class QuizApiClient {
             url: `${this.base}/admin/quiz/${quizId}`,
             type: 'DELETE'
         });
+    }
+
+    startGameForQuiz(quizId) {
+        if (!quizId)
+            return $.Deferred()
+                .reject(new Error("Quiz ID is required for playing quiz"))
+                .promise();
+
+        window.location.href = `${this.base}/admin/startGame?quizId=${quizId}`;
     }
 }

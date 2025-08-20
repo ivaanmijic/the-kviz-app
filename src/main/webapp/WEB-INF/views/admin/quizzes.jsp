@@ -42,7 +42,7 @@
 
                     <div slot="footer" class="card-footer">
                         <div class="w-full flex space-x-2">
-                            <sl-button variant="primary" class="flex-1" data-action="start" data-quiz-id="${quiz.id}">
+                            <sl-button variant="primary" class="flex-1 play-quiz-btn" data-action="start" data-quiz-id="${quiz.id}">
                                 Start
                             </sl-button>
                             <c:if test="${quiz.visible or sessionScope.admin.role eq 'SUPERADMIN'}">

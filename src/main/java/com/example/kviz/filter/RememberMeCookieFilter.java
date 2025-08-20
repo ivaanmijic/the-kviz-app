@@ -60,10 +60,7 @@ public class RememberMeCookieFilter implements Filter {
             }
         }
 
-        if ((req.getRequestURI().equals("/") ||
-                req.getRequestURI().equals("/auth/")) &&
-                req.getSession(false) != null &&
-                req.getSession(false).getAttribute("admin") != null) {
+        if (req.getRequestURI().equals("/auth/") && req.getSession(false) != null && req.getSession(false).getAttribute("admin") != null) {
             resp.sendRedirect("/admin/panel");
             return;
         }

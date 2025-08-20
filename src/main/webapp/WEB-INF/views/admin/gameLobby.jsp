@@ -18,8 +18,8 @@
 <jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/fragments/playerHeader.jsp"></jsp:include>
 <div class="lobby-main-screen bg-gray-900 text-white">
     <div class="text-center" id="replaceable">
-        <p class="text-2xl text-gray-300">Pridružite se na</p>
-        <p class="text-3xl text-gray-300">PIN Kviz</p>
+        <p class="text-2xl text-gray-300">Join the quiz with</p>
+        <p class="text-3xl text-gray-300">PIN</p>
         <div class="my-6 bg-white/10 text-white rounded-lg p-8 inline-block backdrop-blur-sm border border-white/20">
             <p class="text-8xl font-extrabold tracking-widest pin-screen-glow" id="gameId">
             ${gameId}
@@ -31,7 +31,7 @@
                     class="text-4xl text-indigo-300"
             ></sl-icon>
             <p class="text-5xl font-bold" id="playerCount">${joinedPlayers}</p>
-            <p class="text-2xl text-gray-300">Igrača Prijavljeno</p>
+            <p class="text-2xl text-gray-300">Players Joined</p>
         </div>
         <sl-button
                 variant="success"
@@ -39,7 +39,7 @@
                 class="mt-12 !text-2xl !px-12 !py-4"
                 id="startQuiz"
         >
-            Započni Kviz!
+            Start!
         </sl-button>
     </div>
 </div>
