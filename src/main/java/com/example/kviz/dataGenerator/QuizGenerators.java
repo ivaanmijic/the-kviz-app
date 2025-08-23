@@ -41,8 +41,8 @@ public class QuizGenerators {
         quiz.setCategory(QuizCategoryFactory.getCategory("technology"));
         quiz.setVisible(true);
         quiz = quizService.save(quiz);
-        ImageSave.save("quizImages", "imageQuiz1.jpg", "quizImages" + quiz.getId());
-        quiz.setThumbnail("quizImages" + quiz.getId() + ".jpg");
+        ImageSave.save("quizImages", "imageQuiz1.jpg", "quizImage" + quiz.getId());
+        quiz.setThumbnail("quizImage" + quiz.getId() + ".jpg");
 
         List<Question> questions = new ArrayList<>();
         List<QuestionString> lista = Quiz1GeneratorString.generateQuestions();
@@ -85,8 +85,8 @@ public class QuizGenerators {
         quiz.setCategory(QuizCategoryFactory.getCategory("technology"));
         quiz.setVisible(true);
         quiz = quizService.save(quiz);
-        ImageSave.save("quizImages", "imageQuiz2.jpg", "quizImages" + quiz.getId());
-        quiz.setThumbnail("quizImages" + quiz.getId() + ".jpg");
+        ImageSave.save("quizImages", "imageQuiz2.jpg", "quizImage" + quiz.getId());
+        quiz.setThumbnail("quizImage" + quiz.getId() + ".jpg");
 
         List<Question> questions = new ArrayList<>();
         List<QuestionString> lista = Quiz2GeneratorString.generateQuestions();

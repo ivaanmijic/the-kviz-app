@@ -13,7 +13,7 @@ class QuestionBlock {
         wrapper.className = "question-wrapper";
         const initialTitle = this.question !== null ? this.question.question : "Question " + this.index;
         wrapper.innerHTML =
-            '<span slot="summary"><span class="summary-title">' + initialTitle + '</span><sl-icon-button class="remove-question-btn" style="margin-left:10px;" name="trash"></sl-icon-button></span>' +
+            '<span slot="summary"> <span class="drag-handle">⠿</span>  <span class="summary-title">' + initialTitle + '</span><sl-icon-button class="remove-question-btn" style="margin-left:10px;" name="trash"></sl-icon-button></span>' +
             '<div class="question-cont">' +
             this._questionHtml() +
             '<div id="typeOfAnswers"></div>' +
@@ -28,7 +28,7 @@ class QuestionBlock {
         this._questionImageListeners();
         this._removeQuestionButton();
         this._disableSpaceButton();
-        this._makeDraggable();
+        //this._makeDraggable();
         this._onChangeType();
     }
 
@@ -364,7 +364,24 @@ class QuizForm {
 
     addQuestion(question = null) {
         this.questionsContainer.appendChild(new QuestionBlock(this.idx, question));
+        this.initializeSortable();
         this.idx++;
+    }
+
+    initializeSortable() {
+        if (this.sortableInstance) {
+            this.sortableInstance.destroy(); // Uništi prethodnu instancu ako postoji
+        }
+
+        this.sortableInstance = new Sortable(this.questionsContainer, {
+            animation: 150,
+            handle: '.drag-handle',
+            onEnd: (evt) => {
+                const noviRedoslijed = [...this.questionsContainer.querySelectorAll('sl-details')]
+                    .map(el => el.querySelector('.summary-title').innerText);
+                console.log("Novi redoslijed:", noviRedoslijed);
+            }
+        });
     }
 
     _toggleDetail() {

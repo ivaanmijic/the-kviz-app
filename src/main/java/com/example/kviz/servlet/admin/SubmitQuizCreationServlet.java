@@ -46,9 +46,10 @@ public class SubmitQuizCreationServlet extends HttpServlet {
             System.out.println(request.getPart("quizImage"));
         }
         HttpSession session = request.getSession();
-
-        Admin owner = (Admin) session.getAttribute("admin");
-        quiz.setOwner(owner);
+        if(request.getParameter("quizId") == null) {
+            Admin owner = (Admin) session.getAttribute("admin");
+            quiz.setOwner(owner);
+        }
 
         quiz.setTitle(request.getParameter("quizTitle"));
         String cat = request.getParameter("quizCategory");
