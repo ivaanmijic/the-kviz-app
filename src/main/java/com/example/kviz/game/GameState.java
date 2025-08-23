@@ -1,5 +1,6 @@
 package com.example.kviz.game;
 
+import com.example.kviz.game.supporting.QuestionPayload;
 import com.example.kviz.model.Question;
 import com.example.kviz.model.Quiz;
 import com.example.kviz.model.supporting.QuestionDTO;
@@ -125,7 +126,7 @@ public class GameState {
         Question q = quiz.getQuestions().get(currentQuestionIndex);
         String questionType = q.getType().toString().toLowerCase();
         String image = q.getImage();
-        String question = q.getQuestion();
+        String question = q.getQuestion().replaceAll("\"", "\\\"");
         System.out.println("Question: " + question);
         List<String> a = q.getAnswersAsString();
         Collections.shuffle(a);
@@ -133,7 +134,9 @@ public class GameState {
         System.out.println("Answers: " + answers);
         String time = q.getTime().toString();
         String deadlineString = gson.toJson(deadline);
-        String payload = "{\"type\":\"question\",\"questionType\":\"" + questionType +"\", \"question\":\"" + question + "\", \"answers\":" + answers + ", \"time\":\"" + time + "\", \"deadline\":\"" + deadlineString + "\", \"image\":\"" + image + "\"}";
+        QuestionPayload qp = new QuestionPayload(questionType, question, a, time, deadlineString, image);
+        String payload = gson.toJson(qp);
+        //String payload = "{\"type\":\"question\",\"questionType\":\"" + questionType +"\", \"question\":\"" + question + "\", \"answers\":" + answers + ", \"time\":\"" + time + "\", \"deadline\":\"" + deadlineString + "\", \"image\":\"" + image + "\"}";
         System.out.println(payload);
         try {
             admin.getBasicRemote().sendText(payload);

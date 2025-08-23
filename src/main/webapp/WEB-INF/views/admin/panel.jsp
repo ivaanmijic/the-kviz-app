@@ -79,6 +79,7 @@
     </sl-alert>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script src="${pageContext.request.contextPath}/webjars/jquery/3.7.1/jquery.min.js"></script>
 <script type="module" src="${pageContext.request.contextPath}/js/adminPanelRouter.js"></script>
 <script src="${pageContext.request.contextPath}/js/create-quiz.js"></script>
