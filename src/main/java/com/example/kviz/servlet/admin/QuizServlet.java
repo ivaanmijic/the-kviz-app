@@ -63,6 +63,7 @@ public class QuizServlet extends HttpServlet {
         long adminId = 0;
         boolean publicQuizzes = false;
 
+        req.setAttribute("notPublic", true);
         if (path.equals("/list")) {
             try {
                 adminId = Long.parseLong(req.getParameter("admin_id"));
@@ -71,6 +72,7 @@ public class QuizServlet extends HttpServlet {
             }
         } else if (path.equals("/list/public")) {
             publicQuizzes = true;
+            req.setAttribute("notPublic", false);
         } else {
             log.error("Resource not found");
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);

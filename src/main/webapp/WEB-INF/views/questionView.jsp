@@ -50,4 +50,4 @@
     <div class="flex justify-center">
         <sl-button id="submitMultipleBtn" variant="primary">Submit</sl-button>
     </div>
-</div>>
+</div>

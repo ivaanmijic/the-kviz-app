@@ -25,7 +25,7 @@ export class QuizEditor {
         document.getElementById('quizCategory').value = this.quiz.category.toLowerCase();
         document.getElementById('quizVisibility').value = this.quiz.visibility ? "public" : "private";
         document.getElementById('quizDescription').value = this.quiz.description;
-        document.getElementById('submitQuiz').innerText = 'Edit Quiz';
+        document.getElementById('submitQuiz').innerText = 'Save changes';
         document.getElementById('quizEditorTitle').innerText = 'Edit Quiz';
     }
 
