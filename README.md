@@ -13,4 +13,17 @@ Na osnovu sugestija dobivenih tokom prezentacije aplikacije, implementirane su s
 - **Poboljšan Drag & Drop** – implementirano je efikasnije rješenje za reorganizaciju pitanja.  
 - **Dugme za spremanje** – u modu uređivanja kviza promijen je teks dugmeta za uređivanje sa "Edit" na "Save Changes". 
 
+## Demo videi
+
+Za bolji uvid u funkcionalnosti aplikacije dostupna su tri demo videa:
+
+1. 🎥 [Admin (management) dio](https://drive.google.com/drive/folders/1WwG9SnUnDbRn5m6tWoHtdoyBchNZUhyj)  
+   *Kreiranje, uređivanje i upravljanje kvizovima.*  
+
+2. 🎥 [Remember me cookie](https://drive.google.com/drive/folders/1WwG9SnUnDbRn5m6tWoHtdoyBchNZUhyj)  
+   *Demonstracija trajne prijave korisnika putem kolačića.*  
+
+3. 🎥 [Play dio aplikacije](https://drive.google.com/drive/folders/1WwG9SnUnDbRn5m6tWoHtdoyBchNZUhyj)  
+   *Prikaz toka igre i načina igranja kviza.* 
+
 ---
