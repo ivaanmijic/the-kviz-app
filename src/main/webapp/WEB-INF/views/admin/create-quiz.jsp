@@ -18,7 +18,6 @@
 <section>
     <h2 class="section-title" id="quizEditorTitle">Create New Quiz</h2>
     <form class="create-quiz" id="createQuiz" method="post" enctype="multipart/form-data">
-        <button class="submit-quiz" id="submitQuiz" submit>Add Quiz</button>
         <div class="main-quiz-info">
             <label class="upload-box" id="uploadBox">
                 <img id="quizPreview" style="display:none;">
@@ -46,10 +45,11 @@
         <div id="questions-container">
         </div>
         <sl-tooltip content="Add new question">
-            <div id="add-question-button">
-                <sl-icon name="plus"></sl-icon>
-            </div>
+            <sl-button variant="text" size="large" id="add-question-button">
+                &#xFF0B Add Question
+            </sl-button>
         </sl-tooltip>
+        <sl-button variant="success" size="large" class="submit-quiz" id="submitQuiz" submit>Submit</sl-button>
     </form>
 </section>
 <script>

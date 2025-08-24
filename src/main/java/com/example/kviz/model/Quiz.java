@@ -42,7 +42,7 @@ public class Quiz {
     @Column(nullable = false, length = 10000)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "admin_id", nullable = false)
     private Admin owner;
 

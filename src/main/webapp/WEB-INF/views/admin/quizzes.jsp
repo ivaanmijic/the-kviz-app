@@ -24,28 +24,39 @@
                         <div class="quiz-description-clipped">
                                 ${quiz.description}
                         </div>
-                        <sl-button class="read-more-btn" size="small" pill data-quiz-id="${quiz.id}" data-quiz-description="${quiz.description}">
-                            Read more...
-                        </sl-button>
                     </div>
 
-                    <p class="text-sm mt-2">
-                        <c:choose>
-                            <c:when test="${quiz.visible}">
-                                Public
-                            </c:when>
-                            <c:otherwise>
-                                Private
-                            </c:otherwise>
-                        </c:choose>
-                    </p>
+                    <!-- This row has button + visibility + owner -->
+                    <div class="flex items-center justify-between mt-2 text-sm">
+                        <sl-button class="read-more-btn" size="small" pill
+                                   data-quiz-id="${quiz.id}"
+                                   data-quiz-description="${quiz.description}">
+                            Read more...
+                        </sl-button>
+
+                        <div class="flex items-center gap-2">
+        <span>
+            <c:choose>
+                <c:when test="${quiz.visible}">
+                    Public
+                </c:when>
+                <c:otherwise>
+                    Private
+                </c:otherwise>
+            </c:choose>
+        </span>
+                            <span>|</span>
+                            <span>Owner: ${quiz.owner.username}</span>
+                        </div>
+                    </div>
 
                     <div slot="footer" class="card-footer">
                         <div class="w-full flex space-x-2">
-                            <sl-button variant="primary" class="flex-1 play-quiz-btn" data-action="start" data-quiz-id="${quiz.id}">
+                            <sl-button variant="primary" class="flex-1 play-quiz-btn" data-action="start"
+                                       data-quiz-id="${quiz.id}">
                                 Start
                             </sl-button>
-                            <c:if test="${quiz.visible or sessionScope.admin.role eq 'SUPERADMIN'}">
+                            <c:if test="${notPublic}">
                                 <sl-button class="edit-quiz-btn" variant="neutral" data-action="edit"
                                            data-quiz-id="${quiz.id}">Edit
                                 </sl-button>
