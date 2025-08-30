@@ -1,0 +1,27 @@
+{
+  "name": "the-kviz-app",
+  "version": "1.0.0",
+  "description": "Razvoj web aplikacija 2024./25. Završni projekt",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ivaanmijic/the-kviz-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ivaanmijic/the-kviz-app/issues"
+  },
+  "homepage": "https://github.com/ivaanmijic/the-kviz-app#readme",
+  "devDependencies": {
+    "@shoelace-style/shoelace": "^2.20.1",
+    "typescript": "^5.8.3"
+  }
+}

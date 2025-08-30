@@ -1,0 +1,39 @@
+:root {
+    --sl-color-primary-50: var(--sl-color-blue-50);
+    --sl-color-primary-100: var(--sl-color-blue-100);
+    --sl-color-primary-200: var(--sl-color-blue-200);
+    --sl-color-primary-300: var(--sl-color-blue-300);
+    --sl-color-primary-400: var(--sl-color-blue-400);
+    --sl-color-primary-500: var(--sl-color-blue-500);
+    --sl-color-primary-600: var(--sl-color-blue-600);
+    --sl-color-primary-700: var(--sl-color-blue-700);
+    --sl-color-primary-800: var(--sl-color-blue-800);
+    --sl-color-primary-900: var(--sl-color-blue-900);
+    --sl-color-primary-950: var(--sl-color-blue-950);
+
+
+    --sl-color-blue-100: rgb(228 237 252);
+    --sl-color-blue-200: rgb(207 223 250);
+    --sl-color-blue-300: rgb(185 208 247);
+    --sl-color-blue-400: rgb(154 187 244);
+    --sl-color-blue-500: rgb(114 160 240);
+    --sl-color-blue-600: rgb(68 129 235);
+    --sl-color-blue-700: rgb(56 106 193);
+    --sl-color-blue-800: rgb(46 88 159);
+    --sl-color-blue-900: rgb(33 62 113);
+    --sl-color-blue-950: rgb(20 38 70);
+
+
+    --brand-primary: #4481eb;
+    --brand-secondary: #04befe;
+
+    --gradient: linear-gradient(-45deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
+    --shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.1);
+
+    --bg-color: var(--sl-color-neutral-0);
+    --bg-color-secondary: var(--sl-color-neutral-50);
+    --label-color: var(--sl-color-neutral-200);
+    --label-color-secondary: var(--sl-color-neutral-700);
+
+    --card-color: var(--sl-color-neutral-0)
+}

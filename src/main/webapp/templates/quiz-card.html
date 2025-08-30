@@ -1,0 +1,24 @@
+<sl-card class="quiz-card">
+    <img slot="image" class="quiz-card-img" src="{{Thumbnail}}" alt="Quiz image"
+         onerror="this.onerror=null;this.src='https://placehold.co/600x400/334155/ffffff?text=Quiz';">
+
+    <h3 class="text-lg font-bold">{{Title}}</h3>
+
+    <div class="description-container mt-2">
+        <div class="quiz-description-clipped">
+            {{Description}}
+        </div>
+        <sl-button size="small" pill data-action="details" data-quiz-id="{{QuizID}}">
+            Read more...
+        </sl-button>
+    </div>
+
+    <p class="text-sm mt-2">{{QuestionCount}} questions</p>
+
+    <div slot="footer" class="card-footer">
+        <div class="w-full flex space-x-2">
+            <sl-button variant="primary" class="flex-1" data-action="start" data-quiz-id="{{QuizID}}">Start</sl-button>
+            {{AdminActions}}
+        </div>
+    </div>
+</sl-card>

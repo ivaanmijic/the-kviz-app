@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="kvizGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4481eb"/>
+      <stop offset="100%" stop-color="#04befe"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <!-- Rounded-square plate -->
+  <rect x="56" y="56" width="400" height="400" rx="96" ry="96" fill="white" filter="url(#soft)"/>
+  
+  <!-- Stylized Q (quiz) mark -->
+  <circle cx="256" cy="256" r="108" fill="none" stroke="url(#kvizGradient)" stroke-width="56" stroke-linecap="round"/>
+  <!-- Tail of Q -->
+  <path d="M 332 332 L 384 384" stroke="url(#kvizGradient)" stroke-width="56" stroke-linecap="round"/>
+  
+  <!-- Optional subtle inner highlight -->
+  <circle cx="256" cy="230" r="120" fill="none" stroke="white" stroke-opacity="0.25" stroke-width="12"/>
+</svg>

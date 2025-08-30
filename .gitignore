@@ -1,0 +1,11 @@
+/build/
+/bin/
+/.gradle/
+/.settings/
+*.project
+/.idea/
+/gradle
+/gradlew
+/gradlew.bat
+/kvizapp.log
+/uploads/
